@@ -45,6 +45,8 @@
     <script src="./app/controller/UserFilterCtrl.js"></script>
     <script src="./app/service/Map.js"></script>
     <script src="./app/service/HeatMapSourceGenerator.js"></script>
+    <script src="./app/components/histogram/HistogramDirective.js"></script>
+    <script src="./app/components/modules.js"></script>
 
 </head>
 
@@ -63,6 +65,11 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2 row-box">
                 <ng-include src="'./app/view/geospatialFilter.html'"></ng-include>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 row-box">
+                <time-histogram></time-histogram>
             </div>
         </div>
         <div class="row">

@@ -10,8 +10,8 @@ angular
         function(MapService, $rootScope, $controller, $filter, $window, $document , $http) {
 
             var searchObj = {
-                minDate: new Date('2000-01-01'),
-                maxDate: new Date('2016-12-31'),
+                minDate: new Date('2013-01-01'),
+                maxDate: new Date('2014-12-31'),
                 searchText : ''
             };
 
@@ -245,7 +245,6 @@ angular
 
                 // add additional parameter for the soft maximum of the heatmap grid
                 params["a.hm.limit"] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
-
                 if (params && spatialFilters !== null) {
 
                     config = {
@@ -253,7 +252,6 @@ angular
                         method: 'GET',
                         params: params
                     };
-
                     //load the data
                     $http(config).
                     success(function(data, status, headers, cfg) {
@@ -262,6 +260,8 @@ angular
                             MapService.createOrUpdateHeatMapLayer(data["a.hm"]);
                             // get the count of matches
                             $rootScope.$broadcast('setCounter', data["a.matchDocs"]);
+
+                            $rootScope.$broadcast('setHistogram', data["a.time"]);
                         }
                     }).
                     error(function(data, status, headers, cfg) {
@@ -343,12 +343,11 @@ angular
                 var params = {
                     "q.text": keyword,
                     "q.time": '['+this.getFormattedDateString(reqParamsUi.minDate) +
-                         ' TO ' + this.getFormattedDateString(reqParamsUi.maxDate) +
-                         ']',
-                    "q.geo": '[' + bounds.minX + ',' + bounds.minY + ' TO ' +
-                                 bounds.maxX + ',' + bounds.maxY + ']',
-                    "a.hm.filter": '[' + minInnerX + ',' + minInnerY + ' TO ' +
-                                                        maxInnerX + ',' + maxInnerY + ']'
+                         ' TO ' + this.getFormattedDateString(reqParamsUi.maxDate) + ']',
+                    "q.geo": '[' + bounds.minX + ',' + bounds.minY + ' TO ' + bounds.maxX + ',' + bounds.maxY + ']',
+                    "a.hm.filter": '[' + minInnerX + ',' + minInnerY + ' TO ' + maxInnerX + ',' + maxInnerY + ']',
+                    "a.time.limit": '1',
+                    "a.time.gap": 'P1D'
                 };
 
                 return params;
