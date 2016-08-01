@@ -3,15 +3,30 @@
 /**
  * DatePickerCtrl Controller
  */
-angular.module('SolrHeatmapApp')
-    .controller('DatePickerController', ['HeatMapSourceGenerator', '$uibModal', '$scope',
-        function(HeatMapSourceGeneratorService, $uibModal, $scope) {
+(function() {
+
+angular
+    .module('search_datepicker_component', [])
+    .directive('datePicker', datePicker);
+
+    function datePicker() {
+      var directive = {
+        controller: ExampleController,
+        templateUrl: 'app/components/datepicker/datepicker.html',
+        // template: '{{initialDateOptions}}',
+        restrict: 'EA'
+      };
+      return directive;
+    }
+
+    ExampleController.$inject = ['HeatMapSourceGenerator', '$uibModal', '$scope'];
+    function ExampleController(HeatMapSourceGeneratorService, $uibModal, $scope) {
 
             var vm = $scope;
 
             vm.initialDateOptions = {
-                minDate: new Date('2000-01-01'),
-                maxDate: new Date('2016-12-31')
+                minDate: new Date('2013-01-01'),
+                maxDate: new Date('2013-12-31')
             };
 
             vm.dateString = '[2000-01-01T00:00:00 TO 2016-12-31T00:00:00]';
@@ -112,6 +127,6 @@ angular.module('SolrHeatmapApp')
                 });
             };
 
-        }]
+        }
 
-);
+})();

@@ -6,18 +6,23 @@ angular
 
 function timeHistogram() {
   var directive = {
-    templateUrl: 'app/components/histogram/histogram.html',
+    template: '<div class="bar-graph" id="{{barId}}" style="width: 400px";></div>',
     restrict: 'EA',
     link: link
   };
   return directive;
 
-  function link(scope, element) {
+  function link(scope, element, attr) {
+
+    scope.barId = attr.barid;
 
     scope.$on('setHistogram', function(even, histogram) {
       makeHistogram(histogram);
     });
 
+    /**
+     * Create histogram
+     */
     function makeHistogram(histogram) {
 
       findHistogramMaxValue();
@@ -31,9 +36,10 @@ function timeHistogram() {
 
       function renderingSvgBars() {
         if (histogram.counts) {
-          histogram.barsWidth = $('#bars').width();
+          histogram.bars = document.getElementById(scope.barId);
+
           var barsheight = 60;
-          var rectWidth = histogram.barsWidth / histogram.counts.length;
+          var rectWidth = (histogram.bars.offsetWidth / histogram.counts.length) - 2;
           var svgRect = histogram.counts.map(function(bar, barKey) {
             var height = histogram.maxValue === 0 ? 0 : barsheight * bar.count / histogram.maxValue;
             var y = barsheight - height;
@@ -42,8 +48,7 @@ function timeHistogram() {
                    '  <rect width="' + rectWidth + '" height="' + height + '" y="' + y + '" fill="#B0B0B0"></rect>' +
                    '</g>';
           });
-          var svgbar = '<svg width="100%" height="' + barsheight + '">' + svgRect.join('') + '</svg>';
-          $('#bars').html(svgbar);
+          histogram.bars.innerHTML = '<svg width="100%" height="' + barsheight + '">' + svgRect.join('') + '</svg>';
         }
       }
     }
