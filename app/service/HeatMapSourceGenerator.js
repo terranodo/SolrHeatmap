@@ -10,7 +10,7 @@ angular
         function(MapService, $rootScope, $controller, $filter, $window, $document , $http) {
 
             var searchObj = {
-                minDate: new Date('2013-01-01'),
+                minDate: new Date('2013-01-02'),
                 maxDate: new Date('2014-12-31'),
                 searchText : ''
             };
