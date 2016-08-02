@@ -10,17 +10,15 @@ angular
     .directive('datePicker', datePicker);
 
     function datePicker() {
-      var directive = {
-        controller: ExampleController,
+      return {
+        controller: datePickerFilterController,
         templateUrl: 'app/components/datepicker/datepicker.html',
-        // template: '{{initialDateOptions}}',
         restrict: 'EA'
       };
-      return directive;
     }
 
-    ExampleController.$inject = ['HeatMapSourceGenerator', '$uibModal', '$scope'];
-    function ExampleController(HeatMapSourceGeneratorService, $uibModal, $scope) {
+    datePickerFilterController.$inject = ['HeatMapSourceGenerator', '$uibModal', '$scope'];
+    function datePickerFilterController(HeatMapSourceGeneratorService, $uibModal, $scope) {
 
             var vm = $scope;
 
@@ -59,6 +57,7 @@ angular
 
             vm.onSubmitDateText = onSubmitDateText;
 
+            vm.slider = defaultSliderValue();
 
             /**
              * Set initial values for min and max dates in both of datepicker.
@@ -115,9 +114,7 @@ angular
             function setDateRange(minDate, maxDate){
                 HeatMapSourceGeneratorService.setMinDate(minDate);
                 HeatMapSourceGeneratorService.setMaxDate(maxDate);
-
                 vm.dateString = toStringDateFormat(minDate, maxDate);
-                console.log(vm.dateString);
             };
 
             function toStringDateFormat(minDate, maxDate) {
@@ -128,8 +125,11 @@ angular
             function stringToDate(dateString) {
                 var dateArray = dateString.split(' TO ');
                 if (typeof(dateString) === 'string' && dateArray.length === 2) {
-                  dateArray[0] = dateArray[0].slice(1,11);
-                  dateArray[1] = dateArray[1].slice(0,10);
+                  dateArray[0] = new Date(dateArray[0].slice(1,11));
+                  dateArray[1] = new Date(dateArray[1].slice(0,10));
+                  if (dateArray[0] == 'Invalid Date' || dateArray[0] == 'Invalid Date') {
+                    return null;
+                  }
                   return dateArray;
                 }
                 return null;
@@ -137,8 +137,12 @@ angular
 
             function onSubmitDateText() {
                 var dateArray = stringToDate(vm.dateString);
-                vm.dts = new Date(dateArray[0]);
-                vm.dte = new Date(dateArray[1]);
+                if (dateArray !== null) {
+                  vm.dts = dateArray[0];
+                  vm.dte = dateArray[1];
+                } else{
+                  vm.dateString = toStringDateFormat(vm.dts, vm.dte)
+                }
             }
 
             function showInfo(){
@@ -158,6 +162,24 @@ angular
                 });
             };
 
+            function defaultSliderValue() {
+              return {
+                minValue: 0,
+                maxValue: 10,
+                options: {
+                  floor: 0,
+                  ceil: 10,
+                  step: 1,
+                  noSwitching: true, hideLimitLabels: true,
+                  getSelectionBarColor: function() {
+                    return '#dadada';
+                  },
+                  translate: function() {
+                    return '';
+                  }
+                }
+              };
+            };
         }
 
 })();
