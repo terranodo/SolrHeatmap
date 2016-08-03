@@ -18,7 +18,7 @@ angular
              *
              */
             function userSearch() {
-              HeatMapSourceGeneratorService.setUser($scope.userfilterInput);
+              HeatMapSourceGeneratorService.filterObj.setUser($scope.userfilterInput);
               HeatMapSourceGeneratorService.performSearch();
             }
 

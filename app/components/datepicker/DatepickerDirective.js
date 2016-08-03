@@ -28,8 +28,8 @@ angular
             };
 
             vm.dateOptions = {
-                minDate: HeatMapSourceGeneratorService.getSearchObj().minDate,
-                maxDate: HeatMapSourceGeneratorService.getSearchObj().maxDate,
+                minDate: HeatMapSourceGeneratorService.filterObj.getSearchObj().minDate,
+                maxDate: HeatMapSourceGeneratorService.filterObj.getSearchObj().maxDate,
                 startingDay: 1, // Monday
                 showWeeks: false
             };
@@ -112,9 +112,8 @@ angular
              * @param {Date} maxDate date value of the end datepicker
              */
             function setDateRange(minDate, maxDate){
-                HeatMapSourceGeneratorService.setMinDate(minDate);
-                HeatMapSourceGeneratorService.setMaxDate(maxDate);
                 vm.dateString = toStringDateFormat(minDate, maxDate);
+                HeatMapSourceGeneratorService.filterObj.setTextDate(vm.dateString);
             };
 
             function toStringDateFormat(minDate, maxDate) {
@@ -140,6 +139,8 @@ angular
                 if (dateArray !== null) {
                   vm.dts = dateArray[0];
                   vm.dte = dateArray[1];
+                  HeatMapSourceGeneratorService.filterObj.setTextDate(vm.dateString);
+                  HeatMapSourceGeneratorService.performSearch();
                 } else{
                   vm.dateString = toStringDateFormat(vm.dts, vm.dte)
                 }

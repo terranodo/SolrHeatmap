@@ -4,48 +4,59 @@
 /**
  * HeatMapSourceGenerator Service
  */
+(function() {
 angular
     .module('SolrHeatmapApp')
     .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window', '$document', '$http',
         function(MapService, $rootScope, $controller, $filter, $window, $document , $http) {
 
-            var searchObj = {
-                minDate: new Date('2013-01-02'),
-                maxDate: new Date('2014-12-31'),
-                searchText : null,
-                user: null
+
+            var methods = {
+                getGeospatialFilter: getGeospatialFilter,
+                getTweetsSearchQueryParameters: getTweetsSearchQueryParameters,
+                performSearch: performSearch,
+                startCsvExport: startCsvExport,
+                getFormattedDateString: getFormattedDateString,
+                filterObj: filterMethods()
             };
 
-            /**
-             * Set keyword text
-             */
-            function setSearchText(val) {
-                searchObj.searchText = val.length === 0 ? null : val;
-            }
+            return methods;
 
-            /**
-             * Set start search date
-             */
-            function setMinDate(val) {
-                searchObj.minDate = val;
-            }
 
-            /**
-             * Set end search date
-             */
-            function setMaxDate (val) {
-                searchObj.maxDate = val;
-            }
+            function filterMethods() {
+              var searchObj = {
+                  minDate: new Date('2013-03-10'),
+                  maxDate: new Date('2013-03-21'),
+                  textDate: null,
+                  searchText : null,
+                  user: null
+              };
+              /**
+               * Set keyword text
+               */
+              function setSearchText(val) {
+                  searchObj.searchText = val.length === 0 ? null : val;
+              }
 
-            function setUser(val) {
-                searchObj.user = val.length === 0 ? null : val;
-            }
+              function setUser(val) {
+                  searchObj.user = val.length === 0 ? null : val;
+              }
 
-            /**
-             * Returns the complete search object
-             */
-            function getSearchObj(){
-                return searchObj;
+              function setTextDate(val) {
+                  searchObj.textDate = val.length === 0 ? null : val;
+              }
+              /**
+               * Returns the complete search object
+               */
+              function getSearchObj(){
+                  return searchObj;
+              }
+              return {
+                getSearchObj: getSearchObj,
+                setSearchText: setSearchText,
+                setUser: setUser,
+                setTextDate: setTextDate
+              }
             }
 
 
@@ -328,7 +339,7 @@ angular
              */
             function getTweetsSearchQueryParameters(bounds) {
 
-                var reqParamsUi = this.getSearchObj();
+                var reqParamsUi = methods.filterObj.getSearchObj();
 
                 // calculate reduced bounding box
                 var dx = bounds.maxX - bounds.minX,
@@ -341,12 +352,11 @@ angular
                 var params = {
                     "q.text": reqParamsUi.searchText,
                     "q.user": reqParamsUi.user,
-                    "q.time": '['+this.getFormattedDateString(reqParamsUi.minDate) +
-                         ' TO ' + this.getFormattedDateString(reqParamsUi.maxDate) + ']',
+                    "q.time": timeTextFormat(reqParamsUi.textDate, reqParamsUi.minDate, reqParamsUi.maxDate),
                     "q.geo": '[' + bounds.minX + ',' + bounds.minY + ' TO ' + bounds.maxX + ',' + bounds.maxY + ']',
                     "a.hm.filter": '[' + minInnerX + ',' + minInnerY + ' TO ' + maxInnerX + ',' + maxInnerY + ']',
                     "a.time.limit": '1',
-                    "a.time.gap": 'P1D'
+                    "a.time.gap": 'PT1H'
                 };
 
                 return params;
@@ -363,21 +373,15 @@ angular
                     (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).
                     slice(-2);
             }
-
-            var methods = {
-                getGeospatialFilter: getGeospatialFilter,
-                getTweetsSearchQueryParameters: getTweetsSearchQueryParameters,
-                performSearch: performSearch,
-                startCsvExport: startCsvExport,
-                setSearchText: setSearchText,
-                setMinDate: setMinDate,
-                setMaxDate: setMaxDate,
-                getFormattedDateString: getFormattedDateString,
-                getSearchObj: getSearchObj,
-                setUser: setUser
-            };
-
-            return methods;
+            function timeTextFormat(textDate, minDate, maxDate) {
+              if (textDate === null) {
+                return '['+ getFormattedDateString(minDate) +
+                     ' TO ' + getFormattedDateString(maxDate) + ']'
+              } else{
+                return textDate;
+              }
+            }
 
         }]
 );
+})();
