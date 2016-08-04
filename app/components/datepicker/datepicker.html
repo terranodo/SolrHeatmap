@@ -5,7 +5,8 @@
                 <div class="col-md-5">
                     <p class="input-group">
                         <input type="text" class="form-control" uib-datepicker-popup ng-model="dts" is-open="startDate.opened"
-                            show-button-bar="false" datepicker-options="dateOptions" ng-required="true" ng-change="onChangeDatepicker()" readonly/>
+                            show-button-bar="false" datepicker-options="dateOptions" ng-required="true"
+                            ng-model-options="{timezone: 'UTC'}" ng-change="onChangeDatepicker()" readonly/>
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="openStartDate()"><i class="glyphicon glyphicon-calendar"></i></button>
                         </span>

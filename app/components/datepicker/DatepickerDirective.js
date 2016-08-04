@@ -34,8 +34,7 @@ angular
                 showWeeks: false
             };
 
-            vm.dateString = toStringDateFormat(vm.dateOptions.minDate, vm.dateOptions.maxDate);
-
+            vm.dateString = getFormattedDateString(vm.dateOptions.minDate, vm.dateOptions.maxDate);
 
             vm.startDate = {
                 opened: false
@@ -46,8 +45,6 @@ angular
             };
 
             vm.onChangeDatepicker = onChangeDatepicker;
-
-            vm.setDateRange = setDateRange;
 
             vm.showInfo = showInfo;
 
@@ -100,23 +97,11 @@ angular
              * Will be fired after the start and the end date was chosen.
              */
             function onChangeDatepicker(){
-                vm.setDateRange(vm.dts, vm.dte);
-                HeatMapSourceGeneratorService.performSearch();
+                vm.dateString = getFormattedDateString(vm.dts, vm.dte);
+                performDateSearch();
             };
 
-
-            /**
-             * Help method that updates `searchObj` of the heatmap with
-             * the current min and max dates.
-             * @param {Date} minDate date value of the start datepicker
-             * @param {Date} maxDate date value of the end datepicker
-             */
-            function setDateRange(minDate, maxDate){
-                vm.dateString = toStringDateFormat(minDate, maxDate);
-                HeatMapSourceGeneratorService.filterObj.setTextDate(vm.dateString);
-            };
-
-            function toStringDateFormat(minDate, maxDate) {
+            function getFormattedDateString(minDate, maxDate) {
               return '[' + minDate.toISOString().replace('.000Z','') + ' TO ' +
                   maxDate.toISOString().replace('.000Z','') + ']';
             }
@@ -139,10 +124,9 @@ angular
                 if (dateArray !== null) {
                   vm.dts = dateArray[0];
                   vm.dte = dateArray[1];
-                  HeatMapSourceGeneratorService.filterObj.setTextDate(vm.dateString);
-                  HeatMapSourceGeneratorService.performSearch();
+                  performDateSearch();
                 } else{
-                  vm.dateString = toStringDateFormat(vm.dts, vm.dte)
+                  vm.dateString = getFormattedDateString(vm.dts, vm.dte)
                 }
             }
 
@@ -163,10 +147,32 @@ angular
                 });
             };
 
+            vm.$on('setHistogram', function(event, dataHistogram) {
+              if (vm.slider.options.ceil === 10) {
+                vm.slider.counts = dataHistogram.counts;
+                vm.slider.options.ceil = vm.slider.maxValue = dataHistogram.counts.length - 1;
+              }
+            })
+
+            vm.$on('slideEnded', function() {
+              var minKey = vm.slider.minValue,
+                  maxKey = vm.slider.maxValue;
+              vm.dts =  new Date(vm.slider.counts[minKey].value);
+              vm.dte =  new Date(vm.slider.counts[maxKey].value);
+              vm.dateString = getFormattedDateString(vm.dts, vm.dte);
+              performDateSearch();
+            });
+
+            function performDateSearch() {
+              HeatMapSourceGeneratorService.filterObj.setTextDate(vm.dateString);
+              HeatMapSourceGeneratorService.performSearch();
+            }
+
             function defaultSliderValue() {
               return {
                 minValue: 0,
                 maxValue: 10,
+                active: false,
                 options: {
                   floor: 0,
                   ceil: 10,
