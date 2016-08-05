@@ -1,3 +1,12 @@
+
+/*
+ * Slider
+ */
+rzslider {
+    width: 100%;
+    margin: 0;
+}
+
 rzslider .rz-pointer {
   top: -6px;
   width: 20px;
@@ -13,7 +22,7 @@ rzslider .rz-pointer:focus {
 }
 
 rzslider .rz-bar {
-  height: 10px;
+  height: 6px;
 }
 rzslider .rz-pointer:after {
     position: static;

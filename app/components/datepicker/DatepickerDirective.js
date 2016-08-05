@@ -185,7 +185,7 @@ angular
                   step: 1,
                   noSwitching: true, hideLimitLabels: true,
                   getSelectionBarColor: function() {
-                    return '#dadada';
+                    return '#3da9ca';
                   },
                   translate: function() {
                     return '';
