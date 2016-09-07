@@ -28,10 +28,13 @@
   ],
   "scripts": {
     "js-lint": "eslint -c .eslintrc ./",
+    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.js",
+    "test:unit": "./node_modules/karma/bin/karma start --browsers PhantomJS karma.js",
     "deploy": "grunt deploy"
   },
   "dependencies": {},
   "devDependencies": {
+    "angular-mocks": "^1.5.8",
     "angular-ui-bootstrap": "^1.3.3",
     "eslint": "^2.13.0",
     "eslint-config-angular": "^0.5.0",
@@ -43,6 +46,11 @@
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-gh-pages": "1.1.0"
+    "grunt-gh-pages": "1.1.0",
+    "jasmine-core": "^2.5.0",
+    "karma": "^1.2.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-spec-reporter": "0.0.26"
   }
 }
