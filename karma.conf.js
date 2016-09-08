@@ -1,5 +1,5 @@
-module.exports = function ( karma ) {
-  karma.set({
+module.exports = function ( config ) {
+  config.set({
     basePath: '.',
     files: [
       'assets/lib/angularjs/angular.min.js',
@@ -18,7 +18,6 @@ module.exports = function ( karma ) {
     exclude: [
     ],
     frameworks: [ 'jasmine' ],
-    plugins: [ 'karma-jasmine', 'karma-phantomjs-launcher', 'karma-spec-reporter' ],
     preprocessors: {
     },
     reporters: 'spec',

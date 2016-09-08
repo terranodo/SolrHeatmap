@@ -28,8 +28,8 @@
   ],
   "scripts": {
     "js-lint": "eslint -c .eslintrc ./",
-    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.js",
-    "test:unit": "./node_modules/karma/bin/karma start --browsers PhantomJS karma.js",
+    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
+    "test:unit": "./node_modules/karma/bin/karma start --browsers PhantomJS --auto-watch",
     "deploy": "grunt deploy"
   },
   "dependencies": {},
