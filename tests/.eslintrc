@@ -1,0 +1,15 @@
+{
+  "env": {
+    "node": true,
+  },
+  "globals": {
+    "angular": true,
+    "jasmine": true
+  },
+  "rules": {
+    "camelcase": 2,
+    "curly": 2,
+    "quotes": [2, "single"],
+    "semi": [2, "always"],
+  }
+}
