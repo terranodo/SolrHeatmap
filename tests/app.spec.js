@@ -17,14 +17,14 @@ describe( 'MainController', function() {
 
     describe('#response', function() {
         describe('without a config', function() {
-          it( 'throws error', function() {
-            expect(MainCtrl.response).toThrowError('Could not find the mapConfig');
-          });
+            it( 'throws error', function() {
+                expect(MainCtrl.response).toThrowError('Could not find the mapConfig');
+            });
         });
     });
     describe('#badResponse', function() {
         it( 'throws error', function() {
-          expect(MainCtrl.badResponse).toThrowError('Error while loading the config.json');
+            expect(MainCtrl.badResponse).toThrowError('Error while loading the config.json');
         });
     });
 });

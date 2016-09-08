@@ -21,3 +21,4 @@ exclude_paths:
 - API/
 - assets/
 - reports
+- tests

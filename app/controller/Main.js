@@ -13,7 +13,7 @@
             var vm = this;
 
             vm.response = function(data, status, headers, config) {
-              if (data && data.mapConfig) {
+                if (data && data.mapConfig) {
                   var mapConf = data.mapConfig,
                       appConf = data.appConfig,
                       bopwsConfig = data.bopwsConfig,
@@ -69,7 +69,7 @@
               }
             };
             vm.badResponse = function(data, status, headers, config) {
-              throw new Error('Error while loading the config.json');
+                throw new Error('Error while loading the config.json');
             };
 
             solrHeatmapApp = vm;
