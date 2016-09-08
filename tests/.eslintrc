@@ -1,10 +1,11 @@
 {
   "env": {
     "node": true,
+    "jasmine": true
   },
   "globals": {
     "angular": true,
-    "jasmine": true
+    "inject": true
   },
   "rules": {
     "camelcase": 2,
