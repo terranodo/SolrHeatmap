@@ -1,13 +1,14 @@
 describe( 'SearchController', function() {
-    var SearchController, $scope, rootScope, HeatMapSourceGeneratorService, MapService;
+    var SearchController, $scope, rootScope, HeatMapSourceGeneratorService, MapService, uibModal;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
-    beforeEach( inject( function( $controller, $rootScope, _HeatMapSourceGenerator_, _Map_) {
+    beforeEach( inject( function( $controller, $rootScope, _HeatMapSourceGenerator_, _Map_, _$uibModal_) {
         rootScope = $rootScope;
         $scope = $rootScope.$new();
         HeatMapSourceGeneratorService = _HeatMapSourceGenerator_;
         MapService = _Map_;
+        uibModal = _$uibModal_;
         SearchController = $controller( 'SearchController', { $scope: $scope });
     }));
     it( 'searchInput is empty string', function() {
@@ -58,6 +59,13 @@ describe( 'SearchController', function() {
             var searchSpy = spyOn($scope, 'doSearch');
             $scope.onKeyPress({which: 14});
             expect(searchSpy).not.toHaveBeenCalledTimes(1);
+        });
+    });
+    describe('#showInfo', function() {
+        it('opens the modal info', function() {
+            var modalSpy = spyOn(uibModal, 'open');
+            $scope.showInfo();
+            expect(modalSpy).toHaveBeenCalledTimes(1);
         });
     });
 });
