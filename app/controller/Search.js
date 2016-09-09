@@ -39,9 +39,8 @@
                 // if ($scope.searchInput.length === 0) {
                 //    return false;
                 // }
+                HeatMapSourceGeneratorService.search($scope.searchInput);
 
-                HeatMapSourceGeneratorService.filterObj.setSearchText($scope.searchInput);
-                HeatMapSourceGeneratorService.performSearch();
             };
 
             $scope.resetSearchInput = function() {
