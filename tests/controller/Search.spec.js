@@ -48,4 +48,16 @@ describe( 'SearchController', function() {
             });
         });
     });
+    describe('#onKeyPress', function() {
+        it('search on enter key pressed', function() {
+            var searchSpy = spyOn($scope, 'doSearch');
+            $scope.onKeyPress({which: 13});
+            expect(searchSpy).toHaveBeenCalledTimes(1);
+        });
+        it('does not search on all other keys', function() {
+            var searchSpy = spyOn($scope, 'doSearch');
+            $scope.onKeyPress({which: 14});
+            expect(searchSpy).not.toHaveBeenCalledTimes(1);
+        });
+    });
 });
