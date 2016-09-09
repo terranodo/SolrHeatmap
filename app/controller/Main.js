@@ -14,24 +14,24 @@
 
             vm.response = function(data, status, headers, config) {
                 if (data && data.mapConfig) {
-                  var mapConf = data.mapConfig,
-                      appConf = data.appConfig,
-                      bopwsConfig = data.bopwsConfig,
-                      instructions = data.instructions;
+                    var mapConf = data.mapConfig,
+                        appConf = data.appConfig,
+                        bopwsConfig = data.bopwsConfig,
+                        instructions = data.instructions;
 
-                  // create the map with the given config
-                  MapService.init({
-                      mapConfig: mapConf
-                  });
-                  solrHeatmapApp.appConfig = appConf;
-                  solrHeatmapApp.initMapConf = mapConf;
-                  solrHeatmapApp.bopwsConfig = bopwsConfig;
-                  solrHeatmapApp.instructions = instructions;
+                    // create the map with the given config
+                    MapService.init({
+                        mapConfig: mapConf
+                    });
+                    solrHeatmapApp.appConfig = appConf;
+                    solrHeatmapApp.initMapConf = mapConf;
+                    solrHeatmapApp.bopwsConfig = bopwsConfig;
+                    solrHeatmapApp.instructions = instructions;
 
-                  // fire event mapReady
-                  $rootScope.$broadcast('mapReady', MapService.getMap());
+                    // fire event mapReady
+                    $rootScope.$broadcast('mapReady', MapService.getMap());
 
-                  MapService.getMap().getView()
+                    MapService.getMap().getView()
                       .on('change:resolution', function(evt){
                           var existingHeatMapLayers = MapService.getLayersBy('name', 'HeatMapLayer');
                           if (existingHeatMapLayers &&
@@ -48,14 +48,14 @@
                           // check box of transform interaction
                           MapService.checkBoxOfTransformInteraction();
                       });
-                  /*
-                  * register some events
-                  */
-                  MapService.getMap().on('moveend', function(evt){
-                      HeatMapSourceGeneratorService.performSearch();
-                  });
+                    /*
+                    * register some events
+                    */
+                    MapService.getMap().on('moveend', function(evt){
+                        HeatMapSourceGeneratorService.performSearch();
+                    });
 
-                  MapService.getInteractionsByClass(ol.interaction.Transform)[0].on(
+                    MapService.getInteractionsByClass(ol.interaction.Transform)[0].on(
                       ['translateend', 'scaleend'], function (e) {
                           HeatMapSourceGeneratorService.performSearch();
                       });
@@ -64,9 +64,9 @@
                 //solrHeatmapApp.map.on('singleclick',
                 //                          MapService.displayFeatureInfo);
 
-              } else {
-                  throw new Error('Could not find the mapConfig');
-              }
+                } else {
+                    throw new Error('Could not find the mapConfig');
+                }
             };
             vm.badResponse = function(data, status, headers, config) {
                 throw new Error('Error while loading the config.json');
