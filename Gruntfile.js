@@ -5,6 +5,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-less');
 
     grunt.initConfig({
         'gh-pages': {
@@ -51,6 +52,26 @@ module.exports = function(grunt) {
                     'build/hm-client.min.js': ['<%= concat.dist.dest %>']
                 }
             }
+        },
+        less: {
+          development: {
+            options: {
+              paths: ['app/components']
+            },
+            files: {
+              'build/styles.css': 'app/components/**/*.less'
+            }
+          },
+          production: {
+            options: {
+              plugins: [
+                new (require('less-plugin-clean-css'))()
+              ],
+            },
+            files: {
+              'build/styles.min.css': 'app/components/**/*.less'
+            }
+          }
         }
     });
 
@@ -87,9 +108,14 @@ module.exports = function(grunt) {
         'gh-pages:publish'
     ]);
 
+    grunt.registerTask('css', ['less:development']);
+    grunt.registerTask('css-min', ['less:production']);
+
     grunt.registerTask('deploy', 'Publish from travis', [
         'concat',
         'uglify',
+        'css-min',
         'check-deploy'
     ]);
+
 };
