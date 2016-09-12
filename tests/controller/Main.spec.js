@@ -18,7 +18,7 @@ describe( 'MainController', function() {
             });
         });
         describe('with a config', function() {
-            var mapServiceSpy;
+            var mapServiceSpy, setupSpy;
             beforeEach(function() {
                 mapServiceSpy = spyOn(MapService, 'init');
                 setupSpy = spyOn(MainCtrl, 'setupEvents');

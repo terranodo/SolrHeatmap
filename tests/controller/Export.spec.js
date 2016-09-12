@@ -16,7 +16,7 @@ describe( 'ExportController', function() {
     describe('#startExport', function() {
         var startExportSpy;
         beforeEach(function() {
-             startExportSpy = spyOn(HeatMapSourceGeneratorService, 'startCsvExport');
+            startExportSpy = spyOn(HeatMapSourceGeneratorService, 'startCsvExport');
         });
         describe('calls search on HeatMapSourceGeneratorService', function() {
             it('once', function() {

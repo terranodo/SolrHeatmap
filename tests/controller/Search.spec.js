@@ -17,7 +17,7 @@ describe( 'SearchController', function() {
     describe('#doSearch', function() {
         var searchSpy;
         beforeEach(function() {
-             searchSpy = spyOn(HeatMapSourceGeneratorService, 'search');
+            searchSpy = spyOn(HeatMapSourceGeneratorService, 'search');
         });
         describe('calls search on HeatMapSourceGeneratorService', function() {
             it('once', function() {

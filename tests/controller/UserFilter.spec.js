@@ -16,7 +16,7 @@ describe( 'UserFilterController', function() {
     describe('#userSearch', function() {
         var searchSpy;
         beforeEach(function() {
-             searchSpy = spyOn(HeatMapSourceGeneratorService, 'search');
+            searchSpy = spyOn(HeatMapSourceGeneratorService, 'search');
         });
         describe('calls search on HeatMapSourceGeneratorService', function() {
             it('once', function() {
