@@ -55,9 +55,6 @@ module.exports = function(grunt) {
         },
         less: {
           development: {
-            options: {
-              paths: ['app/components']
-            },
             files: {
               'build/styles.css': 'app/components/**/*.less'
             }
@@ -72,6 +69,16 @@ module.exports = function(grunt) {
               'build/styles.min.css': 'app/components/**/*.less'
             }
           }
+        },
+        watch: {
+          options: {
+            livereload: true
+          },
+          build: {
+            files: ['app/**/*'],
+            tasks: ['deploy']
+          },
+
         }
     });
 
@@ -102,6 +109,8 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask('css', ['less:development', 'less:production']);
+
     grunt.registerTask('publish', 'Publish from CLI', [
         'concat',
         'uglify',
@@ -112,8 +121,10 @@ module.exports = function(grunt) {
     grunt.registerTask('deploy', 'Publish from travis', [
         'concat',
         'uglify',
-        'less:production',
+        'css',
         'check-deploy'
     ]);
+
+    grunt.registerTask('delta', ['deploy', 'watch'])
 
 };
