@@ -105,16 +105,14 @@ module.exports = function(grunt) {
     grunt.registerTask('publish', 'Publish from CLI', [
         'concat',
         'uglify',
+        'less:production',
         'gh-pages:publish'
     ]);
-
-    grunt.registerTask('css', ['less:development']);
-    grunt.registerTask('css-min', ['less:production']);
 
     grunt.registerTask('deploy', 'Publish from travis', [
         'concat',
         'uglify',
-        'css-min',
+        'less:production',
         'check-deploy'
     ]);
 
