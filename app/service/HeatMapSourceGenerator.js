@@ -243,14 +243,8 @@
                         maxY: maxY
                     };
 
-                    // Reset the date fields
-                    // TODO get rid of angular.element
-                    var ctrlViewModelNew = angular.element('[ng-controller=GeospatialFilterController]').scope();
-                    $controller('GeospatialFilterController', {$scope : ctrlViewModelNew });
-                    ctrlViewModelNew.updateFilterString('[' + parseFloat(Math.round(minX * 100) / 100).toFixed(2) + ',' +
-                                            parseFloat(Math.round(minY * 100) / 100).toFixed(2) + ' TO ' +
-                                            parseFloat(Math.round(maxX * 100) / 100).toFixed(2) + ',' +
-                                            parseFloat(Math.round(maxY * 100) / 100).toFixed(2) + ']');
+                    //ToDo: Reset date fields
+                    // GeospatialFilterController does not exist anymore
                 }
 
                 return geoFilter;
