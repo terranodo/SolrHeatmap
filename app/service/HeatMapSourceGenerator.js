@@ -262,12 +262,15 @@
             function performSearch(){
                 var config = {},
                     spatialFilters = this.getGeospatialFilter(),
+                        params;
+                if(spatialFilters) {
                     params = this.getTweetsSearchQueryParameters(
-                                    spatialFilters.queryGeo, spatialFilters.hmFilter);
+                                        spatialFilters.queryGeo);
 
                 // add additional parameter for the soft maximum of the heatmap grid
-                params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
-                if (params && spatialFilters !== null) {
+                    params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
+                }
+                if (params) {
 
                     config = {
                         url: solrHeatmapApp.appConfig.tweetsSearchBaseUrl,
@@ -275,9 +278,10 @@
                         params: params
                     };
                     //load the data
-                    $http(config).
-                    success(function(data, status, headers, cfg) {
+                    $http(config)
+                    .then(function successCallback(response) {
                         // check if we have a heatmap facet and update the map with it
+                        var data = response.data;
                         if (data && data['a.hm']) {
                             MapService.createOrUpdateHeatMapLayer(data['a.hm']);
                             // get the count of matches
@@ -287,11 +291,12 @@
 
                             $rootScope.$broadcast('setTweetList', data['d.docs']);
 
-                            methods.filterObj.setHistogramCount(data['a.time']['counts']);
+                            methods.filterObj.setHistogramCount(data['a.time'].counts);
                         }
-                    }).
-                    error(function(data, status, headers, cfg) {
-                        // hide the loading mask
+                    }, function errorCallback(response) {
+                        $window.alert('An error occured while reading heatmap data');
+                    })
+                    .catch(function() {
                         $window.alert('An error occured while reading heatmap data');
                     });
                 } else {

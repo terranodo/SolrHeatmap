@@ -1,11 +1,12 @@
 describe( 'HeatMapSourceGenerator', function() {
-    var subject, $httpBackend;
+    var subject, $httpBackend, MapService;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
-    beforeEach( inject( function( _HeatMapSourceGenerator_, _$httpBackend_) {
+    beforeEach( inject( function( _HeatMapSourceGenerator_, _$httpBackend_, _Map_) {
         subject = _HeatMapSourceGenerator_;
         $httpBackend = _$httpBackend_;
+        MapService = _Map_;
     }));
 
     describe('#getFormattedDateString', function() {
@@ -68,6 +69,76 @@ describe( 'HeatMapSourceGenerator', function() {
                     return true;
                 } );
                 subject.startCsvExport();
+                $httpBackend.flush();
+                expect($window.alert).toHaveBeenCalled();
+            }));
+        });
+    });
+    describe('#performSearch', function() {
+        var spatialSpy, queryParamSpy, exportRequest, geospatialFilter;
+        beforeEach(function() {
+            solrHeatmapApp.bopwsConfig = { csvDocsLimit: 10 };
+            solrHeatmapApp.appConfig = { tweetsSearchBaseUrl: '/search' };
+            geospatialFilter = {queryGeo: { minX: 1, maxX: 1, minY: 1, maxY: 1}};
+            spatialSpy = spyOn(subject, 'getGeospatialFilter').and.returnValue(geospatialFilter);
+            queryParamSpy = spyOn(subject, 'getTweetsSearchQueryParameters').and.returnValue({});
+            exportRequest = $httpBackend.when('GET', '/search').respond('');
+        });
+        afterEach(function() {
+            $httpBackend.resetExpectations();
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+        });
+        it('sends the search request', function() {
+            $httpBackend.expectGET('/search').respond('');
+            subject.performSearch();
+            $httpBackend.flush();
+        });
+        describe('has data', function() {
+            var createOrUpdateHeatMapLayerSpy;
+            beforeEach(function() {
+                createOrUpdateHeatMapLayerSpy = spyOn(MapService, 'createOrUpdateHeatMapLayer');
+            });
+            describe('no a.hm data', function() {
+                beforeEach(function() {
+                    exportRequest.respond({});
+                });
+                it('does not call createOrUpdateHeatMapLayer', function() {
+                    subject.performSearch();
+                    $httpBackend.flush();
+                    expect(createOrUpdateHeatMapLayerSpy).not.toHaveBeenCalled();
+                });
+            });
+            describe('with a.hm data', function() {
+                beforeEach(function() {
+                    exportRequest.respond({ 'a.hm': '1', 'a.time': { counts: 1}});
+                });
+                it('does not call createOrUpdateHeatMapLayer', function() {
+                    subject.performSearch();
+                    $httpBackend.flush();
+                    expect(createOrUpdateHeatMapLayerSpy).toHaveBeenCalled();
+                });
+            });
+        });
+        describe('no geospatial filter', function() {
+            beforeEach(function() {
+                spatialSpy.and.returnValue(null);
+            });
+            afterEach(function() {
+                $httpBackend.resetExpectations();
+            });
+            it('does not send the export request', function() {
+                subject.performSearch();
+                expect($httpBackend.flush).toThrow();
+            });
+        });
+        describe('error from server', function() {
+            it('throws an window error', inject(function($window) {
+                exportRequest.respond(401, '');
+                spyOn( $window, 'alert' ).and.callFake( function() {
+                    return true;
+                } );
+                subject.performSearch();
                 $httpBackend.flush();
                 expect($window.alert).toHaveBeenCalled();
             }));
