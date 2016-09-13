@@ -307,14 +307,17 @@
             function startCsvExport(numberOfDocuments){
                 var config = {},
                     spatialFilters = this.getGeospatialFilter(),
+                        params;
+                if(spatialFilters) {
                     params = this.getTweetsSearchQueryParameters(
-                                    spatialFilters.queryGeo, spatialFilters.hmFilter);
+                                        spatialFilters.queryGeo);
 
-                // add additional parameter for the number of documents to return
-                params['d.docs.limit'] = angular.isNumber(numberOfDocuments) ?
-                        numberOfDocuments : solrHeatmapApp.bopwsConfig.csvDocsLimit;
+                    // add additional parameter for the number of documents to return
+                    params['d.docs.limit'] = angular.isNumber(numberOfDocuments) ?
+                            numberOfDocuments : solrHeatmapApp.bopwsConfig.csvDocsLimit;
 
-                if (params && spatialFilters !== null) {
+                }
+                if (params) {
                     config = {
                         url: solrHeatmapApp.appConfig.tweetsExportBaseUrl,
                         method: 'GET',
@@ -322,19 +325,21 @@
                     };
 
                     //start the export
-                    $http(config).
-                    success(function(data, status, headers, cfg) {
+                    $http(config)
+                    .then(function successCallback(response) {
                         var anchor = angular.element('<a/>');
                         anchor.css({display: 'none'}); // Make sure it's not visible
                         angular.element($document.body).append(anchor); // Attach to document
                         anchor.attr({
-                            href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
+                            href: 'data:attachment/csv;charset=utf-8,' + encodeURI(response.data),
                             target: '_blank',
                             download: 'bop_export.csv'
                         })[0].click();
                         anchor.remove(); // Clean it up afterwards
-                    }).
-                    error(function(data, status, headers, cfg) {
+                    }, function errorCallback(response) {
+                        $window.alert('An error occured while exporting csv data');
+                    })
+                    .catch(function() {
                         $window.alert('An error occured while exporting csv data');
                     });
                 } else {
