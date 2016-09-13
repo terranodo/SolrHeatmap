@@ -1,5 +1,5 @@
 describe( 'HeatMapSourceGenerator', function() {
-    var subject, $httpBackend, MapService;
+    var subject, $httpBackend, MapService, spatialSpy;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
@@ -7,6 +7,8 @@ describe( 'HeatMapSourceGenerator', function() {
         subject = _HeatMapSourceGenerator_;
         $httpBackend = _$httpBackend_;
         MapService = _Map_;
+        geospatialFilter = {queryGeo: { minX: 1, maxX: 1, minY: 1, maxY: 1}};
+        spatialSpy = spyOn(MapService, 'getCurrentExtent').and.returnValue(geospatialFilter);
     }));
 
     describe('#getFormattedDateString', function() {
@@ -16,14 +18,11 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#startCsvExport', function() {
-        var spatialSpy, queryParamSpy, exportRequest, geospatialFilter;
+        var exportRequest, geospatialFilter;
         beforeEach(function() {
             solrHeatmapApp.bopwsConfig = { csvDocsLimit: 10 };
             solrHeatmapApp.appConfig = { tweetsExportBaseUrl: '/export' };
-            geospatialFilter = {queryGeo: { minX: 1, maxX: 1, minY: 1, maxY: 1}};
-            spatialSpy = spyOn(subject, 'getGeospatialFilter').and.returnValue(geospatialFilter);
-            queryParamSpy = spyOn(subject, 'getTweetsSearchQueryParameters').and.returnValue({});
-            exportRequest = $httpBackend.when('GET', '/export?d.docs.limit=10').respond('');
+            exportRequest = $httpBackend.when('GET', '/export?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
         });
         afterEach(function() {
             $httpBackend.resetExpectations();
@@ -31,23 +30,13 @@ describe( 'HeatMapSourceGenerator', function() {
             $httpBackend.verifyNoOutstandingRequest();
         });
         it('sends the export request', function() {
-            $httpBackend.expectGET('/export?d.docs.limit=10').respond('');
+            $httpBackend.expectGET('/export?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
             subject.startCsvExport();
             $httpBackend.flush();
         });
         it('sends the export request with numberofDocuments', function() {
-            $httpBackend.expectGET('/export?d.docs.limit=20').respond('');
+            $httpBackend.expectGET('/export?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=20&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
             subject.startCsvExport(20);
-            $httpBackend.flush();
-        });
-        it('calls getTweetsSearchQueryParameters', function() {
-            subject.startCsvExport();
-            expect(queryParamSpy).toHaveBeenCalledTimes(1);
-            $httpBackend.flush();
-        });
-        it('call getTweetsSearchQueryParameters with bounds', function() {
-            subject.startCsvExport();
-            expect(queryParamSpy).toHaveBeenCalledWith({minX: 1, maxX: 1, minY: 1, maxY: 1});
             $httpBackend.flush();
         });
         describe('no geospatial filter', function() {
@@ -75,14 +64,12 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#performSearch', function() {
-        var spatialSpy, queryParamSpy, exportRequest, geospatialFilter;
+        var exportRequest, geospatialFilter;
         beforeEach(function() {
             solrHeatmapApp.bopwsConfig = { csvDocsLimit: 10 };
             solrHeatmapApp.appConfig = { tweetsSearchBaseUrl: '/search' };
             geospatialFilter = {queryGeo: { minX: 1, maxX: 1, minY: 1, maxY: 1}};
-            spatialSpy = spyOn(subject, 'getGeospatialFilter').and.returnValue(geospatialFilter);
-            queryParamSpy = spyOn(subject, 'getTweetsSearchQueryParameters').and.returnValue({});
-            exportRequest = $httpBackend.when('GET', '/search').respond('');
+            exportRequest = $httpBackend.when('GET', '/search?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
         });
         afterEach(function() {
             $httpBackend.resetExpectations();
@@ -90,7 +77,7 @@ describe( 'HeatMapSourceGenerator', function() {
             $httpBackend.verifyNoOutstandingRequest();
         });
         it('sends the search request', function() {
-            $httpBackend.expectGET('/search').respond('');
+            $httpBackend.expectGET('/search?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
             subject.performSearch();
             $httpBackend.flush();
         });

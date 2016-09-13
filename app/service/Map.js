@@ -6,8 +6,8 @@
  */
 (function() {
     angular.module('SolrHeatmapApp')
-    .factory('Map', ['$rootScope', '$filter', '$document',
-        function($rootScope, $filter, $document) {
+    .factory('Map', ['$rootScope', '$filter', '$document', 'Normalize', '$controller',
+        function($rootScope, $filter, $document, NormalizeService, $controller) {
 
             var map = {},
                 defaults = {
@@ -447,6 +447,73 @@
                     setTransactionBBox(solrHeatmapApp.initMapConf.view.extent);
                 }
             }
+            /**
+             * Builds geospatial filter depending on the current map extent.
+             * This filter will be used later for `q.geo` parameter of the API
+             * search or export request.
+             */
+            function getCurrentExtent(){
+                var map = this.getMap(),
+                    viewProj = map.getView().getProjection().getCode(),
+                    extent = map.getView().calculateExtent(map.getSize()),
+                    extentWgs84 = ol.proj.transformExtent(extent, viewProj, 'EPSG:4326'),
+                    transformInteractionLayer = this.
+                                    getLayersBy('name', 'TransformInteractionLayer')[0],
+                    currentBbox,
+                    currentBboxExtentWgs84,
+                    geoFilter = {};
+
+                if (!transformInteractionLayer) {
+                    return null;
+                }
+                currentBbox = transformInteractionLayer.getSource().getFeatures()[0];
+                currentBboxExtentWgs84 = ol.proj.transformExtent(
+                                currentBbox.getGeometry().getExtent(), viewProj, 'EPSG:4326');
+
+                // default: Zoom level <= 1 query whole world
+                if (map.getView().getZoom() <= 1) {
+                    extentWgs84 = [-180, -90 ,180, 90];
+                }
+
+                if (extent && extentWgs84){
+                    var normalizedExtentMap = NormalizeService.normalizeExtent(extentWgs84),
+                        normalizedExtentBox = NormalizeService.normalizeExtent(currentBboxExtentWgs84),
+                        minX = normalizedExtentMap[1],
+                        maxX = normalizedExtentMap[3],
+                        minY = normalizedExtentMap[0],
+                        maxY = normalizedExtentMap[2];
+
+                    geoFilter.hmFilter = {
+                        minX: minX,
+                        maxX: maxX,
+                        minY: minY,
+                        maxY: maxY
+                    };
+
+                    minX = normalizedExtentBox[1];
+                    maxX = normalizedExtentBox[3];
+                    minY = normalizedExtentBox[0];
+                    maxY = normalizedExtentBox[2];
+
+                    geoFilter.queryGeo = {
+                        minX: minX,
+                        maxX: maxX,
+                        minY: minY,
+                        maxY: maxY
+                    };
+
+                    // Reset the date fields
+                    // TODO get rid of angular.element
+                    var ctrlViewModelNew = angular.element('[ng-controller=GeospatialFilterController]').scope();
+                    $controller('GeospatialFilterController', {$scope : ctrlViewModelNew });
+                    ctrlViewModelNew.updateFilterString('[' + parseFloat(Math.round(minX * 100) / 100).toFixed(2) + ',' +
+                                            parseFloat(Math.round(minY * 100) / 100).toFixed(2) + ' TO ' +
+                                            parseFloat(Math.round(maxX * 100) / 100).toFixed(2) + ',' +
+                                            parseFloat(Math.round(maxY * 100) / 100).toFixed(2) + ']');
+                }
+
+                return geoFilter;
+            }
 
             /**
              *
@@ -511,7 +578,8 @@
                 createHeatMapSource: createHeatMapSource,
                 heatmapMinMax: heatmapMinMax,
                 rescaleHeatmapValue: rescaleHeatmapValue,
-                resetMap: resetMap
+                resetMap: resetMap,
+                getCurrentExtent: getCurrentExtent
             };
 
             return ms;
