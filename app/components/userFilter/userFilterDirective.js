@@ -17,12 +17,14 @@
         };
     }
 
-    UserFilterController.$inject = ['HeatMapSourceGenerator', '$scope', '$uibModal'];
-    function UserFilterController(HeatMapSourceGeneratorService, $scope, $uibModal) {
+    UserFilterController.$inject = ['HeatMapSourceGenerator', '$scope',
+                                    '$uibModal', 'InfoService'];
+    function UserFilterController(HeatMapSourceGeneratorService, $scope,
+                                    $uibModal, InfoService) {
 
         $scope.userSearch = userSearch;
 
-        $scope.showInfo = showInfo;
+        $scope.showUserFilterInfo = showUserFilterInfo;
 
         /**
          *
@@ -32,23 +34,9 @@
             HeatMapSourceGeneratorService.performSearch();
         }
 
-        function showInfo(){
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'infoPopup.html',
-                controller: 'InfoWindowController',
-                size: 'lg',
-                resolve: {
-                    infoMsg: function(){
-                        return solrHeatmapApp.instructions.
-                                                userfilter.instruction;
-                    },
-                    toolName: function(){
-                        return solrHeatmapApp.instructions.
-                                                userfilter.toolTitle;
-                    }
-                }
-            });
+        function showUserFilterInfo() {
+            InfoService.showInfoPopup(solrHeatmapApp.instructions.userfilter.instruction,
+                solrHeatmapApp.instructions.userfilter.toolTitle);
         }
     }
 })();

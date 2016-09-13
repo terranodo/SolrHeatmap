@@ -18,9 +18,9 @@
     }
 
     toolbarSearchController.$inject = ['Map', 'HeatMapSourceGenerator', '$scope',
-                                        '$uibModal', '$controller', '$window'];
+                                        '$uibModal', '$controller', '$window', 'InfoService'];
     function toolbarSearchController(MapService, HeatMapSourceGeneratorService,
-                                        $scope, $uibModal, $controller, $window) {
+                                        $scope, $uibModal, $controller, $window, InfoService) {
         /**
          *
          */
@@ -70,21 +70,9 @@
             ctrlViewModelNew.setInitialDates();
         };
 
-        $scope.showInfo = function(){
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'infoPopup.html',
-                controller: 'InfoWindowController',
-                size: 'lg',
-                resolve: {
-                    infoMsg: function(){
-                        return solrHeatmapApp.instructions.textsearch.instruction;
-                    },
-                    toolName: function(){
-                        return solrHeatmapApp.instructions.textsearch.toolTitle;
-                    }
-                }
-            });
+        $scope.showtoolbarSearchInfo = function() {
+            InfoService.showInfoPopup(solrHeatmapApp.instructions.textsearch.instruction,
+                solrHeatmapApp.instructions.textsearch.toolTitle);
         };
     }
 })();

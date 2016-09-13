@@ -16,28 +16,14 @@
         };
     }
 
-    GeospatialFilterController.$inject = ['$scope', '$uibModal'];
-    function GeospatialFilterController($scope, $uibModal) {
+    GeospatialFilterController.$inject = ['$scope', '$uibModal', 'InfoService'];
+    function GeospatialFilterController($scope, $uibModal, InfoService) {
 
         $scope.filterString = '[-90,-180 TO 90,180]';
 
-        $scope.showInfo = function(){
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'infoPopup.html',
-                controller: 'InfoWindowController',
-                size: 'lg',
-                resolve: {
-                    infoMsg: function(){
-                        return solrHeatmapApp.instructions.
-                                        geospatialsearch.instruction;
-                    },
-                    toolName: function(){
-                        return solrHeatmapApp.instructions.
-                                        geospatialsearch.toolTitle;
-                    }
-                }
-            });
+        $scope.showGeospatialInfo = function() {
+            InfoService.showInfoPopup(solrHeatmapApp.instructions.geospatialsearch.instruction,
+                solrHeatmapApp.instructions.geospatialsearch.toolTitle);
         };
 
         $scope.updateFilterString = function(str) {

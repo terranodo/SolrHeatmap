@@ -18,10 +18,10 @@
     }
 
     datePickerFilterController.$inject = [
-        '$rootScope', 'HeatMapSourceGenerator','$uibModal', '$scope'
+        '$rootScope', 'HeatMapSourceGenerator','$uibModal', '$scope', 'InfoService'
     ];
     function datePickerFilterController(
-        $rootScope, HeatMapSourceGeneratorService, $uibModal, $scope) {
+        $rootScope, HeatMapSourceGeneratorService, $uibModal, $scope, InfoService) {
 
         var vm = $scope;
 
@@ -49,7 +49,7 @@
 
         vm.onChangeDatepicker = onChangeDatepicker;
 
-        vm.showInfo = showInfo;
+        vm.showDatepickerInfo = showDatepickerInfo;
 
         vm.openEndDate = openEndDate;
 
@@ -135,21 +135,9 @@
             }
         }
 
-        function showInfo(){
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'infoPopup.html',
-                controller: 'InfoWindowController',
-                size: 'lg',
-                resolve: {
-                    infoMsg: function(){
-                        return solrHeatmapApp.instructions.datepicker.instruction;
-                    },
-                    toolName: function(){
-                        return solrHeatmapApp.instructions.datepicker.toolTitle;
-                    }
-                }
-            });
+        function showDatepickerInfo() {
+            InfoService.showInfoPopup(solrHeatmapApp.instructions.datepicker.instruction,
+                solrHeatmapApp.instructions.datepicker.toolTitle);
         }
 
         function setHistogram(event, dataHistogram) {

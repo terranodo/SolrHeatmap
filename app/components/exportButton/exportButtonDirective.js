@@ -17,8 +17,10 @@
         };
     }
 
-    ExportController.$inject = ['HeatMapSourceGenerator', '$uibModal', '$scope'];
-    function ExportController(HeatMapSourceGeneratorService, $uibModal, $scope) {
+    ExportController.$inject = ['HeatMapSourceGenerator', '$uibModal',
+                                '$scope', 'InfoService'];
+    function ExportController(HeatMapSourceGeneratorService, $uibModal,
+                                $scope, InfoService) {
 
         $scope.export = {
             numDocuments: 1,
@@ -35,21 +37,9 @@
             HeatMapSourceGeneratorService.startCsvExport(numDocs);
         };
 
-        $scope.showInfo = function(){
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'infoPopup.html',
-                controller: 'InfoWindowController',
-                size: 'lg',
-                resolve: {
-                    infoMsg: function(){
-                        return solrHeatmapApp.instructions.export.instruction;
-                    },
-                    toolName: function(){
-                        return solrHeatmapApp.instructions.export.toolTitle;
-                    }
-                }
-            });
+        $scope.showExportInfo = function() {
+            InfoService.showInfoPopup(solrHeatmapApp.instructions.export.instruction,
+                solrHeatmapApp.instructions.export.toolTitle);
         };
 
     }
