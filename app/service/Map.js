@@ -453,8 +453,7 @@
              * search or export request.
              */
             function getCurrentExtent(){
-                var map = this.getMap(),
-                    viewProj = map.getView().getProjection().getCode(),
+                var viewProj = map.getView().getProjection().getCode(),
                     extent = map.getView().calculateExtent(map.getSize()),
                     extentWgs84 = ol.proj.transformExtent(extent, viewProj, 'EPSG:4326'),
                     transformInteractionLayer = this.
@@ -477,7 +476,8 @@
 
                 if (extent && extentWgs84){
                     var normalizedExtentMap = NormalizeService.normalizeExtent(extentWgs84),
-                        normalizedExtentBox = NormalizeService.normalizeExtent(currentBboxExtentWgs84),
+                        normalizedExtentBox =
+                            NormalizeService.normalizeExtent(currentBboxExtentWgs84),
                         minX = normalizedExtentMap[1],
                         maxX = normalizedExtentMap[3],
                         minY = normalizedExtentMap[0],
@@ -502,14 +502,19 @@
                         maxY: maxY
                     };
 
+                    var roundToFixed = function(value){
+                        return parseFloat(Math.round(value* 100) / 100).toFixed(2);
+                    };
                     // Reset the date fields
                     // TODO get rid of angular.element
-                    var ctrlViewModelNew = angular.element('[ng-controller=GeospatialFilterController]').scope();
+                    var ctrlViewModelNew =
+                        angular.element('[ng-controller=GeospatialFilterController]').scope();
                     $controller('GeospatialFilterController', {$scope : ctrlViewModelNew });
-                    ctrlViewModelNew.updateFilterString('[' + parseFloat(Math.round(minX * 100) / 100).toFixed(2) + ',' +
-                                            parseFloat(Math.round(minY * 100) / 100).toFixed(2) + ' TO ' +
-                                            parseFloat(Math.round(maxX * 100) / 100).toFixed(2) + ',' +
-                                            parseFloat(Math.round(maxY * 100) / 100).toFixed(2) + ']');
+                    ctrlViewModelNew.updateFilterString('[' +
+                                            roundToFixed(minX) + ',' +
+                                            roundToFixed(minY) + ' TO ' +
+                                            roundToFixed(maxX) + ',' +
+                                            roundToFixed(maxY) + ']');
                 }
 
                 return geoFilter;

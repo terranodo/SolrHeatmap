@@ -10,6 +10,12 @@
     .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window', '$document', '$http',
         function(MapService, $rootScope, $controller, $filter, $window, $document , $http) {
 
+            var methods = {
+                performSearch: performSearch,
+                startCsvExport: startCsvExport,
+                getFormattedDateString: getFormattedDateString,
+                filterObj: filterMethods()
+            };
             /**
              *
              */
@@ -39,19 +45,12 @@
                 return params;
             }
             var createParamsForGeospatialSearch = function() {
-                var spatialFilters = MapService.getCurrentExtent(),
-                        params;
+                var spatialFilters = MapService.getCurrentExtent(), params;
                 if(spatialFilters) {
                     params = getTweetsSearchQueryParameters(
                                         spatialFilters.queryGeo);
                 }
                 return params;
-            };
-            var methods = {
-                performSearch: performSearch,
-                startCsvExport: startCsvExport,
-                getFormattedDateString: getFormattedDateString,
-                filterObj: filterMethods()
             };
 
             return methods;
