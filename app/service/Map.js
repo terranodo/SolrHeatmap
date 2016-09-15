@@ -506,11 +506,7 @@
                         return parseFloat(Math.round(value* 100) / 100).toFixed(2);
                     };
                     // Reset the date fields
-                    // TODO get rid of angular.element
-                    var ctrlViewModelNew =
-                        angular.element('[ng-controller=GeospatialFilterController]').scope();
-                    $controller('GeospatialFilterController', {$scope : ctrlViewModelNew });
-                    ctrlViewModelNew.updateFilterString('[' +
+                    $rootScope.$broadcast('geoFilterUpdated', '[' +
                                             roundToFixed(minX) + ',' +
                                             roundToFixed(minY) + ' TO ' +
                                             roundToFixed(maxX) + ',' +
