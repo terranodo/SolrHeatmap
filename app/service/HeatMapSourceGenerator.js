@@ -11,6 +11,7 @@
         function(MapService, $rootScope, $controller, $filter, $window, $document , $http) {
 
             var methods = {
+                search: search,
                 performSearch: performSearch,
                 startCsvExport: startCsvExport,
                 getFormattedDateString: getFormattedDateString,
@@ -54,6 +55,11 @@
             };
 
             return methods;
+
+            function search(input) {
+                this.filterObj.setSearchText(input);
+                this.performSearch();
+            }
 
             function filterMethods() {
                 var searchObj = {
