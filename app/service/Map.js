@@ -522,8 +522,7 @@
             function init(config) {
                 var viewConfig = angular.extend(defaults.view,
                                                     config.mapConfig.view),
-                    rendererConfig = angular.extend(defaults.renderer,
-                                                    config.mapConfig.renderer),
+                    rendererConfig = config.mapConfig.renderer ? config.mapConfig.renderer : defaults.renderer,
                     layerConfig = config.mapConfig.layers;
 
                 map = new ol.Map({
