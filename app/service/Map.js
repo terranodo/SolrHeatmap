@@ -560,7 +560,7 @@
                 if (angular.isArray(viewConfig.extent)) {
                     var vw = map.getView();
                     vw.set('extent', viewConfig.extent);
-                    generateMaskAndAssociatedInteraction(viewConfig.extent, viewConfig.projection);
+                    this.generateMaskAndAssociatedInteraction(viewConfig.extent, viewConfig.projection);
                 }
             }
 
