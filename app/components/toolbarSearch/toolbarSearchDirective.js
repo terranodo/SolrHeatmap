@@ -14,7 +14,7 @@
             controller: toolbarSearchController,
             restrict: 'EA',
             templateUrl: 'app/components/toolbarSearch/toolbarSearchField.html',
-            controllerAs: 'vm',
+            controllerAs: 'vm'
         };
     }
 
