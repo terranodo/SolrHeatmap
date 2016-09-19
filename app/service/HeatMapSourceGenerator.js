@@ -1,4 +1,4 @@
-/*eslint angular/di: [2,'array']*/
+/*eslint angular/di: [2,"array"]*/
 /*eslint angular/document-service: 2*/
 /*eslint max-len: [2,150]*/
 /**
@@ -7,13 +7,14 @@
 (function() {
     angular
     .module('SolrHeatmapApp')
-    .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window', '$document', '$http',
+    .factory('HeatMapSourceGenerator', ['MapService', '$rootScope', '$controller', '$filter', '$window', '$document', '$http',
         function(MapService, $rootScope, $controller, $filter, $window, $document , $http) {
 
 
             var methods = {
                 getGeospatialFilter: getGeospatialFilter,
                 getTweetsSearchQueryParameters: getTweetsSearchQueryParameters,
+                search: search,
                 performSearch: performSearch,
                 startCsvExport: startCsvExport,
                 getFormattedDateString: getFormattedDateString,
@@ -21,6 +22,11 @@
             };
 
             return methods;
+
+            function search(input) {
+                this.filterObj.setSearchText(input);
+                this.performSearch();
+            }
 
             function filterMethods() {
                 var searchObj = {

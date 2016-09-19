@@ -1,7 +1,7 @@
 <div class="col-xs-7 padding-search">
-    <div class="input-group searchinputfield" id="vm.searchinput">
-        <input class="form-control input-sm" type="text" placeholder="Enter keyword" ng-keypress="vm.onKeyPress($event)"
-          ng-model="vm.searchInput" ng-click="onFocus()" ng-blur="onBlur()">
+    <div class="input-group searchinputfield" id="searchinput">
+        <input class="form-control input-sm" type="text" placeholder="Enter keyword" ng-keypress="onKeyPress($event)"
+          ng-model="searchInput" ng-click="onFocus()" ng-blur="onBlur()">
         <span class="input-group-addon">
             <i class="glyphicon glyphicon-search"></i>
         </span>
@@ -9,14 +9,14 @@
 </div>
 <div class="col-xs-5 padding-search">
     <span class="searchbtn">
-       <button class="btn btn-primary btn-sm" type="button" ng-click="vm.doSearch()">Search</button>
+       <button class="btn btn-primary btn-sm" type="button" ng-click="doSearch()">Search</button>
     </span>
     <span class="searchbtn">
-        <button class="btn btn-primary btn-sm" type="button" ng-click="vm.resetSearchInput()">Reset</button>
+        <button class="btn btn-primary btn-sm" type="button" ng-click="resetSearchInput()">Reset</button>
     </span>
 
     <span class="searchbtn">
-        <a href="" class="infobtn" ng-click="vm.showtoolbarSearchInfo()">
+        <a href="" class="infobtn" ng-click="showtoolbarSearchInfo()">
              <span class="glyphicon glyphicon-info-sign"></span>
         </a>
     </span>

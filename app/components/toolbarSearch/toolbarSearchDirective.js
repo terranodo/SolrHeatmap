@@ -13,17 +13,16 @@
         return {
             controller: toolbarSearchController,
             restrict: 'EA',
-            templateUrl: 'app/components/toolbarSearch/toolbarSearchField.html',
-            controllerAs: 'vm'
+            templateUrl: 'app/components/toolbarSearch/toolbarSearchField.html'
         };
     }
 
-    toolbarSearchController.$inject = ['Map', 'HeatMapSourceGenerator', '$uibModal',
+    toolbarSearchController.$inject = ['MapService', 'HeatMapSourceGenerator', '$scope', '$uibModal',
                                         '$controller', '$window', 'InfoService'];
-    function toolbarSearchController(MapService, HeatMapSourceGeneratorService,
+    function toolbarSearchController(MapService, HeatMapSourceGeneratorService, $scope,
                                         $uibModal, $controller, $window, InfoService) {
 
-        var vm = this;
+        var vm = $scope;
         /**
          *
          */
@@ -54,15 +53,12 @@
             // if (vm.searchInput.length === 0) {
             //    return false;
             // }
-
-            HeatMapSourceGeneratorService.filterObj.setSearchText(vm.searchInput);
-            HeatMapSourceGeneratorService.performSearch();
+            HeatMapSourceGeneratorService.search(vm.searchInput);
         };
 
         vm.resetSearchInput = function() {
             vm.searchInput = '';
-            HeatMapSourceGeneratorService.filterObj.setSearchText('');
-            HeatMapSourceGeneratorService.performSearch();
+            HeatMapSourceGeneratorService.search(vm.searchInput);
 
             // Reset the map
             MapService.resetMap();

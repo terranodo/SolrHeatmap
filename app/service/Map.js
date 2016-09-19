@@ -2,11 +2,11 @@
 /*eslint angular/document-service: 2*/
 /*eslint max-len: [2,100]*/
 /**
- * Map Service
+ * MapService
  */
 (function() {
     angular.module('SolrHeatmapApp')
-    .factory('Map', ['$rootScope', '$filter', '$document',
+    .factory('MapService', ['$rootScope', '$filter', '$document',
         function($rootScope, $filter, $document) {
 
             var map = {},
