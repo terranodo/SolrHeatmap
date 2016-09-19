@@ -4,21 +4,21 @@
                 <label class="control-label col-md-1">From:</label>
                 <div class="col-md-5">
                     <p class="input-group">
-                        <input type="text" class="form-control input-sm" uib-datepicker-popup ng-model="dts" is-open="startDate.opened"
-                            show-button-bar="false" datepicker-options="dateOptions" ng-required="true"
-                            ng-model-options="{timezone: 'UTC'}" ng-change="onChangeDatepicker()" readonly/>
+                        <input type="text" class="form-control input-sm" uib-datepicker-popup ng-model="vm.dts" is-open="vm.startDate.opened"
+                            show-button-bar="false" datepicker-options="vm.dateOptions" ng-required="vm.true"
+                            ng-model-options="{timezone: 'UTC'}" ng-change="vm.onChangeDatepicker()" readonly/>
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="openStartDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            <button type="button" class="btn btn-default btn-sm" ng-click="vm.openStartDate()"><i class="glyphicon glyphicon-calendar"></i></button>
                         </span>
                     </p>
                 </div>
                 <label class="control-label col-md-1">To:</label>
                 <div class="col-md-5">
                     <p class="input-group">
-                        <input type="text" class="form-control input-sm" uib-datepicker-popup ng-model="dte" is-open="endDate.opened" show-button-bar="false"
-                          datepicker-options="dateOptions" ng-required="true" ng-change="onChangeDatepicker()" readonly />
+                        <input type="text" class="form-control input-sm" uib-datepicker-popup ng-model="vm.dte" is-open="vm.endDate.opened" show-button-bar="false"
+                          datepicker-options="vm.dateOptions" ng-required="true" ng-change="vm.onChangeDatepicker()" readonly />
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-sm" ng-click="openEndDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            <button type="button" class="btn btn-default btn-sm" ng-click="vm.openEndDate()"><i class="glyphicon glyphicon-calendar"></i></button>
                         </span>
                     </p>
                 </div>
@@ -29,15 +29,15 @@
     <div class="col-md-12 component-padding">
         <div class="row">
           <div class="col-md-12">
-              <form ng-submit="onSubmitDateText()">
+              <form ng-submit="vm.onSubmitDateText()">
                   <div class="form-group">
                       <span class="searchbtn">
-                          <a href="" class="infobtn" ng-click="showDatepickerInfo()">
+                          <a href="" class="infobtn" ng-click="vm.showDatepickerInfo()">
                                <span class="glyphicon glyphicon-info-sign"></span>
                           </a>
                       </span>
                       <label for="focusedInput" class="control-label">Date:</label>
-                      <input id="focusedInput" class="form-control input-sm" type="text" ng-model="dateString">
+                      <input id="focusedInput" class="form-control input-sm" type="text" ng-model="vm.dateString">
                   </div>
               </form>
 
@@ -47,5 +47,5 @@
 
     <div class="col-md-12 component-padding">
         <time-histogram barId="inbar"></time-histogram>
-        <rzslider  rz-slider-model="slider.minValue" rz-slider-high="slider.maxValue" rz-slider-options="slider.options"></rzslider>
+        <rzslider rz-slider-model="vm.slider.minValue" rz-slider-high="vm.slider.maxValue" rz-slider-options="vm.slider.options"></rzslider>
     </div>

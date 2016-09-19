@@ -13,18 +13,21 @@
         return {
             controller: toolbarSearchController,
             restrict: 'EA',
-            templateUrl: 'app/components/toolbarSearch/toolbarSearchField.html'
+            templateUrl: 'app/components/toolbarSearch/toolbarSearchField.html',
+            controllerAs: 'vm',
         };
     }
 
-    toolbarSearchController.$inject = ['Map', 'HeatMapSourceGenerator', '$scope',
-                                        '$uibModal', '$controller', '$window', 'InfoService'];
+    toolbarSearchController.$inject = ['Map', 'HeatMapSourceGenerator', '$uibModal',
+                                        '$controller', '$window', 'InfoService'];
     function toolbarSearchController(MapService, HeatMapSourceGeneratorService,
-                                        $scope, $uibModal, $controller, $window, InfoService) {
+                                        $uibModal, $controller, $window, InfoService) {
+
+        var vm = this;
         /**
          *
          */
-        $scope.searchInput = '';
+        vm.searchInput = '';
 
         /**
          *
@@ -36,28 +39,28 @@
         /**
          *
          */
-        $scope.onKeyPress = function($event) {
+        vm.onKeyPress = function($event) {
             // only fire the search if Enter-key (13) is pressed
             if (getKeyboardCodeFromEvent($event) === 13) {
-                $scope.doSearch();
+                vm.doSearch();
             }
         };
 
         /**
          *
          */
-        $scope.doSearch = function() {
+        vm.doSearch = function() {
             // if no input is given
-            // if ($scope.searchInput.length === 0) {
+            // if (vm.searchInput.length === 0) {
             //    return false;
             // }
 
-            HeatMapSourceGeneratorService.filterObj.setSearchText($scope.searchInput);
+            HeatMapSourceGeneratorService.filterObj.setSearchText(vm.searchInput);
             HeatMapSourceGeneratorService.performSearch();
         };
 
-        $scope.resetSearchInput = function() {
-            $scope.searchInput = '';
+        vm.resetSearchInput = function() {
+            vm.searchInput = '';
             HeatMapSourceGeneratorService.filterObj.setSearchText('');
             HeatMapSourceGeneratorService.performSearch();
 
@@ -65,12 +68,10 @@
             MapService.resetMap();
 
             // Reset the date fields
-            var ctrlViewModelNew = $scope.$new();
-            $controller('DatePickerController', {$scope : ctrlViewModelNew });
-            ctrlViewModelNew.setInitialDates();
+            //ToDo: Reset date fields
         };
 
-        $scope.showtoolbarSearchInfo = function() {
+        vm.showtoolbarSearchInfo = function() {
             InfoService.showInfoPopup('textsearch');
         };
     }

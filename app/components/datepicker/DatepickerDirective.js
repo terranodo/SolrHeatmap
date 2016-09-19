@@ -12,6 +12,7 @@
     function datePicker() {
         return {
             controller: datePickerFilterController,
+            controllerAs: 'vm',
             templateUrl: 'app/components/datepicker/datepicker.html',
             restrict: 'EA'
         };
@@ -23,7 +24,7 @@
     function datePickerFilterController(
         $rootScope, HeatMapSourceGeneratorService, $uibModal, $scope, InfoService) {
 
-        var vm = $scope;
+        var vm = this;
 
         vm.initialDateOptions = {
             minDate: new Date('2013-03-01'),
@@ -69,9 +70,9 @@
 
         vm.setInitialDates();
 
-        vm.$on('setHistogram', setHistogram);
+        $scope.$on('setHistogram', setHistogram);
 
-        vm.$on('slideEnded', slideEnded);
+        $scope.$on('slideEnded', slideEnded);
 
         /**
          * Will be called on click on start datepicker.
