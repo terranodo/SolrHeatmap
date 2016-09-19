@@ -22,8 +22,7 @@
         $scope.filterString = '[-90,-180 TO 90,180]';
 
         $scope.showGeospatialInfo = function() {
-            InfoService.showInfoPopup(solrHeatmapApp.instructions.geospatialsearch.instruction,
-                solrHeatmapApp.instructions.geospatialsearch.toolTitle);
+            InfoService.showInfoPopup('geospatialsearch');
         };
 
         $scope.updateFilterString = function(str) {

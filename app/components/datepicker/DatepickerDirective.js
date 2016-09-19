@@ -136,8 +136,7 @@
         }
 
         function showDatepickerInfo() {
-            InfoService.showInfoPopup(solrHeatmapApp.instructions.datepicker.instruction,
-                solrHeatmapApp.instructions.datepicker.toolTitle);
+            InfoService.showInfoPopup('datepicker');
         }
 
         function setHistogram(event, dataHistogram) {

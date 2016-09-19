@@ -71,8 +71,7 @@
         };
 
         $scope.showtoolbarSearchInfo = function() {
-            InfoService.showInfoPopup(solrHeatmapApp.instructions.textsearch.instruction,
-                solrHeatmapApp.instructions.textsearch.toolTitle);
+            InfoService.showInfoPopup('textsearch');
         };
     }
 })();

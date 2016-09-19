@@ -1,4 +1,4 @@
-/*eslint angular/di: [2,'array']*/
+/*eslint angular/di: [2, "array"]*/
 /*eslint angular/document-service: 2*/
 /*eslint max-len: [2,150]*/
 /**
@@ -13,21 +13,25 @@
             showInfoPopup: showInfoPopup
         };
 
-        function showInfoPopup(infoMsg, toolName){
-            var modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'infoPopup.html',
-                controller: 'InfoWindowController',
-                size: 'lg',
-                resolve: {
-                    infoMsg: function(){
-                        return infoMsg;
-                    },
-                    toolName: function(){
-                        return toolName;
+        function showInfoPopup(instructionsKey){
+            var instructionTopic = solrHeatmapApp.instructions[instructionsKey];
+            if (instructionTopic) {
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    templateUrl: 'infoPopup.html',
+                    controller: 'InfoWindowController',
+                    size: 'lg',
+                    resolve: {
+                        infoMsg: function(){
+                            return instructionTopic.instruction;
+                        },
+                        toolName: function(){
+                            return instructionTopic.toolTitle;
+                        }
                     }
-                }
-            });
+                });
+            }
+
         }
     }]);
 

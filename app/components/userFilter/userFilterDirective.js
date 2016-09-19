@@ -35,8 +35,7 @@
         }
 
         function showUserFilterInfo() {
-            InfoService.showInfoPopup(solrHeatmapApp.instructions.userfilter.instruction,
-                solrHeatmapApp.instructions.userfilter.toolTitle);
+            InfoService.showInfoPopup('userfilter');
         }
     }
 })();

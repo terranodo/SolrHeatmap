@@ -38,8 +38,7 @@
         };
 
         $scope.showExportInfo = function() {
-            InfoService.showInfoPopup(solrHeatmapApp.instructions.export.instruction,
-                solrHeatmapApp.instructions.export.toolTitle);
+            InfoService.showInfoPopup('export');
         };
 
     }
