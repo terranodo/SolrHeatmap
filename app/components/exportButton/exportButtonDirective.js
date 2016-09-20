@@ -13,7 +13,17 @@
         return {
             controller: ExportController,
             restrict: 'EA',
-            templateUrl: 'app/components/exportButton/exportButton.html'
+            templateUrl: 'exportButton/exportButton.tpl.html',
+            link: function(scope) {
+                scope.export = {
+                    numDocuments: 1,
+                    options: {
+                        floor: 1,
+                        ceil: 10000,
+                        step: 1
+                    }
+                };
+            }
         };
     }
 

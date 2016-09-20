@@ -1,17 +1,24 @@
 describe( 'ExportController', function() {
-    var ExportController, $scope, rootScope, HeatMapSourceGeneratorService, uibModal;
+    var ExportController, scope, rootScope, HeatMapSourceGeneratorService, uibModal, compiledElement;
 
-    beforeEach( module( 'SolrHeatmapApp' ) );
+    beforeEach(module('SolrHeatmapApp'));
+    beforeEach(module('search_exportButton_component'));
 
-    beforeEach( inject( function( $controller, $rootScope, _HeatMapSourceGenerator_, _$uibModal_) {
+    beforeEach(inject( function($compile, $controller, $rootScope, _HeatMapSourceGenerator_, _$uibModal_) {
         rootScope = $rootScope;
-        $scope = $rootScope.$new();
+        scope = $rootScope.$new();
+
+        var element = angular.element('<export-button></exportButton>');
+        compiledElement = $compile(element)(scope);
+        scope.$digest();
+
         HeatMapSourceGeneratorService = _HeatMapSourceGenerator_;
         uibModal = _$uibModal_;
-        ExportController = $controller( 'ExportController', { $scope: $scope });
+
     }));
+
     it( 'export has defaults', function() {
-        expect($scope.export.numDocuments).toEqual(1);
+        expect(compiledElement.scope().export.numDocuments).toEqual(1);
     });
     describe('#startExport', function() {
         var startExportSpy;
@@ -20,12 +27,12 @@ describe( 'ExportController', function() {
         });
         describe('calls search on HeatMapSourceGeneratorService', function() {
             it('once', function() {
-                $scope.startExport();
+                compiledElement.scope().startExport();
                 expect(startExportSpy).toHaveBeenCalledTimes(1);
             });
             it('with number of docs', function() {
-                $scope.export.numDocuments = 10;
-                $scope.startExport();
+                compiledElement.scope().export.numDocuments = 10;
+                compiledElement.scope().startExport();
                 expect(startExportSpy).toHaveBeenCalledWith(10);
             });
         });
@@ -33,7 +40,7 @@ describe( 'ExportController', function() {
     describe('#showInfo', function() {
         it('opens the modal info', function() {
             var modalSpy = spyOn(uibModal, 'open');
-            $scope.showInfo();
+            compiledElement.scope().showExportInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);
         });
     });

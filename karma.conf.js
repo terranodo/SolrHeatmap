@@ -13,7 +13,8 @@ module.exports = function ( config ) {
       'node_modules/angularjs-slider/dist/rzslider.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'app/**/*.js',
-      'tests/**/*.spec.js'
+      'tests/**/*.spec.js',
+      'tmp/templates.js'
     ],
     exclude: [
     ],
