@@ -246,3 +246,8 @@ code {
 .component-padding {
   padding: 4px;
 }
+
+.tweetlist-box {
+   margin-top: -10px;
+   margin-bottom: -10px;
+}
