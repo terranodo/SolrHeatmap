@@ -7,7 +7,7 @@ describe( 'HeatMapSourceGenerator', function() {
         subject = _HeatMapSourceGenerator_;
         $httpBackend = _$httpBackend_;
         MapService = _Map_;
-        geospatialFilter = {queryGeo: { minX: 1, maxX: 1, minY: 1, maxY: 1}};
+        geospatialFilter = { minX: 1, maxX: 1, minY: 1, maxY: 1};
         spatialSpy = spyOn(MapService, 'getCurrentExtent').and.returnValue(geospatialFilter);
     }));
 

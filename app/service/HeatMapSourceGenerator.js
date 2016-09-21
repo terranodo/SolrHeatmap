@@ -49,7 +49,7 @@
                 var spatialFilters = MapService.getCurrentExtent(), params;
                 if(spatialFilters) {
                     params = getTweetsSearchQueryParameters(
-                                        spatialFilters.queryGeo);
+                                        spatialFilters);
                 }
                 return params;
             };
