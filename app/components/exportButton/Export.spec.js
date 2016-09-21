@@ -1,10 +1,10 @@
 describe( 'ExportDirective', function() {
-    var $scope, element, rootScope, HeatMapSourceGeneratorService, uibModal, compiledElement;
+    var $scope, element, rootScope, HeatMapSourceGeneratorService, compiledElement, InfoService;
 
     beforeEach(module('SolrHeatmapApp'));
     beforeEach(module('search_exportButton_component'));
 
-    beforeEach(inject( function($compile, $controller, $rootScope, _HeatMapSourceGenerator_, _$uibModal_) {
+    beforeEach(inject( function($compile, $controller, $rootScope, _HeatMapSourceGenerator_, _InfoService_) {
         rootScope = $rootScope;
         $scope = $rootScope.$new();
 
@@ -13,8 +13,7 @@ describe( 'ExportDirective', function() {
         $scope.$digest();
 
         HeatMapSourceGeneratorService = _HeatMapSourceGenerator_;
-        uibModal = _$uibModal_;
-
+        InfoService = _InfoService_;
     }));
 
     it( 'export has defaults', function() {
@@ -39,8 +38,7 @@ describe( 'ExportDirective', function() {
     });
     describe('#showInfo', function() {
         it('opens the modal info', function() {
-            pending();
-            var modalSpy = spyOn(uibModal, 'open');
+            var modalSpy = spyOn(InfoService, 'showInfoPopup');
             $scope.showExportInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);
         });

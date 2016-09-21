@@ -1,9 +1,9 @@
 describe( 'UserFilterDirective', function() {
-    var $scope, rootScope, HeatMapSourceGeneratorService, uibModal, element, compiledElement;
+    var $scope, rootScope, HeatMapSourceGeneratorService, InfoService, element, compiledElement;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
-    beforeEach( inject( function($compile, $controller, $rootScope, _HeatMapSourceGenerator_, _$uibModal_) {
+    beforeEach( inject( function($compile, $controller, $rootScope, _HeatMapSourceGenerator_, _InfoService_) {
         rootScope = $rootScope;
         $scope = $rootScope.$new();
 
@@ -12,7 +12,7 @@ describe( 'UserFilterDirective', function() {
         $scope.$digest();
 
         HeatMapSourceGeneratorService = _HeatMapSourceGenerator_;
-        uibModal = _$uibModal_;
+        InfoService = _InfoService_;
     }));
     it( 'searchInput is empty string', function() {
         expect($scope.userfilterInput).toEqual('');
@@ -36,8 +36,7 @@ describe( 'UserFilterDirective', function() {
     });
     describe('#showInfo', function() {
         it('opens the modal info', function() {
-            pending();
-            var modalSpy = spyOn(uibModal, 'open');
+            var modalSpy = spyOn(InfoService, 'showInfoPopup');
             $scope.showUserFilterInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);
         });
