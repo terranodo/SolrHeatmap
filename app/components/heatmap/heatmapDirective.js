@@ -13,7 +13,7 @@
         return {
             controller: ResultCounterController,
             restrict: 'EA',
-            templateUrl: 'app/components/heatmap/heatmap.html'
+            templateUrl: 'heatmap/heatmap.tpl.html'
         };
     }
 

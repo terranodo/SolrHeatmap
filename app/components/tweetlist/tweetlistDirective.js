@@ -7,7 +7,7 @@
         return {
             controller: tweetlistController,
             restrict: 'EA',
-            templateUrl: 'app/components/tweetlist/tweetlist.html'
+            templateUrl: 'tweetlist/tweetlist.tpl.html'
         };
     }
 

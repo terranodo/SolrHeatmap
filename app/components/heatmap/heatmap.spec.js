@@ -1,12 +1,14 @@
-describe( 'ResultCounter', function() {
-    var ResultController, $scope, rootScope;
+describe( 'HeatmapResultCounter', function() {
+    var $scope, rootScope, element, compiledElement;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
-    beforeEach( inject( function( $controller, $rootScope) {
+    beforeEach( inject( function($compile, $controller, $rootScope) {
         rootScope = $rootScope;
         $scope = $rootScope.$new();
-        ResultController = $controller( 'ResultCounterController', { $scope: $scope });
+        element = angular.element('<heatmap></heatmap>');
+        compiledElement = $compile(element)($scope);
+        $scope.$digest();
     }));
     describe('#setCounter', function() {
         describe('broadcast is wrong', function() {

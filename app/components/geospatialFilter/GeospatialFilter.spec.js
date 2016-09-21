@@ -1,13 +1,16 @@
-describe( 'GeospatialFilterController', function() {
-    var GeospatialFilterController, $scope, rootScope, uibModal;
+describe( 'GeospatialFilterDirective', function() {
+    var $scope, rootScope, uibModal, element, compiledElement;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
+    beforeEach( module( 'search_geospatialFilter_component' ) );
 
-    beforeEach( inject( function( $controller, $rootScope, _$uibModal_) {
+    beforeEach( inject( function($compile, $controller, $rootScope, _$uibModal_) {
         rootScope = $rootScope;
         $scope = $rootScope.$new();
+        element = angular.element('<geospatial-filter></geospatial-filter>');
+        compiledElement = $compile(element)($scope);
+        $scope.$digest();
         uibModal = _$uibModal_;
-        GeospatialFilterController = $controller( 'GeospatialFilterController', { $scope: $scope });
     }));
     it( 'filterString has default', function() {
         expect($scope.filterString).toEqual('[-90,-180 TO 90,180]');
@@ -21,7 +24,7 @@ describe( 'GeospatialFilterController', function() {
     describe('#showInfo', function() {
         it('opens the modal info', function() {
             var modalSpy = spyOn(uibModal, 'open');
-            $scope.showInfo();
+            $scope.showGeospatialInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);
         });
     });

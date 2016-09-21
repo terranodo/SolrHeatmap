@@ -1,15 +1,19 @@
-describe( 'SearchController', function() {
-    var SearchController, $scope, rootScope, HeatMapSourceGeneratorService, MapService, uibModal;
+describe( 'SearchDirective', function() {
+    var $scope, rootScope, HeatMapSourceGeneratorService, MapService, uibModal, element, compiledElement;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
-    beforeEach( inject( function( $controller, $rootScope, _HeatMapSourceGenerator_, _Map_, _$uibModal_) {
+    beforeEach( inject( function($compile, $controller, $rootScope, _HeatMapSourceGenerator_, _MapService_, _$uibModal_) {
         rootScope = $rootScope;
         $scope = $rootScope.$new();
+
+        element = angular.element('<toolbar-search></toolbar-search>');
+        compiledElement = $compile(element)($scope);
+        $scope.$digest();
+
         HeatMapSourceGeneratorService = _HeatMapSourceGenerator_;
-        MapService = _Map_;
+        MapService = _MapService_;
         uibModal = _$uibModal_;
-        SearchController = $controller( 'SearchController', { $scope: $scope });
     }));
     it( 'searchInput is empty string', function() {
         expect($scope.searchInput).toEqual('');
@@ -64,7 +68,7 @@ describe( 'SearchController', function() {
     describe('#showInfo', function() {
         it('opens the modal info', function() {
             var modalSpy = spyOn(uibModal, 'open');
-            $scope.showInfo();
+            $scope.showtoolbarSearchInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);
         });
     });

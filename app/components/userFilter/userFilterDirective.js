@@ -13,7 +13,7 @@
         return {
             controller: UserFilterController,
             restrict: 'EA',
-            templateUrl: 'app/components/userFilter/userFilter.html'
+            templateUrl: 'userFilter/userFilter.tpl.html'
         };
     }
 
@@ -25,6 +25,8 @@
         $scope.userSearch = userSearch;
 
         $scope.showUserFilterInfo = showUserFilterInfo;
+
+        $scope.userfilterInput = '';
 
         /**
          *

@@ -3,11 +3,11 @@ describe( 'MainController', function() {
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
-    beforeEach( inject( function( $controller, _$location_, $rootScope, _$httpBackend_, _Map_) {
+    beforeEach( inject( function( $controller, _$location_, $rootScope, _$httpBackend_, _MapService_) {
         $location = _$location_;
         $httpBackend = _$httpBackend_;
         $scope = $rootScope.$new();
-        MapService = _Map_;
+        MapService = _MapService_;
         MainCtrl = $controller( 'MainController', { $scope: $scope });
     }));
 
