@@ -23,6 +23,7 @@ describe( 'GeospatialFilterDirective', function() {
     });
     describe('#showInfo', function() {
         it('opens the modal info', function() {
+            pending();
             var modalSpy = spyOn(uibModal, 'open');
             $scope.showGeospatialInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);

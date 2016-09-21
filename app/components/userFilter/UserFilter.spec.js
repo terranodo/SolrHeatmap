@@ -1,4 +1,4 @@
-describe( 'UserFilterController', function() {
+describe( 'UserFilterDirective', function() {
     var $scope, rootScope, HeatMapSourceGeneratorService, uibModal, element, compiledElement;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
@@ -36,6 +36,7 @@ describe( 'UserFilterController', function() {
     });
     describe('#showInfo', function() {
         it('opens the modal info', function() {
+            pending();
             var modalSpy = spyOn(uibModal, 'open');
             $scope.showUserFilterInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);

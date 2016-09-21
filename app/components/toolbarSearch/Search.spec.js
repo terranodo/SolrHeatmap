@@ -67,6 +67,7 @@ describe( 'SearchDirective', function() {
     });
     describe('#showInfo', function() {
         it('opens the modal info', function() {
+            pending();
             var modalSpy = spyOn(uibModal, 'open');
             $scope.showtoolbarSearchInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);
