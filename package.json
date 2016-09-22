@@ -58,6 +58,7 @@
     "karma": "^1.2.0",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.0.2",
+    "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-spec-reporter": "0.0.26",
     "less-plugin-clean-css": "^1.5.1",

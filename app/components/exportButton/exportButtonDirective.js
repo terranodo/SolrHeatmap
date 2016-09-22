@@ -13,7 +13,7 @@
         return {
             controller: ExportController,
             restrict: 'EA',
-            templateUrl: 'exportButton/exportButton.tpl.html'
+            templateUrl: 'components/exportButton/exportButton.tpl.html'
         };
     }
 

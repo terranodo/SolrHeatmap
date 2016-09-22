@@ -12,7 +12,7 @@
         return {
             controller: GeospatialFilterController,
             restrict: 'EA',
-            templateUrl: 'geospatialFilter/geospatialFilter.tpl.html'
+            templateUrl: 'components/geospatialFilter/geospatialFilter.tpl.html'
         };
     }
 

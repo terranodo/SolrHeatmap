@@ -13,7 +13,7 @@
         return {
             controller: UserFilterController,
             restrict: 'EA',
-            templateUrl: 'userFilter/userFilter.tpl.html'
+            templateUrl: 'components/userFilter/userFilter.tpl.html'
         };
     }
 

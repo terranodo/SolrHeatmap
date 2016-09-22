@@ -11,7 +11,7 @@ describe( 'InfoService', function() {
 
     describe('#showInfo', function() {
         it('opens the modal info', function() {
-            pending();
+            solrHeatmapApp.instructions = {'textsearch': 'Test'};
             var modalSpy = spyOn(uibModal, 'open');
             InfoService.showInfoPopup('textsearch');
             expect(modalSpy).toHaveBeenCalledTimes(1);

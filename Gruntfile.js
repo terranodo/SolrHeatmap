@@ -88,7 +88,7 @@ module.exports = function(grunt) {
         },
         html2js: {
             options: {
-                base: 'app/components'
+                base: 'app'
             },
             components: {
                 src: ['app/**/*.tpl.html'],

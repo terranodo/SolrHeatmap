@@ -13,7 +13,7 @@
         return {
             controller: toolbarSearchController,
             restrict: 'EA',
-            templateUrl: 'toolbarSearch/toolbarSearchField.tpl.html'
+            templateUrl: 'components/toolbarSearch/toolbarSearchField.tpl.html'
         };
     }
 

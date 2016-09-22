@@ -13,7 +13,7 @@
         return {
             controller: datePickerFilterController,
             controllerAs: 'vm',
-            templateUrl: 'app/components/datepicker/datepicker.html',
+            templateUrl: 'components/datepicker/datepicker.tpl.html',
             restrict: 'EA'
         };
     }
