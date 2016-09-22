@@ -7,8 +7,8 @@
 (function() {
     angular.module('SolrHeatmapApp')
     .factory('Map', ['$rootScope', '$filter', '$document', 'Normalize', '$controller',
-        function($rootScope, $filter, $document, NormalizeService, $controller) {
-
+        function($rootScope, $filter, $document, Normalize, $controller) {
+            var NormalizeService = Normalize;
             var service = {};
             var map = {},
                 defaults = {

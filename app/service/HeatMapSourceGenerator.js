@@ -8,7 +8,8 @@
     angular
     .module('SolrHeatmapApp')
     .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window', '$document', '$http',
-        function(MapService, $rootScope, $controller, $filter, $window, $document , $http) {
+        function(Map, $rootScope, $controller, $filter, $window, $document , $http) {
+            var MapService= Map;
 
             var methods = {
                 search: search,
