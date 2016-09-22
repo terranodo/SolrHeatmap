@@ -6,28 +6,25 @@
 (function() {
     angular
     .module('search_geospatialFilter_component', [])
-    .directive('geospatialFilter', geospatialFilter);
-
-    function geospatialFilter() {
+    .directive('geospatialFilter', ['InfoService', function(InfoService) {
         return {
-            controller: GeospatialFilterController,
+            link: GeospatialFilterLink,
             restrict: 'EA',
             templateUrl: 'components/geospatialFilter/geospatialFilter.tpl.html'
         };
-    }
 
-    GeospatialFilterController.$inject = ['$scope', '$uibModal', 'InfoService'];
-    function GeospatialFilterController($scope, $uibModal, InfoService) {
+        function GeospatialFilterLink(scope) {
 
-        $scope.filterString = '[-90,-180 TO 90,180]';
+            scope.filterString = '[-90,-180 TO 90,180]';
 
-        $scope.showGeospatialInfo = function() {
-            InfoService.showInfoPopup('geospatialsearch');
-        };
+            scope.showGeospatialInfo = function() {
+                InfoService.showInfoPopup('geospatialsearch');
+            };
 
-        $scope.updateFilterString = function(str) {
-            $scope.filterString = str;
-        };
+            scope.updateFilterString = function(str) {
+                scope.filterString = str;
+            };
 
-    }
+        }
+    }]);
 })();

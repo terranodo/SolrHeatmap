@@ -7,39 +7,34 @@
 (function() {
     angular
     .module('search_exportButton_component', [])
-    .directive('exportButton', exportButton);
+    .directive('exportButton', ['HeatMapSourceGenerator', 'InfoService',
+        function(HeatMapSourceGenerator, InfoService) {
+            return {
+                link: ExportLink,
+                restrict: 'EA',
+                templateUrl: 'components/exportButton/exportButton.tpl.html'
+            };
 
-    function exportButton() {
-        return {
-            controller: ExportController,
-            restrict: 'EA',
-            templateUrl: 'components/exportButton/exportButton.tpl.html'
-        };
-    }
+            function ExportLink(scope) {
 
-    ExportController.$inject = ['HeatMapSourceGenerator', '$uibModal',
-                                '$scope', 'InfoService'];
-    function ExportController(HeatMapSourceGeneratorService, $uibModal,
-                                $scope, InfoService) {
+                scope.export = {
+                    numDocuments: 1,
+                    options: {
+                        floor: 1,
+                        ceil: 10000,
+                        step: 1
+                    }
+                };
 
-        $scope.export = {
-            numDocuments: 1,
-            options: {
-                floor: 1,
-                ceil: 10000,
-                step: 1
+                scope.startExport = function() {
+                    var numDocs = scope.export.numDocuments;
+
+                    HeatMapSourceGenerator.startCsvExport(numDocs);
+                };
+
+                scope.showExportInfo = function() {
+                    InfoService.showInfoPopup('export');
+                };
             }
-        };
-
-        $scope.startExport = function() {
-            var numDocs = $scope.export.numDocuments;
-
-            HeatMapSourceGeneratorService.startCsvExport(numDocs);
-        };
-
-        $scope.showExportInfo = function() {
-            InfoService.showInfoPopup('export');
-        };
-
-    }
+        }]);
 })();

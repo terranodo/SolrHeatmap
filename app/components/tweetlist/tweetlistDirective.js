@@ -5,22 +5,22 @@
 
     function tweetlist() {
         return {
-            controller: tweetlistController,
+            link: tweetlistLink,
             restrict: 'EA',
             templateUrl: 'components/tweetlist/tweetlist.tpl.html'
         };
-    }
 
-    tweetlistController.$inject = ['$scope'];
-    function tweetlistController($scope) {
-        var vm = $scope;
-        vm.tweetList = [];
-        vm.tweetList.exist = false;
-        vm.$on('setTweetList', setTweetList);
+        function tweetlistLink(scope) {
+            var vm = scope;
+            vm.tweetList = [];
+            vm.tweetList.exist = false;
+            vm.$on('setTweetList', setTweetList);
 
-        function setTweetList(event, tweetList) {
-            vm.tweetList = tweetList;
-            vm.tweetList.exist = true;
+            function setTweetList(event, tweetList) {
+                vm.tweetList = tweetList;
+                vm.tweetList.exist = true;
+            }
         }
     }
+
 })();

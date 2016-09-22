@@ -7,36 +7,32 @@
 (function() {
     angular
     .module('search_userFilter_component', [])
-    .directive('userFilter', userFilter);
+    .directive('userFilter', ['HeatMapSourceGenerator', 'InfoService', '$uibModal',
+        function(HeatMapSourceGenerator, InfoService, $uibModal) {
+            return {
+                link: UserFilterLink,
+                restrict: 'EA',
+                templateUrl: 'components/userFilter/userFilter.tpl.html'
+            };
 
-    function userFilter() {
-        return {
-            controller: UserFilterController,
-            restrict: 'EA',
-            templateUrl: 'components/userFilter/userFilter.tpl.html'
-        };
-    }
+            function UserFilterLink(scope) {
 
-    UserFilterController.$inject = ['HeatMapSourceGenerator', '$scope',
-                                    '$uibModal', 'InfoService'];
-    function UserFilterController(HeatMapSourceGeneratorService, $scope,
-                                    $uibModal, InfoService) {
+                scope.userSearch = userSearch;
 
-        $scope.userSearch = userSearch;
+                scope.showUserFilterInfo = showUserFilterInfo;
 
-        $scope.showUserFilterInfo = showUserFilterInfo;
+                scope.userfilterInput = '';
 
-        $scope.userfilterInput = '';
+                /**
+                 *
+                 */
+                function userSearch() {
+                    HeatMapSourceGenerator.search(scope.userfilterInput);
+                }
 
-        /**
-         *
-         */
-        function userSearch() {
-            HeatMapSourceGeneratorService.search($scope.userfilterInput);
-        }
-
-        function showUserFilterInfo() {
-            InfoService.showInfoPopup('userfilter');
-        }
-    }
+                function showUserFilterInfo() {
+                    InfoService.showInfoPopup('userfilter');
+                }
+            }
+        }]);
 })();

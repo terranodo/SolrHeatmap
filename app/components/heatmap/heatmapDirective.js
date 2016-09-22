@@ -11,19 +11,18 @@
 
     function heatmap() {
         return {
-            controller: ResultCounterController,
+            link: ResultCounterLink,
             restrict: 'EA',
             templateUrl: 'components/heatmap/heatmap.tpl.html'
         };
-    }
 
-    ResultCounterController.$inject = ['$scope'];
-    function ResultCounterController($scope) {
-        $scope.$on('setCounter', function(e, data){
-            if (data < 1 || !data) {
-                data = 'No results found';
-            }
-            $scope.counter = data;
-        });
+        function ResultCounterLink(scope) {
+            scope.$on('setCounter', function(e, data){
+                if (data < 1 || !data) {
+                    data = 'No results found';
+                }
+                scope.counter = data;
+            });
+        }
     }
 })();
