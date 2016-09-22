@@ -1,5 +1,5 @@
 describe( 'HeatMapSourceGenerator', function() {
-    var subject, $httpBackend, MapService, spatialSpy;
+    var subject, $httpBackend, MapService, spatialSpy, geospatialFilter;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
@@ -18,7 +18,7 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#startCsvExport', function() {
-        var exportRequest, geospatialFilter;
+        var exportRequest;
         beforeEach(function() {
             solrHeatmapApp.bopwsConfig = { csvDocsLimit: 10 };
             solrHeatmapApp.appConfig = { tweetsExportBaseUrl: '/export' };
@@ -64,7 +64,7 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#performSearch', function() {
-        var exportRequest, geospatialFilter;
+        var exportRequest;
         beforeEach(function() {
             solrHeatmapApp.bopwsConfig = { csvDocsLimit: 10 };
             solrHeatmapApp.appConfig = { tweetsSearchBaseUrl: '/search' };

@@ -260,10 +260,12 @@
             service.createOrUpdateHeatMapLayer = function(data) {
                 var existingHeatMapLayers, transformInteractionLayer, olVecSrc, newHeatMapLayer;
                 existingHeatMapLayers = service.getLayersBy('name', 'HeatMapLayer');
-                transformInteractionLayer = service.getLayersBy('name', "TransformInteractionLayer")[0];
+                transformInteractionLayer = service.getLayersBy('name',
+                                                                "TransformInteractionLayer")[0];
                 olVecSrc = createHeatMapSource(data);
 
-                if (existingHeatMapLayers && existingHeatMapLayers.length > 0){ var currHeatmapLayer = existingHeatMapLayers[0];
+                if (existingHeatMapLayers && existingHeatMapLayers.length > 0){
+                    var currHeatmapLayer = existingHeatMapLayers[0];
                     // Update layer source
                     var layerSrc = currHeatmapLayer.getSource();
                     if (layerSrc){
@@ -342,9 +344,9 @@
                 backGroundLayer.addFilter(mask);
             }
 
-
             function setTransactionBBox(extent) {
-                var transformationLayer = service.getLayersBy('name','TransformInteractionLayer')[0],
+                var transformationLayer = service.getLayersBy('name',
+                                                              'TransformInteractionLayer')[0],
                     vectorSrc = transformationLayer.getSource(),
                     currentBbox = vectorSrc.getFeatures()[0],
                     polyNew;
@@ -366,7 +368,8 @@
              * the transform box will be resized to 90%
              */
             service.checkBoxOfTransformInteraction = function() {
-                var transformInteractionLayer = service.getLayersBy('name', 'TransformInteractionLayer')[0],
+                var transformInteractionLayer = service.getLayersBy('name',
+                                                                    'TransformInteractionLayer')[0],
                     mapExtent = service.getMapView().calculateExtent(service.getMapSize()),
                     vectorSrc = transformInteractionLayer.getSource(),
                     currentBbox = vectorSrc.getFeatures()[0],
@@ -482,7 +485,8 @@
             service.init = function(config) {
                 var viewConfig = angular.extend(defaults.view,
                                                     config.mapConfig.view),
-                    rendererConfig = config.mapConfig.renderer ? config.mapConfig.renderer : defaults.renderer,
+                    rendererConfig = config.mapConfig.renderer ?
+                        config.mapConfig.renderer : defaults.renderer,
                     layerConfig = config.mapConfig.layers;
 
                 map = new ol.Map({

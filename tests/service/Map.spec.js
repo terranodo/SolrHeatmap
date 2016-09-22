@@ -1,5 +1,5 @@
 describe( 'HeatMapSourceGenerator', function() {
-    var subject, NormalizeService, olSpy, mapSpy, viewSpy, mapViewSpy, defaultConfig, defaultViewConfig;
+    var subject, NormalizeService, olSpy, mapSpy, viewSpy, mapViewSpy, defaultConfig, defaultViewConfig, layer;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
@@ -24,7 +24,7 @@ describe( 'HeatMapSourceGenerator', function() {
             subject.init(defaultConfig);
             expect(viewSpy).toHaveBeenCalledWith(defaultViewConfig);
         });
-        describe('can change settings',  function() {
+        describe('can change settings', function() {
             it('change zoom', function() {
                 defaultConfig = { mapConfig: { view: { zoom: 3}}};
                 defaultViewConfig.zoom = 3;
@@ -72,7 +72,7 @@ describe( 'HeatMapSourceGenerator', function() {
             layer = jasmine.createSpyObj('layer', ['addFilter']);
             spyOn(subject, 'getLayersBy').and.returnValue([layer]);
             spyOn(subject, 'getMap').and.returnValue(mapSpy);
-            mapProjection = spyOn(subject, 'getMapProjection').and.returnValue('EPSG:4326');
+            spyOn(subject, 'getMapProjection').and.returnValue('EPSG:4326');
             defaultConfig = { mapConfig: { view: { extent: [0,0]}}};
             subject.init(defaultConfig);
             expect(mapSpy.getView).toHaveBeenCalled();
@@ -157,7 +157,7 @@ describe( 'HeatMapSourceGenerator', function() {
     });
     describe('#getLayersBy', function() {
         beforeEach(function() {
-            layer = { get: function(key) { return 'SD' }};
+            layer = { get: function(key) { return 'SD'; }};
             spyOn(subject, 'getLayers').and.returnValue([layer]);
         });
         it('returns layer for key value SD', function() {
@@ -168,8 +168,8 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#getInteractionByClass', function() {
-        function SD() {};
-        function SF() {};
+        function SD() {}
+        function SF() {}
         beforeEach(function() {
             spyOn(subject, 'getInteractions').and.returnValue([new SD()]);
         });
@@ -193,9 +193,9 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#getCurrentExtent', function() {
-        var extent, mapZoomSpy, layerSpy;
+        var extent, mapZoomSpy, layerSpy, view;
         beforeEach(function() {
-            layer = { getSource: function() { return { getFeatures: function() { return [{getGeometry: function() { return { getExtent: function() { return [0,0,0,0]}}}}]}}; }};
+            layer = { getSource: function() { return { getFeatures: function() { return [{getGeometry: function() { return { getExtent: function() { return [0,0,0,0];}};}}];}}; }};
             view = { calculateExtent: function(size) { return [0,0]; }};
             spyOn(subject, 'getMapView').and.returnValue(view);
             mapZoomSpy = spyOn(subject, 'getMapZoom').and.returnValue(10);
@@ -224,10 +224,10 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#createOrUpdateHeatMapLayer', function() {
-        var data, layerSpym, setSourceSpy;
+        var data, layerSpy, setSourceSpy;
         beforeEach(function() {
-            var clearSourceSpy = jasmine.createSpyObj('getSource', ['clear'])
-            layer = { getFilters: function() { return [{ setActive: function() {}}]; }, setSource: function() {}, getSource: function() { return { clear: function() {}, getFeatures: function() { return [{getGeometry: function() { return { getExtent: function() { return [0,0,0,0]}}}}]}}; }};
+            var clearSourceSpy = jasmine.createSpyObj('getSource', ['clear']);
+            layer = { getFilters: function() { return [{ setActive: function() {}}]; }, setSource: function() {}, getSource: function() { return { clear: function() {}, getFeatures: function() { return [{getGeometry: function() { return { getExtent: function() { return [0,0,0,0];}};}}];}}; }};
             setSourceSpy = spyOn(layer, 'setSource');
             data = { columns: 2, rows: 2, gridLevel: 2, maxX: 1, maxY: 1, minY: 0, minX: 0, projection: 'EPSG:4326', counts_ints2D: [[0,0],[0,0]]};
         });
@@ -239,14 +239,14 @@ describe( 'HeatMapSourceGenerator', function() {
                 subject.createOrUpdateHeatMapLayer(data);
                 expect(setSourceSpy).toHaveBeenCalled();
             });
-        })
+        });
         describe('heatmap layer does not exist', function() {
-            var mapSpy, strippedLayer;
+            var strippedLayer;
             beforeEach(function() {
                 var called = 0;
-                strippedLayer = { getFilters: function() { return [{ setActive: function() {}}]; }, setSource: function() {}, getSource: function() { return { clear: function() {}, getFeatures: function() { return []}}; }};
+                strippedLayer = { getFilters: function() { return [{ setActive: function() {}}]; }, setSource: function() {}, getSource: function() { return { clear: function() {}, getFeatures: function() { return [];}}; }};
                 layerSpy = spyOn(subject, 'getLayersBy').and.callFake(function(key, value) {
-                   if(value == 'HeatMapLayer') {
+                   if(value === 'HeatMapLayer') {
                         if(called > 0) {
                             return [strippedLayer];
                         }
@@ -263,12 +263,12 @@ describe( 'HeatMapSourceGenerator', function() {
                 subject.createOrUpdateHeatMapLayer(data);
                 expect(mapSpy.addLayer).toHaveBeenCalled();
             });
-        })
+        });
     });
     describe('#resetMap', function() {
-        var getViewSpy, layer;
+        var getViewSpy;
         beforeEach(function() {
-            layer = { getSource: function() { return { clear: function() {}, getFeatures: function() { return [{setGeometry: function() { }}]}}; }};
+            layer = { getSource: function() { return { clear: function() {}, getFeatures: function() { return [{setGeometry: function() { }}];}}; }};
             getViewSpy = jasmine.createSpyObj('map', ['setCenter', 'setZoom']);
             spyOn(subject, 'getMapView').and.returnValue(getViewSpy);
             spyOn(subject, 'getInteractions').and.returnValue([]);
@@ -294,10 +294,10 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#resetMap', function() {
-        var getViewSpy, layer, setGeometrySpy;
+        var getViewSpy, setGeometrySpy;
         beforeEach(function() {
             var feature = {getGeometry: function() { return { getCoordinates: function() { return [0,0]; }}; }, setGeometry: function() {}};
-            layer = { getSource: function() { return { getFeatures: function() { return [feature]}}; }};
+            layer = { getSource: function() { return { getFeatures: function() { return [feature];}}; }};
             setGeometrySpy = spyOn(feature, 'setGeometry');
             spyOn(subject, 'getLayersBy').and.returnValue([layer]);
             getViewSpy = jasmine.createSpyObj('map', ['calculateExtent']);
