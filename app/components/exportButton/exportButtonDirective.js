@@ -12,7 +12,8 @@
             return {
                 link: ExportLink,
                 restrict: 'EA',
-                templateUrl: 'components/exportButton/exportButton.tpl.html'
+                templateUrl: 'components/exportButton/exportButton.tpl.html',
+                scope: {}
             };
 
             function ExportLink(scope) {

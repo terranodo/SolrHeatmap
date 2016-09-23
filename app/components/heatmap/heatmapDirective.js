@@ -13,7 +13,8 @@
         return {
             link: ResultCounterLink,
             restrict: 'EA',
-            templateUrl: 'components/heatmap/heatmap.tpl.html'
+            templateUrl: 'components/heatmap/heatmap.tpl.html',
+            scope: {}
         };
 
         function ResultCounterLink(scope) {

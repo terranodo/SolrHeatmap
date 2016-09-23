@@ -12,7 +12,8 @@
             return {
                 link: UserFilterLink,
                 restrict: 'EA',
-                templateUrl: 'components/userFilter/userFilter.tpl.html'
+                templateUrl: 'components/userFilter/userFilter.tpl.html',
+                scope: {}
             };
 
             function UserFilterLink(scope) {

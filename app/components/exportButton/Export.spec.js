@@ -1,5 +1,5 @@
 describe( 'ExportDirective', function() {
-    var $scope, element, rootScope, HeatMapSourceGeneratorService, compiledElement, InfoService;
+    var $scope, scope, element, rootScope, HeatMapSourceGeneratorService, compiledElement, InfoService;
 
     beforeEach(module('SolrHeatmapApp'));
     beforeEach(module('search_exportButton_component'));
@@ -11,13 +11,14 @@ describe( 'ExportDirective', function() {
         element = angular.element('<export-button></exportButton>');
         compiledElement = $compile(element)($scope);
         $scope.$digest();
+        scope = compiledElement.isolateScope();
 
         HeatMapSourceGeneratorService = _HeatMapSourceGenerator_;
         InfoService = _InfoService_;
     }));
 
     it( 'export has defaults', function() {
-        expect($scope.export.numDocuments).toEqual(1);
+        expect(scope.export.numDocuments).toEqual(1);
     });
     describe('#startExport', function() {
         var startExportSpy;
@@ -26,12 +27,12 @@ describe( 'ExportDirective', function() {
         });
         describe('calls search on HeatMapSourceGeneratorService', function() {
             it('once', function() {
-                $scope.startExport();
+                scope.startExport();
                 expect(startExportSpy).toHaveBeenCalledTimes(1);
             });
             it('with number of docs', function() {
-                $scope.export.numDocuments = 10;
-                $scope.startExport();
+                scope.export.numDocuments = 10;
+                scope.startExport();
                 expect(startExportSpy).toHaveBeenCalledWith(10);
             });
         });
@@ -39,7 +40,7 @@ describe( 'ExportDirective', function() {
     describe('#showInfo', function() {
         it('opens the modal info', function() {
             var modalSpy = spyOn(InfoService, 'showInfoPopup');
-            $scope.showExportInfo();
+            scope.showExportInfo();
             expect(modalSpy).toHaveBeenCalledTimes(1);
         });
     });

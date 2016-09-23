@@ -7,7 +7,8 @@
         return {
             link: tweetlistLink,
             restrict: 'EA',
-            templateUrl: 'components/tweetlist/tweetlist.tpl.html'
+            templateUrl: 'components/tweetlist/tweetlist.tpl.html',
+            scope: {}
         };
 
         function tweetlistLink(scope) {

@@ -10,7 +10,8 @@
         return {
             link: GeospatialFilterLink,
             restrict: 'EA',
-            templateUrl: 'components/geospatialFilter/geospatialFilter.tpl.html'
+            templateUrl: 'components/geospatialFilter/geospatialFilter.tpl.html',
+            scope: {}
         };
 
         function GeospatialFilterLink(scope) {

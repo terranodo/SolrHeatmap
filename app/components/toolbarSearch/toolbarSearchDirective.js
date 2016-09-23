@@ -12,7 +12,8 @@
             return {
                 link: toolbarSearchLink,
                 restrict: 'EA',
-                templateUrl: 'components/toolbarSearch/toolbarSearchField.tpl.html'
+                templateUrl: 'components/toolbarSearch/toolbarSearchField.tpl.html',
+                scope: {}
             };
 
             function toolbarSearchLink(scope) {

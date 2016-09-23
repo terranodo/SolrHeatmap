@@ -12,7 +12,8 @@
             return {
                 link: datePickerFilterLink,
                 templateUrl: 'components/datepicker/datepicker.tpl.html',
-                restrict: 'EA'
+                restrict: 'EA',
+                scope: {}
             };
 
             function datePickerFilterLink(scope) {
