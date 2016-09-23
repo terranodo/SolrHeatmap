@@ -3,7 +3,7 @@ describe( 'SearchDirective', function() {
 
     beforeEach( module( 'SolrHeatmapApp' ) );
 
-    beforeEach( inject( function($compile, $controller, $rootScope, _HeatMapSourceGenerator_, _MapService_, _InfoService_) {
+    beforeEach( inject( function($compile, $controller, $rootScope, _HeatMapSourceGenerator_, _Map_, _InfoService_) {
         rootScope = $rootScope;
         $scope = $rootScope.$new();
 
@@ -13,7 +13,7 @@ describe( 'SearchDirective', function() {
         scope = compiledElement.isolateScope();
 
         HeatMapSourceGeneratorService = _HeatMapSourceGenerator_;
-        MapService = _MapService_;
+        MapService = _Map_;
         InfoService = _InfoService_;
     }));
     it( 'searchInput is empty string', function() {

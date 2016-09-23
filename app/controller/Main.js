@@ -7,8 +7,10 @@
 (function() {
     angular
     .module('SolrHeatmapApp')
-    .controller('MainController', ['MapService', 'HeatMapSourceGenerator' , '$http', '$scope', '$rootScope',
-        function(MapService, HeatMapSourceGenerator, $http, $scope, $rootScope) {
+    .controller('MainController', ['Map', 'HeatMapSourceGenerator' , '$http', '$scope', '$rootScope',
+        function(Map, HeatMapSourceGenerator, $http, $scope, $rootScope) {
+            var MapService = Map;
+            var HeatMapSourceGeneratorService = HeatMapSourceGenerator;
 
             var vm = this;
             vm.setupEvents = function() {
@@ -30,12 +32,12 @@
                       MapService.checkBoxOfTransformInteraction();
                   });
                 MapService.getMap().on('moveend', function(evt){
-                    HeatMapSourceGenerator.performSearch();
+                    HeatMapSourceGeneratorService.performSearch();
                 });
 
                 MapService.getInteractionsByClass(ol.interaction.Transform)[0].on(
                   ['translateend', 'scaleend'], function (e) {
-                      HeatMapSourceGenerator.performSearch();
+                      HeatMapSourceGeneratorService.performSearch();
                   });
             };
 

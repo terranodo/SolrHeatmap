@@ -7,8 +7,10 @@
 (function() {
     angular
     .module('search_toolbarsearch_component', [])
-    .directive('toolbarSearch', ['MapService', 'HeatMapSourceGenerator', '$window', 'InfoService',
-        function toolbarSearch(MapService, HeatMapSourceGenerator, $window, InfoService) {
+    .directive('toolbarSearch', ['Map', 'HeatMapSourceGenerator', '$window', 'InfoService',
+        function toolbarSearch(Map, HeatMapSourceGenerator, $window, InfoService) {
+            var MapService = Map;
+
             return {
                 link: toolbarSearchLink,
                 restrict: 'EA',
