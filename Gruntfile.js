@@ -45,13 +45,13 @@ module.exports = function(grunt) {
                     'tmp/templates.js'
                 ],
                 // the location of the resulting JS file
-                dest: 'build/hm-client.js'
+                dest: 'tmp/hm-client.js'
             }
         },
         uglify: {
             options: {
               // the banner is inserted at the top of the output
-              banner: '/*! Solr-Heatmap-Client created on <%= grunt.template.today("dd-mm-yyyy") %> */\n',
+              banner: '/*! Angular search created on <%= grunt.template.today("dd-mm-yyyy") %> */\n',
               mangle: false
             },
             dist: {
@@ -136,10 +136,14 @@ module.exports = function(grunt) {
 
     grunt.registerTask('deploy', 'Publish from travis', [
         'buildjs',
-        'css',
+        'less:production',
         'check-deploy'
     ]);
 
-    grunt.registerTask('delta', ['deploy', 'watch'])
+    grunt.registerTask('dev-watch', [
+        'html2js',
+        'less:development',
+        'watch'
+    ]);
 
 };
