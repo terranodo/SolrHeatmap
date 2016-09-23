@@ -10,16 +10,25 @@ module.exports = function ( config ) {
       "assets/lib/proj4js/proj4.js",
       "config/3857.js",
       "assets/lib/ol3/ol.js",
+      "assets/lib/ol3-ext/filter/filter.js",
+      "assets/lib/ol3-ext/filter/maskfilter.js",
+      "assets/lib/ol3-ext/interaction/transforminteraction.js",
       'node_modules/angularjs-slider/dist/rzslider.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'app/**/*.js',
-      'tests/**/*.spec.js'
+      'tests/**/*.spec.js',
+      'app/**/*.tpl.html'
     ],
     exclude: [
     ],
     frameworks: [ 'jasmine' ],
     preprocessors: {
-      'app/**/*.js': ['coverage']
+      'app/**/*.js': ['coverage'],
+      'app/**/*.tpl.html': ['ng-html2js']
+    },
+    ngHtml2JsPreprocessor: {
+        stripPrefix: 'app/',
+        moduleName: 'templates-components'
     },
     reporters: ['spec','coverage'],
     port: 9018,
