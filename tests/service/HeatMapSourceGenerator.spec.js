@@ -131,4 +131,28 @@ describe( 'HeatMapSourceGenerator', function() {
             }));
         });
     });
+
+    describe('#filterMethods', function() {
+        it('Set texts filters ', function(){
+            subject.filterObj.setSearchText('San Diego 1');
+            subject.filterObj.setUser('San Diego 2');
+            subject.filterObj.setTextDate('San Diego 3');
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                searchText: 'San Diego 1',
+                user: 'San Diego 2',
+                textDate: 'San Diego 3'
+            }));
+        });
+        it('All reset have to be null', function() {
+            subject.filterObj.setSearchText('');
+            subject.filterObj.setUser('');
+            subject.filterObj.setTextDate('');
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                searchText: null,
+                user: null,
+                textDate: null
+            }));
+        });
+    });
+
 });

@@ -18,44 +18,44 @@
                 getFormattedDateString: getFormattedDateString,
                 filterObj: filterMethods()
             };
-            /**
-             *
-             */
-            function getTweetsSearchQueryParameters (bounds) {
 
-                var reqParamsUi = methods.filterObj.getSearchObj();
+            return methods;
 
-                // calculate reduced bounding box
-                var dx = bounds.maxX - bounds.minX,
-                    dy = bounds.maxY - bounds.minY,
-                    minInnerX = bounds.minX + (1 - solrHeatmapApp.appConfig.ratioInnerBbox) * dx,
-                    maxInnerX = bounds.minX + (solrHeatmapApp.appConfig.ratioInnerBbox) * dx,
-                    minInnerY = bounds.minY + (1 - solrHeatmapApp.appConfig.ratioInnerBbox) * dy,
-                    maxInnerY = bounds.minY + (solrHeatmapApp.appConfig.ratioInnerBbox) * dy;
 
-                var params = {
-                    'q.text': reqParamsUi.searchText,
-                    'q.user': reqParamsUi.user,
-                    'q.time': timeTextFormat(reqParamsUi.textDate, reqParamsUi.minDate, reqParamsUi.maxDate),
-                    'q.geo': '[' + bounds.minX + ',' + bounds.minY + ' TO ' + bounds.maxX + ',' + bounds.maxY + ']',
-                    'a.hm.filter': '[' + minInnerX + ',' + minInnerY + ' TO ' + maxInnerX + ',' + maxInnerY + ']',
-                    'a.time.limit': '1',
-                    'a.time.gap': 'PT1H',
-                    'd.docs.limit': '10'
-                };
-
-                return params;
-            }
-            var createParamsForGeospatialSearch = function() {
+            function createParamsForGeospatialSearch() {
                 var spatialFilters = MapService.getCurrentExtent(), params;
                 if(spatialFilters) {
                     params = getTweetsSearchQueryParameters(
                                         spatialFilters);
                 }
                 return params;
-            };
 
-            return methods;
+                function getTweetsSearchQueryParameters (bounds) {
+
+                    var reqParamsUi = methods.filterObj.getSearchObj();
+
+                    // calculate reduced bounding box
+                    var dx = bounds.maxX - bounds.minX,
+                        dy = bounds.maxY - bounds.minY,
+                        minInnerX = bounds.minX + (1 - solrHeatmapApp.appConfig.ratioInnerBbox) * dx,
+                        maxInnerX = bounds.minX + (solrHeatmapApp.appConfig.ratioInnerBbox) * dx,
+                        minInnerY = bounds.minY + (1 - solrHeatmapApp.appConfig.ratioInnerBbox) * dy,
+                        maxInnerY = bounds.minY + (solrHeatmapApp.appConfig.ratioInnerBbox) * dy;
+
+                    var queryParams = {
+                        'q.text': reqParamsUi.searchText,
+                        'q.user': reqParamsUi.user,
+                        'q.time': timeTextFormat(reqParamsUi.textDate, reqParamsUi.minDate, reqParamsUi.maxDate),
+                        'q.geo': '[' + bounds.minX + ',' + bounds.minY + ' TO ' + bounds.maxX + ',' + bounds.maxY + ']',
+                        'a.hm.filter': '[' + minInnerX + ',' + minInnerY + ' TO ' + maxInnerX + ',' + maxInnerY + ']',
+                        'a.time.limit': '1',
+                        'a.time.gap': 'PT1H',
+                        'd.docs.limit': '10'
+                    };
+
+                    return queryParams;
+                }
+            }
 
             function search(input) {
                 this.filterObj.setSearchText(input);
