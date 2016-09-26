@@ -83,7 +83,7 @@ module.exports = function(grunt) {
           },
           build: {
             files: ['app/**/*'],
-            tasks: ['deploy']
+            tasks: ['dev']
           }
         },
         html2js: {
@@ -128,6 +128,10 @@ module.exports = function(grunt) {
 
     grunt.registerTask('buildjs', ['html2js', 'concat', 'uglify']);
 
+    grunt.registerTask('dev', ['html2js', 'less:development']);
+
+    grunt.registerTask('dev-watch', ['dev', 'watch']);
+
     grunt.registerTask('publish', 'Publish from CLI', [
         'buildjs',
         'less:production',
@@ -139,11 +143,4 @@ module.exports = function(grunt) {
         'less:production',
         'check-deploy'
     ]);
-
-    grunt.registerTask('dev-watch', [
-        'html2js',
-        'less:development',
-        'watch'
-    ]);
-
 };
