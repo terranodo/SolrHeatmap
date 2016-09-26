@@ -346,4 +346,9 @@ describe( 'HeatMapSourceGenerator', function() {
             expect(subject.getCurrentExtentQuery()).toEqual('[0,0 TO 0,0]');
         });
     });
+    describe('#getExtentForProjectionFromQuery', function() {
+        it('returns extent query', function() {
+            expect(subject.getExtentForProjectionFromQuery('[0,2 TO 1,3]', 'EPSG:3857')).toEqual([222638.98158654716, -7.081154551613622e-10, 333958.4723798207, 111325.14286638486]);
+        });
+    });
 });

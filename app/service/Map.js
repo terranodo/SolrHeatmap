@@ -457,7 +457,7 @@
 
             service.getExtentForProjectionFromQuery = function(query, projection) {
                 var extentObj = service.getExtentFromQuery(query);
-                var extent = NormalizeService.normalizeExtent([extentObj.minX, extentObj.minY, extentObj.maxX, extentObj.maxY]);
+                var extent = NormalizeService.normalizeExtent([extentObj.minY, extentObj.minX, extentObj.maxY, extentObj.maxX]);
                 return ol.proj.transformExtent(extent, 'EPSG:4326', projection);
 
             };

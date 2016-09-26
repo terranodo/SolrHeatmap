@@ -51,8 +51,9 @@
                         bopwsConfig = data.bopwsConfig,
                         instructions = data.instructions;
 
-                        // get sgeo state and set in the config
-                    //mapConf.view.extent = MapService.getExtentForProjectionFromQuery(solrHeatmapApp.$state.geo, mapConf.view.projection);
+                    if(solrHeatmapApp.$state.geo) {
+                      mapConf.view.extent = MapService.getExtentForProjectionFromQuery(solrHeatmapApp.$state.geo, mapConf.view.projection);
+                    }
                     MapService.init({
                         mapConfig: mapConf
                     });

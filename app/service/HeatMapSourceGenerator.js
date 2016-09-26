@@ -41,7 +41,7 @@
                     'a.time.gap': 'PT1H',
                     'd.docs.limit': '10'
                 };
-                $state.go('search', {time: params['q.time'], geo: params['q.geo']}, {notify: false, location: "replace"});
+                $state.go('search', {text: params['q.text'], user: params['q.user'], time: params['q.time'], geo: params['q.geo']}, {notify: false, location: "replace"});
 
                 return params;
             }
