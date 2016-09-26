@@ -28,7 +28,7 @@
                  *
                  */
                 function userSearch() {
-                    HeatMapSourceGenerator.search(scope.userfilterInput);
+                    HeatMapSourceGenerator.searchUser(scope.userfilterInput);
                 }
 
                 function showUserFilterInfo() {

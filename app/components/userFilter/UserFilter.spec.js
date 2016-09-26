@@ -21,7 +21,7 @@ describe( 'UserFilterDirective', function() {
     describe('#userSearch', function() {
         var searchSpy;
         beforeEach(function() {
-            searchSpy = spyOn(HeatMapSourceGeneratorService, 'search');
+            searchSpy = spyOn(HeatMapSourceGeneratorService, 'searchUser');
         });
         describe('calls search on HeatMapSourceGeneratorService', function() {
             it('once', function() {

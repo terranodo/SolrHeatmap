@@ -22,7 +22,7 @@ describe( 'HeatMapSourceGenerator', function() {
         beforeEach(function() {
             solrHeatmapApp.bopwsConfig = { csvDocsLimit: 10 };
             solrHeatmapApp.appConfig = { tweetsExportBaseUrl: '/export' };
-            exportRequest = $httpBackend.when('GET', '/export?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
+            exportRequest = $httpBackend.when('GET', '/export?a.hm.filter=%5B-1,1+TO+2,4%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
         });
         afterEach(function() {
             $httpBackend.resetExpectations();
@@ -30,26 +30,14 @@ describe( 'HeatMapSourceGenerator', function() {
             $httpBackend.verifyNoOutstandingRequest();
         });
         it('sends the export request', function() {
-            $httpBackend.expectGET('/export?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
+            $httpBackend.expectGET('/export?a.hm.filter=%5B-1,1+TO+2,4%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
             subject.startCsvExport();
             $httpBackend.flush();
         });
         it('sends the export request with numberofDocuments', function() {
-            $httpBackend.expectGET('/export?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=20&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
+            $httpBackend.expectGET('/export?a.hm.filter=%5B-1,1+TO+2,4%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=20&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
             subject.startCsvExport(20);
             $httpBackend.flush();
-        });
-        describe('no geospatial filter', function() {
-            beforeEach(function() {
-                spatialSpy.and.returnValue(null);
-            });
-            afterEach(function() {
-                $httpBackend.resetExpectations();
-            });
-            it('does not send the export request', function() {
-                subject.startCsvExport();
-                expect($httpBackend.flush).toThrow();
-            });
         });
         describe('error from server', function() {
             it('throws an window error', inject(function($window) {
@@ -69,7 +57,7 @@ describe( 'HeatMapSourceGenerator', function() {
             solrHeatmapApp.bopwsConfig = { csvDocsLimit: 10 };
             solrHeatmapApp.appConfig = { tweetsSearchBaseUrl: '/search' };
             geospatialFilter = {queryGeo: { minX: 1, maxX: 1, minY: 1, maxY: 1}};
-            exportRequest = $httpBackend.when('GET', '/search?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
+            exportRequest = $httpBackend.when('GET', '/search?a.hm.filter=%5B-1,1+TO+2,4%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
         });
         afterEach(function() {
             $httpBackend.resetExpectations();
@@ -77,7 +65,7 @@ describe( 'HeatMapSourceGenerator', function() {
             $httpBackend.verifyNoOutstandingRequest();
         });
         it('sends the search request', function() {
-            $httpBackend.expectGET('/search?a.hm.filter=%5BNaN,NaN+TO+NaN,NaN%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
+            $httpBackend.expectGET('/search?a.hm.filter=%5B-1,1+TO+2,4%5D&a.time.gap=PT1H&a.time.limit=1&d.docs.limit=10&q.geo=%5B1,1+TO+1,1%5D&q.time=%5B2013-03-10T00:00:00+TO+2013-03-21T00:00:00%5D').respond('');
             subject.performSearch();
             $httpBackend.flush();
         });
@@ -107,18 +95,6 @@ describe( 'HeatMapSourceGenerator', function() {
                 });
             });
         });
-        describe('no geospatial filter', function() {
-            beforeEach(function() {
-                spatialSpy.and.returnValue(null);
-            });
-            afterEach(function() {
-                $httpBackend.resetExpectations();
-            });
-            it('does not send the export request', function() {
-                subject.performSearch();
-                expect($httpBackend.flush).toThrow();
-            });
-        });
         describe('error from server', function() {
             it('throws an window error', inject(function($window) {
                 exportRequest.respond(401, '');
@@ -128,6 +104,58 @@ describe( 'HeatMapSourceGenerator', function() {
                 subject.performSearch();
                 $httpBackend.flush();
                 expect($window.alert).toHaveBeenCalled();
+            }));
+        });
+    });
+    describe('#search', function() {
+        it('sets the search text', function() {
+            subject.search('San Diego');
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                searchText: 'San Diego'
+            }));
+        });
+        it('call performSearch', function() {
+            var performSearchSpy = spyOn(subject, 'performSearch')
+            subject.search('San Diego');
+            expect(performSearchSpy).toHaveBeenCalled();
+        });
+    });
+    describe('#searchUser', function() {
+        it('sets the user', function() {
+            subject.searchUser('Joe');
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                user: 'Joe'
+            }));
+        });
+        it('call performSearch', function() {
+            var performSearchSpy = spyOn(subject, 'performSearch')
+            subject.searchUser('Joe');
+            expect(performSearchSpy).toHaveBeenCalled();
+        });
+    });
+    describe('#setFilter', function() {
+        it('sets time', function() {
+            subject.setFilter({time: '[1 TO 1]'});
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                textDate: '[1 TO 1]'
+            }));
+        });
+        it('sets user', function() {
+            subject.setFilter({user: 'Joe'});
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                user: 'Joe'
+            }));
+        });
+        it('sets text', function() {
+            subject.setFilter({text: 'San Diego'});
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                searchText: 'San Diego'
+            }));
+        });
+        it('sets geo', function() {
+            subject.setFilter({geo: '[1,1 TO 1,1]'});
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                geo: '[1,1 TO 1,1]'
             }));
         });
     });

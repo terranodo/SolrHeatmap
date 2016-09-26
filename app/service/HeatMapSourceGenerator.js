@@ -7,16 +7,18 @@
 (function() {
     angular
     .module('SolrHeatmapApp')
-    .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window', '$document', '$http',
-        function(Map, $rootScope, $controller, $filter, $window, $document , $http) {
+    .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window', '$document', '$http', '$state',
+        function(Map, $rootScope, $controller, $filter, $window, $document , $http, $state) {
             var MapService= Map;
 
             var methods = {
                 search: search,
+                searchUser: searchUser,
                 performSearch: performSearch,
                 startCsvExport: startCsvExport,
                 getFormattedDateString: getFormattedDateString,
-                filterObj: filterMethods()
+                filterObj: filterMethods(),
+                setFilter: setFilter
             };
             /**
              *
@@ -25,37 +27,52 @@
 
                 var reqParamsUi = methods.filterObj.getSearchObj();
 
+                /*
                 // calculate reduced bounding box
-                var dx = bounds.maxX - bounds.minX,
-                    dy = bounds.maxY - bounds.minY,
-                    minInnerX = bounds.minX + (1 - solrHeatmapApp.appConfig.ratioInnerBbox) * dx,
-                    maxInnerX = bounds.minX + (solrHeatmapApp.appConfig.ratioInnerBbox) * dx,
-                    minInnerY = bounds.minY + (1 - solrHeatmapApp.appConfig.ratioInnerBbox) * dy,
-                    maxInnerY = bounds.minY + (solrHeatmapApp.appConfig.ratioInnerBbox) * dy;
-
+'[' + bounds.minX + ',' + bounds.minY + ' TO ' + bounds.maxX + ',' + bounds.maxY + ']',
+                */
                 var params = {
                     'q.text': reqParamsUi.searchText,
                     'q.user': reqParamsUi.user,
                     'q.time': timeTextFormat(reqParamsUi.textDate, reqParamsUi.minDate, reqParamsUi.maxDate),
-                    'q.geo': '[' + bounds.minX + ',' + bounds.minY + ' TO ' + bounds.maxX + ',' + bounds.maxY + ']',
-                    'a.hm.filter': '[' + minInnerX + ',' + minInnerY + ' TO ' + maxInnerX + ',' + maxInnerY + ']',
+                    'q.geo': reqParamsUi.geo,
+                    'a.hm.filter': reqParamsUi.hm,
                     'a.time.limit': '1',
                     'a.time.gap': 'PT1H',
                     'd.docs.limit': '10'
                 };
+                $state.go('search', {time: params['q.time'], geo: params['q.geo']}, {notify: false, location: "replace"});
 
                 return params;
             }
             var createParamsForGeospatialSearch = function() {
-                var spatialFilters = MapService.getCurrentExtent(), params;
-                if(spatialFilters) {
-                    params = getTweetsSearchQueryParameters(
-                                        spatialFilters);
-                }
+                //var spatialFilters = MapService.getCurrentExtent(), params;
+                params = getTweetsSearchQueryParameters();
                 return params;
             };
 
             return methods;
+
+            function setFilter(filter) {
+                if(filter.time) {
+                    this.filterObj.setTextDate(filter.time);
+                }
+                if(filter.user) {
+                    this.filterObj.setUser(filter.user);
+                }
+                if(filter.text) {
+                    this.filterObj.setSearchText(filter.text);
+                }
+                if(filter.geo) {
+                    this.filterObj.setSearchBounds(filter.geo);
+                    $rootScope.$broadcast('geoFilterUpdated', filter.geo);
+                }
+            }
+
+            function searchUser(username) {
+                this.filterObj.setUser(username);
+                this.performSearch();
+            }
 
             function search(input) {
                 this.filterObj.setSearchText(input);
@@ -69,6 +86,8 @@
                     textDate: null,
                     searchText : null,
                     user: null,
+                    geo: '[1,1 TO 1,1]',
+                    hm: '[-1,1 TO 2,4]',
                     histogramCount: []
                 };
                 /**
@@ -85,6 +104,17 @@
                 function setTextDate(val) {
                     searchObj.textDate = val.length === 0 ? null : val;
                 }
+
+                function setSearchBounds(val) {
+                    if(val.length !== 0) {
+                        searchObj.geo = val;
+                        searchObj.hm = MapService.getReducedQueryFromExtent(val);
+                    } else {
+                        searchObj.geo = null;
+                        searchObj.hm = null;
+                    }
+                }
+
                 /**
                 * Returns the complete search object
                 */
@@ -100,7 +130,8 @@
                     setSearchText: setSearchText,
                     setUser: setUser,
                     setTextDate: setTextDate,
-                    setHistogramCount: setHistogramCount
+                    setHistogramCount: setHistogramCount,
+                    setSearchBounds: setSearchBounds
                 };
             }
 
@@ -184,7 +215,6 @@
                     $window.alert('Spatial filter could not be computed.');
                 }
             }
-
 
             /**
              * Returns the formatted date object that can be parsed by API.
