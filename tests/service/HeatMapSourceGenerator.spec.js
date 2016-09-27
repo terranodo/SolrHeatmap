@@ -131,4 +131,17 @@ describe( 'HeatMapSourceGenerator', function() {
             }));
         });
     });
+
+    describe('#setFilter', function() {
+        it('All reset have to be null', function() {
+            var filter = {time: '', user: '', text: ''};
+            subject.setFilter(filter);
+            expect(subject.filterObj.getSearchObj()).toEqual(jasmine.objectContaining({
+                searchText: null,
+                user: null,
+                textDate: null
+            }));
+        });
+    });
+
 });

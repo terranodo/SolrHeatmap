@@ -21,7 +21,7 @@ describe( 'UserFilterDirective', function() {
     describe('#userSearch', function() {
         var searchSpy;
         beforeEach(function() {
-            searchSpy = spyOn(HeatMapSourceGeneratorService, 'search');
+            searchSpy = spyOn(HeatMapSourceGeneratorService, 'searchUser');
         });
         describe('calls search on HeatMapSourceGeneratorService', function() {
             it('once', function() {
@@ -29,9 +29,13 @@ describe( 'UserFilterDirective', function() {
                 expect(searchSpy).toHaveBeenCalledTimes(1);
             });
             it('with searchInput', function() {
-                scope.userfilterInput= 'San Diego';
+                scope.userfilterInput = 'San Diego';
                 scope.userSearch();
                 expect(searchSpy).toHaveBeenCalledWith('San Diego');
+            });
+            it('Reset filter', function() {
+                scope.resetUser();
+                expect(searchSpy).toHaveBeenCalledWith('');
             });
         });
     });

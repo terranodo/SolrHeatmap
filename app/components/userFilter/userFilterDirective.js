@@ -18,17 +18,23 @@
 
             function UserFilterLink(scope) {
 
-                scope.userSearch = userSearch;
-
-                scope.showUserFilterInfo = showUserFilterInfo;
-
                 scope.userfilterInput = '';
 
+                scope.userSearch = userSearch;
+
+                scope.resetUser = resetUser;
+
+                scope.showUserFilterInfo = showUserFilterInfo;
                 /**
                  *
                  */
                 function userSearch() {
-                    HeatMapSourceGenerator.search(scope.userfilterInput);
+                    HeatMapSourceGenerator.searchUser(scope.userfilterInput);
+                }
+
+                function resetUser() {
+                    scope.userfilterInput = '';
+                    userSearch();
                 }
 
                 function showUserFilterInfo() {
