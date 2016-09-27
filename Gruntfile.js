@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-html2js');
 
     grunt.initConfig({
         'gh-pages': {
@@ -36,15 +37,21 @@ module.exports = function(grunt) {
             },
             dist: {
                 // the files to concatenate
-                src: ['app/**/*.js', 'assets/lib/ol3-ext/interaction/transforminteraction.js', 'assets/lib/ol3-ext/filter/filter.js', 'assets/lib/ol3-ext/filter/maskfilter.js'],
+                src: ['app/**/*.js',
+                    '!app/**/*.spec.js',
+                    'assets/lib/ol3-ext/interaction/transforminteraction.js',
+                    'assets/lib/ol3-ext/filter/filter.js',
+                    'assets/lib/ol3-ext/filter/maskfilter.js',
+                    'tmp/templates.js'
+                ],
                 // the location of the resulting JS file
-                dest: 'build/hm-client.js'
+                dest: 'tmp/hm-client.js'
             }
         },
         uglify: {
             options: {
               // the banner is inserted at the top of the output
-              banner: '/*! Solr-Heatmap-Client created on <%= grunt.template.today("dd-mm-yyyy") %> */\n',
+              banner: '/*! Angular search created on <%= grunt.template.today("dd-mm-yyyy") %> */\n',
               mangle: false
             },
             dist: {
@@ -76,10 +83,18 @@ module.exports = function(grunt) {
           },
           build: {
             files: ['app/**/*'],
-            tasks: ['deploy']
-          },
-
-        }
+            tasks: ['dev']
+          }
+        },
+        html2js: {
+            options: {
+                base: 'app'
+            },
+            components: {
+                src: ['app/**/*.tpl.html'],
+                dest: 'tmp/templates.js'
+            },
+          }
     });
 
     // get a formatted commit message to review changes from the commit log
@@ -111,20 +126,21 @@ module.exports = function(grunt) {
 
     grunt.registerTask('css', ['less:development', 'less:production']);
 
+    grunt.registerTask('buildjs', ['html2js', 'concat', 'uglify']);
+
+    grunt.registerTask('dev', ['html2js', 'less:development']);
+
+    grunt.registerTask('dev-watch', ['dev', 'watch']);
+
     grunt.registerTask('publish', 'Publish from CLI', [
-        'concat',
-        'uglify',
+        'buildjs',
         'less:production',
         'gh-pages:publish'
     ]);
 
     grunt.registerTask('deploy', 'Publish from travis', [
-        'concat',
-        'uglify',
-        'css',
+        'buildjs',
+        'less:production',
         'check-deploy'
     ]);
-
-    grunt.registerTask('delta', ['deploy', 'watch'])
-
 };
