@@ -13,10 +13,12 @@
 
             var methods = {
                 search: search,
+                searchUser: searchUser,
                 performSearch: performSearch,
                 startCsvExport: startCsvExport,
                 getFormattedDateString: getFormattedDateString,
-                filterObj: filterMethods()
+                filterObj: filterMethods(),
+                setFilter: setFilter
             };
 
             return methods;
@@ -55,6 +57,27 @@
 
                     return queryParams;
                 }
+            }
+
+            function setFilter(filter) {
+                if(filter.time) {
+                    this.filterObj.setTextDate(filter.time);
+                }
+                if(filter.user) {
+                    this.filterObj.setUser(filter.user);
+                }
+                if(filter.text) {
+                    this.filterObj.setSearchText(filter.text);
+                }
+                if(filter.geo) {
+                    this.filterObj.setSearchBounds(filter.geo);
+                    $rootScope.$broadcast('geoFilterUpdated', filter.geo);
+                }
+            }
+
+            function searchUser(username) {
+                this.filterObj.setUser(username);
+                this.performSearch();
             }
 
             function search(input) {

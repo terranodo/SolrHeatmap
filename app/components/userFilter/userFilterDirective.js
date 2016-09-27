@@ -29,8 +29,7 @@
                  *
                  */
                 function userSearch() {
-                    HeatMapSourceGenerator.filterObj.setUser(scope.userfilterInput);
-                    HeatMapSourceGenerator.performSearch();
+                    HeatMapSourceGenerator.searchUser(scope.userfilterInput);
                 }
 
                 function resetUser() {
