@@ -26,6 +26,8 @@
                  */
                 vm.filter = searchFilter;
 
+                vm.focus = false;
+
                 /**
                  *
                  */

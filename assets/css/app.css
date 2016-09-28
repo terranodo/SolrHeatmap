@@ -106,7 +106,7 @@ code {
  * CSS properties of search fields
  */
 .searchinputfield span{
-    background-color: #FFF
+    background-color: transparent;
 }
 
 .searchinputfield input{
