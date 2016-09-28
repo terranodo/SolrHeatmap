@@ -20,8 +20,8 @@
             url: '/search?time&geo&text&user',
             component: 'search',
             resolve: {
-                search: function($stateParams,HeatMapSourceGenerator ) {
-                    HeatMapSourceGenerator.setFilter($stateParams);
+                search: function($stateParams,HeatMapSourceGenerator,searchFilter) {
+                  searchFilter.setFilter($stateParams);
                 }
           }
         });

@@ -7,34 +7,30 @@
 (function() {
     angular
     .module('SolrHeatmapApp')
-    .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window', '$document', '$http', '$state',
-        function(Map, $rootScope, $controller, $filter, $window, $document , $http, $state) {
+    .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window', '$document', '$http', '$state', 'searchFilter',
+        function(Map, $rootScope, $controller, $filter, $window, $document , $http, $state, searchFilter) {
             var MapService= Map;
 
             var methods = {
                 search: search,
-                searchUser: searchUser,
-                performSearch: performSearch,
                 startCsvExport: startCsvExport,
-                getFormattedDateString: getFormattedDateString,
-                filterObj: filterMethods(),
-                setFilter: setFilter
+                getFormattedDateString: getFormattedDateString
             };
             /**
              *
              */
             function getTweetsSearchQueryParameters (bounds) {
 
-                var reqParamsUi = methods.filterObj.getSearchObj();
+                var reqParamsUi = searchFilter;
 
                 /*
                 // calculate reduced bounding box
 '[' + bounds.minX + ',' + bounds.minY + ' TO ' + bounds.maxX + ',' + bounds.maxY + ']',
                 */
                 var params = {
-                    'q.text': reqParamsUi.searchText,
+                    'q.text': reqParamsUi.text,
                     'q.user': reqParamsUi.user,
-                    'q.time': timeTextFormat(reqParamsUi.textDate, reqParamsUi.minDate, reqParamsUi.maxDate),
+                    'q.time': timeTextFormat(reqParamsUi.time, reqParamsUi.minDate, reqParamsUi.maxDate),
                     'q.geo': reqParamsUi.geo,
                     'a.hm.filter': reqParamsUi.hm,
                     'a.time.limit': '1',
@@ -53,92 +49,12 @@
 
             return methods;
 
-            function setFilter(filter) {
-                if(filter.time) {
-                    this.filterObj.setTextDate(filter.time);
-                }
-                if(filter.user) {
-                    this.filterObj.setUser(filter.user);
-                }
-                if(filter.text) {
-                    this.filterObj.setSearchText(filter.text);
-                }
-                if(filter.geo) {
-                    this.filterObj.setSearchBounds(filter.geo);
-                    $rootScope.$broadcast('geoFilterUpdated', filter.geo);
-                }
-            }
 
-            function searchUser(username) {
-                this.filterObj.setUser(username);
-                this.performSearch();
-            }
-
-            function search(input) {
-                this.filterObj.setSearchText(input);
-                this.performSearch();
-            }
-
-            function filterMethods() {
-                var searchObj = {
-                    minDate: new Date('2013-03-10'),
-                    maxDate: new Date('2013-03-21'),
-                    textDate: null,
-                    searchText : null,
-                    user: null,
-                    geo: '[1,1 TO 1,1]',
-                    hm: '[-1,1 TO 2,4]',
-                    histogramCount: []
-                };
-                /**
-                 * Set keyword text
-                 */
-                function setSearchText(val) {
-                    searchObj.searchText = val.length === 0 ? null : val;
-                }
-
-                function setUser(val) {
-                    searchObj.user = val.length === 0 ? null : val;
-                }
-
-                function setTextDate(val) {
-                    searchObj.textDate = val.length === 0 ? null : val;
-                }
-
-                function setSearchBounds(val) {
-                    if(val.length !== 0) {
-                        searchObj.geo = val;
-                        searchObj.hm = MapService.getReducedQueryFromExtent(val);
-                    } else {
-                        searchObj.geo = null;
-                        searchObj.hm = null;
-                    }
-                }
-
-                /**
-                * Returns the complete search object
-                */
-                function getSearchObj(){
-                    return searchObj;
-                }
-
-                function setHistogramCount(val) {
-                    searchObj.histogramCount = angular.isArray(val) && val.length !== 0 ? val : [];
-                }
-                return {
-                    getSearchObj: getSearchObj,
-                    setSearchText: setSearchText,
-                    setUser: setUser,
-                    setTextDate: setTextDate,
-                    setHistogramCount: setHistogramCount,
-                    setSearchBounds: setSearchBounds
-                };
-            }
 
             /**
              * Performs search with the given full configuration / search object.
              */
-            function performSearch(){
+            function search(){
                 var config,
                     params = createParamsForGeospatialSearch();
                 if (params) {
@@ -163,7 +79,7 @@
 
                             $rootScope.$broadcast('setTweetList', data['d.docs']);
 
-                            methods.filterObj.setHistogramCount(data['a.time'].counts);
+                            searchFilter.histogramCount = data['a.time'].counts;
                         }
                     }, function errorCallback(response) {
                         $window.alert('An error occured while reading heatmap data');

@@ -7,8 +7,8 @@
 (function() {
     angular
     .module('SolrHeatmapApp')
-    .controller('MainController', ['Map', 'HeatMapSourceGenerator' , '$http', '$scope', '$rootScope', '$stateParams',
-        function(Map, HeatMapSourceGenerator, $http, $scope, $rootScope, $stateParams) {
+    .controller('MainController', ['Map', 'HeatMapSourceGenerator' , '$http', '$scope', '$rootScope', '$stateParams', 'searchFilter',
+        function(Map, HeatMapSourceGenerator, $http, $scope, $rootScope, $stateParams, searchFilter) {
             var MapService = Map;
             var HeatMapSourceGeneratorService = HeatMapSourceGenerator;
 
@@ -33,14 +33,14 @@
                       MapService.checkBoxOfTransformInteraction();
                   });
                 MapService.getMap().on('moveend', function(evt){
-                    HeatMapSourceGeneratorService.setFilter({geo: MapService.getCurrentExtentQuery() });
-                    HeatMapSourceGeneratorService.performSearch();
+                  searchFilter.setFilter({geo: MapService.getCurrentExtentQuery() });
+                  HeatMapSourceGeneratorService.search();
                 });
 
                 MapService.getInteractionsByClass(ol.interaction.Transform)[0].on(
                   ['translateend', 'scaleend'], function (e) {
-                    HeatMapSourceGeneratorService.setFilter({geo: MapService.getCurrentExtentQuery() });
-                      HeatMapSourceGeneratorService.performSearch();
+                    searchFilter.setFilter({geo: MapService.getCurrentExtentQuery() });
+                    HeatMapSourceGeneratorService.search();
                   });
             };
 
