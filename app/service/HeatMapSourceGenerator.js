@@ -20,14 +20,13 @@
              *
              */
             function getTweetsSearchQueryParameters (bounds) {
-
-                var reqParamsUi = searchFilter;
+                var params,
+                    reqParamsUi = searchFilter;
 
                 /*
                 // calculate reduced bounding box
-'[' + bounds.minX + ',' + bounds.minY + ' TO ' + bounds.maxX + ',' + bounds.maxY + ']',
                 */
-                var params = {
+                params = {
                     'q.text': reqParamsUi.text,
                     'q.user': reqParamsUi.user,
                     'q.time': timeTextFormat(reqParamsUi.time, reqParamsUi.minDate, reqParamsUi.maxDate),
@@ -37,14 +36,19 @@
                     'a.time.gap': 'PT1H',
                     'd.docs.limit': '10'
                 };
-                $state.go('search', {text: params['q.text'], user: params['q.user'], time: params['q.time'], geo: params['q.geo']}, {notify: false, location: "replace"});
+                $state.go('search', {
+                    text: params['q.text'],
+                    user: params['q.user'],
+                    time: params['q.time'],
+                    geo: params['q.geo']
+                }, {notify: false, location: "replace"}
+                );
 
                 return params;
             }
             var createParamsForGeospatialSearch = function() {
                 //var spatialFilters = MapService.getCurrentExtent(), params;
-                params = getTweetsSearchQueryParameters();
-                return params;
+                return getTweetsSearchQueryParameters();
             };
 
             return methods;

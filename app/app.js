@@ -9,7 +9,8 @@
         'search_components',
         'ui.router'
     ]);
-    angular.module('SolrHeatmapApp').config(function($locationProvider, $stateProvider, $urlRouterProvider) {
+    angular.module('SolrHeatmapApp')
+    .config(function($locationProvider, $stateProvider, $urlRouterProvider) {
         $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
@@ -21,9 +22,9 @@
             component: 'search',
             resolve: {
                 search: function($stateParams,HeatMapSourceGenerator,searchFilter) {
-                  searchFilter.setFilter($stateParams);
+                    searchFilter.setFilter($stateParams);
                 }
-          }
+            }
         });
     });
 })();

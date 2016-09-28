@@ -7,7 +7,8 @@
 (function() {
     angular
     .module('search_userFilter_component', [])
-    .directive('userFilter', ['HeatMapSourceGenerator', 'InfoService', '$uibModal', 'searchFilter',
+    .directive('userFilter', [
+        'HeatMapSourceGenerator', 'InfoService', '$uibModal', 'searchFilter',
         function(HeatMapSourceGenerator, InfoService, $uibModal, searchFilter) {
             return {
                 link: UserFilterLink,

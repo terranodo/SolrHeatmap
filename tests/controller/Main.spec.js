@@ -29,16 +29,16 @@ describe( 'MainController', function() {
                 expect(mapServiceSpy).toHaveBeenCalled();
             });
             describe('with a geo state', function() {
-              var serviceSpy;
-              beforeEach(function() {
-                serviceSpy = spyOn(MapService, 'getExtentForProjectionFromQuery');
-                MainCtrl.$state = { geo: '[1,1 TO 1,1]'};
-              });
-              it( 'calls MapService getExtentForProjectionFromQuery', function() {
-                  MainCtrl.response({mapConfig: { view: { projection: 'EPSG:4326'}}});
-                  expect(serviceSpy).toHaveBeenCalled();
-              });
-          });
+                var serviceSpy;
+                beforeEach(function() {
+                    serviceSpy = spyOn(MapService, 'getExtentForProjectionFromQuery');
+                    MainCtrl.$state = { geo: '[1,1 TO 1,1]'};
+                });
+                it( 'calls MapService getExtentForProjectionFromQuery', function() {
+                    MainCtrl.response({mapConfig: { view: { projection: 'EPSG:4326'}}});
+                    expect(serviceSpy).toHaveBeenCalled();
+                });
+            });
         });
     });
     describe('#badResponse', function() {

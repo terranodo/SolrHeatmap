@@ -333,6 +333,7 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#getCurrentExtentQuery', function() {
+        var view, layerSpy, mapZoomSpy;
         beforeEach(function() {
             layer = { getSource: function() { return { getFeatures: function() { return [{getGeometry: function() { return { getExtent: function() { return [0,0,0,0];}};}}];}}; }};
             view = { calculateExtent: function(size) { return [0,0]; }};

@@ -419,18 +419,25 @@
             };
 
             service.createQueryFromExtent = function(extent) {
-                return '[' + extent.minX + ',' + extent.minY + ' TO ' + extent.maxX + ',' + extent.maxY + ']';
+                return '[' + extent.minX +
+                    ',' + extent.minY +
+                    ' TO ' + extent.maxX +
+                    ',' + extent.maxY + ']';
             };
 
             service.getExtentFromQuery = function(query) {
                 var extent, min, max,
                     extentSplit = function(extentString) {
                         return extentString.split(',');
-                };
+                    };
                 extent = query.replace(/\[|\]/g,'').split(' TO ');
                 min = extentSplit(extent[0]);
                 max = extentSplit(extent[1]);
-                return { minX: parseInt(min[0]), minY: parseInt(min[1]), maxX: parseInt(max[0]), maxY: parseInt(max[1])};
+                return {
+                    minX: parseInt(min[0], 10),
+                    minY: parseInt(min[1], 10),
+                    maxX: parseInt(max[0], 10),
+                    maxY: parseInt(max[1], 10)};
             };
 
             service.calculateReducedBoundingBox = function(extent) {
@@ -457,7 +464,11 @@
 
             service.getExtentForProjectionFromQuery = function(query, projection) {
                 var extentObj = service.getExtentFromQuery(query);
-                var extent = NormalizeService.normalizeExtent([extentObj.minY, extentObj.minX, extentObj.maxY, extentObj.maxX]);
+                var extent = NormalizeService.normalizeExtent([
+                    extentObj.minY,
+                    extentObj.minX,
+                    extentObj.maxY,
+                    extentObj.maxX]);
                 return ol.proj.transformExtent(extent, 'EPSG:4326', projection);
 
             };
