@@ -352,4 +352,13 @@ describe( 'HeatMapSourceGenerator', function() {
             expect(subject.getExtentForProjectionFromQuery('[0,2 TO 1,3]', 'EPSG:3857')).toEqual([222638.98158654716, -7.081154551613622e-10, 333958.4723798207, 111325.14286638486]);
         });
     });
+    describe('#updateTransformationLayerFromQueryForMap', function() {
+        it('sets new extent', function() {
+            layer = { getSource: function() { return { clear: function() {}, getFeatures: function() { return [{setGeometry: function() { }}];}}; }};
+            spyOn(subject, 'getMapProjection').and.returnValue('EPSG:4326');
+            spyOn(subject, 'getInteractions').and.returnValue([]);
+            var layerSpy = spyOn(subject, 'getLayersBy').and.returnValue([layer]);
+            subject.updateTransformationLayerFromQueryForMap('[0,2 TO 1,3]', 'EPSG:3857');
+        });
+    });
 });

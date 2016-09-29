@@ -6,8 +6,9 @@
  */
 (function() {
     angular.module('SolrHeatmapApp')
-    .factory('Map', ['$rootScope', '$filter', '$document', 'Normalize', '$controller',
-        function($rootScope, $filter, $document, Normalize, $controller) {
+    .factory('Map',
+             ['$rootScope', '$filter', '$document', 'Normalize', '$controller', 'queryService',
+        function($rootScope, $filter, $document, Normalize, $controller, queryService) {
             var NormalizeService = Normalize;
             var service = {};
             var map = {},
@@ -130,6 +131,13 @@
                 return $filter('filter')(interactions, function(interaction) {
                     return interaction.type_ === type;
                 });
+            };
+
+            service.updateTransformationLayerFromQueryForMap = function(query) {
+                var extent = queryService.
+                    getExtentForProjectionFromQuery(query,
+                                                    service.getMapProjection());
+                setTransactionBBox(extent);
             };
 
             /**
