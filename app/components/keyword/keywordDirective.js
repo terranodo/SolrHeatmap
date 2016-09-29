@@ -4,9 +4,16 @@ angular
     .directive('keyword', [
         function keyword() {
             return {
-                // link: keywordLink,
+                scope: {
+                    remove: '=',
+                    tag: '@'
+                },
+                link: keywordLink,
                 templateUrl: 'components/keyword/keyword.tpl.html',
-                scope: {}
+            }
+
+            function keywordLink(scope) {
+                var vm = scope;
             }
         }]);
 })();

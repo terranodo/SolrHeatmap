@@ -1,11 +1,14 @@
+@height: 32px;
+@height-min: 24px;
+
 .md-chips {
     cursor: default;
-    border-radius: 16px;
+    border-radius: 12px;
     display: block;
-    height: 32px;
-    line-height: 32px;
+    height: @height;
+    line-height: @height;
     margin: 0px 8px 4px 0;
-    padding: 0 6px;
+    padding: 0 8px;
     float: left;
     box-sizing: border-box;
     max-width: 100%;
@@ -17,19 +20,29 @@
         -webkit-appearance: button;
         text-align: center;
         width: 20px;
-        height: 32px;
+        height: @height;
         min-width: 0;
         padding: 0;
         background: transparent;
         border: none;
         box-shadow: none;
-        margin: 0;
+        margin: 0 -4px 0 0px;
         position: relative;
         outline: none;
-        font-size: 1.4em;
+        font-size: 16px;
     }
 
     .glyphicon {
         color: rgb(66,66,66);
     }
+}
+
+keyword.keyword-min .md-chips{
+        height: @height-min;
+        line-height: @height-min;
+        color: rgba(0, 0, 0, 0.5);
+
+        button {
+            height: @height-min;
+        }
 }

@@ -3,7 +3,7 @@
     display: block;
     margin-top: 0;
     background: none;
-    padding: 2px 2px 1px;
+    padding: 2px 2px 4px;
     border-width: 0px;
     line-height: 26px;
     height: 30px;
@@ -19,7 +19,7 @@
 
 .md-input:focus {
     outline: none;
-    padding-bottom: 0;
+    // padding-bottom: 6px;
 }
 .border-search {
     border: 0;
@@ -31,8 +31,9 @@
     border-width: 0 0 1px;
     border-style: solid;
     margin-right: 6px;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 .toolbarsearch-focus {
-    border-width: 0 0 2px;
-    border-color: #337ab7;
+    border-color: rgba(0,0,0,0);
+    box-shadow: 0 2px #337ab7;
 }
