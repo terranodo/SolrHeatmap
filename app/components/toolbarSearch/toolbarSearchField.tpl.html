@@ -1,13 +1,13 @@
-<div class="col-xs-7 padding-search">
+<div class="col-xs-12 padding-search">
     <div class="row toolbarsearch" ng-class="{'toolbarsearch-focus': focus}">
-        <keyword remove="true" tag="tag1"></keyword>
-        <div class="input-group searchinputfield" id="searchinput">
-            <input class="md-input" type="text" placeholder="Enter keyword" ng-keypress="onKeyPress($event)"
-              ng-model="filter.text" ng-click="onFocus()" ng-blur="focus=false" ng-focus="focus=true">
+        <keyword removefn="removeKeyWord" ng-repeat="keywordFilter in filterArray track by $index" remove="true" tag="{{keywordFilter}}"></keyword>
+        <span class="input-group searchinputfield" id="searchinput">
+            <input class="md-input" type="text" placeholder="Enter keyword" ng-keyup="onKeyPress($event)"
+              ng-model="textSearchInput.value" ng-blur="focus=false" ng-focus="focus=true">
             <span class="input-group-addon border-search">
                 <i class="glyphicon glyphicon-search"></i>
             </span>
-         </div>
+        </span>
      </div>
 </div>
 <div class="col-xs-5 padding-search">
@@ -27,7 +27,5 @@
 <div class="col-xs-12 padding-search">
     <div class="row" style="padding-top: 8px;">
         <keyword class="keyword-min" remove="false" tag="tag-abajo"></keyword>
-        <keyword class="keyword-min" remove="false" tag="tag-abajo 2"></keyword>
-        <keyword class="keyword-min" remove="false" tag="tag-abajo 3"></keyword>
     </div>
 </div>

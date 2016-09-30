@@ -1,19 +1,19 @@
 (function() {
-angular
+    angular
     .module('search_keyword_component', [])
-    .directive('keyword', [
-        function keyword() {
-            return {
-                scope: {
-                    remove: '=',
-                    tag: '@'
-                },
-                link: keywordLink,
-                templateUrl: 'components/keyword/keyword.tpl.html',
-            }
+    .directive('keyword', function keyword() {
+        return {
+            scope: {
+                tag: '@',
+                remove: '=',
+                removefn: '='
+            },
+            link: keywordLink,
+            templateUrl: 'components/keyword/keyword.tpl.html'
+        };
 
-            function keywordLink(scope) {
-                var vm = scope;
-            }
-        }]);
+        function keywordLink(scope) {
+            var vm = scope;
+        }
+    });
 })();
