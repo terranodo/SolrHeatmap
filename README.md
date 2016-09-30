@@ -20,7 +20,12 @@ Install dependencies with
 
 Local environment:
 - `npm run server`
-- http://localhost:3000/index-dev.html
+- http://localhost:3001/index-dev.html
+
+To use the new search query:
+
+`http://localhost:3001/search`
+it uses the `404.html`
 
 _Used libraries_:
 * AngularJS v1.5.5
