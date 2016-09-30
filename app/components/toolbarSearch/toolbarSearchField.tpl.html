@@ -23,5 +23,6 @@
     </span>
 </div>
 <div class="col-xs-12 padding-search" style="padding-top: 8px;">
-    <keyword  class="keyword-min" remove="false" tag="tag-abajo"></keyword>
+    <keyword  ng-repeat="keyword in suggestedKeywords track by $index" class="keyword-min"
+        ng-click="addSuggestedKeywordToSearchInput(keyword)" remove="false" tag="{{keyword}}"></keyword>
 </div>

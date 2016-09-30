@@ -24,13 +24,17 @@
 
                 vm.filter = searchFilter;
                 vm.filterArray = [];
+                vm.suggestedKeywords = ['mexico', 'hola', 'hello world', 'america', 'colombia'];
                 vm.textSearchInput = {
                     value: '',
                     previousLength: 0
                 };
                 vm.focus = false;
 
+                vm.doSearch = doSearch;
                 vm.removeKeyWord = removeKeyWord;
+                vm.addSuggestedKeywordToSearchInput = addSuggestedKeywordToSearchInput;
+                vm.showtoolbarSearchInfo = showtoolbarSearchInfo;
 
                 scope.$watch(function(){
                     return vm.filter.text;
@@ -60,7 +64,7 @@
                 /**
                  *
                  */
-                vm.doSearch = function() {
+                function doSearch() {
                     var fiterText;
                     if (vm.textSearchInput.value.length) {
                         fiterText = vm.filter.text || '';
@@ -68,7 +72,7 @@
                         vm.textSearchInput = {value: '', previousLength: 0};
                     }
                     HeatMapSourceGenerator.search(vm.filter.text);
-                };
+                }
 
                 vm.reset = function() {
                     searchFilter.resetFilter();
@@ -77,9 +81,9 @@
                     MapService.resetMap();
                 };
 
-                vm.showtoolbarSearchInfo = function() {
+                function showtoolbarSearchInfo() {
                     InfoService.showInfoPopup('textsearch');
-                };
+                }
 
                 function keyWordStringToArray(keyWordString) {
                     var keyWordList = [];
@@ -110,6 +114,11 @@
                         removeKeyWord(vm.filterArray.pop());
                     }
                     vm.textSearchInput.previousLength = vm.textSearchInput.value.length;
+                }
+
+                function addSuggestedKeywordToSearchInput(keyword) {
+                    vm.textSearchInput.value = keyword;
+                    doSearch();
                 }
             }
         }]);
