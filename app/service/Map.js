@@ -426,28 +426,6 @@
                 }
             };
 
-            service.createQueryFromExtent = function(extent) {
-                return '[' + extent.minX +
-                    ',' + extent.minY +
-                    ' TO ' + extent.maxX +
-                    ',' + extent.maxY + ']';
-            };
-
-            service.getExtentFromQuery = function(query) {
-                var extent, min, max,
-                    extentSplit = function(extentString) {
-                        return extentString.split(',');
-                    };
-                extent = query.replace(/\[|\]/g,'').split(' TO ');
-                min = extentSplit(extent[0]);
-                max = extentSplit(extent[1]);
-                return {
-                    minX: parseInt(min[0], 10),
-                    minY: parseInt(min[1], 10),
-                    maxX: parseInt(max[0], 10),
-                    maxY: parseInt(max[1], 10)};
-            };
-
             service.calculateReducedBoundingBox = function(extent) {
                 if(solrHeatmapApp.appConfig) {
                     var dx = extent.maxX - extent.minX,
@@ -462,23 +440,13 @@
             };
 
             service.getReducedQueryFromExtent = function(extentQuery) {
-                var extent = service.getExtentFromQuery(extentQuery);
-                return service.createQueryFromExtent(service.calculateReducedBoundingBox(extent));
+                var extent = queryService.getExtentFromQuery(extentQuery);
+                return queryService.
+                    createQueryFromExtent(service.calculateReducedBoundingBox(extent));
             };
 
             service.getCurrentExtentQuery = function(){
-                return service.createQueryFromExtent(service.getCurrentExtent());
-            };
-
-            service.getExtentForProjectionFromQuery = function(query, projection) {
-                var extentObj = service.getExtentFromQuery(query);
-                var extent = NormalizeService.normalizeExtent([
-                    extentObj.minY,
-                    extentObj.minX,
-                    extentObj.maxY,
-                    extentObj.maxX]);
-                return ol.proj.transformExtent(extent, 'EPSG:4326', projection);
-
+                return queryService.createQueryFromExtent(service.getCurrentExtent());
             };
 
             /**
