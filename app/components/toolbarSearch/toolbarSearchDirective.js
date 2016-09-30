@@ -22,21 +22,23 @@
             function toolbarSearchLink(scope) {
                 var vm = scope;
 
+
                 vm.filter = searchFilter;
                 vm.filterArray = [];
-                vm.suggestedKeywords = ['mexico', 'hola', 'hello world', 'america', 'colombia'];
-                vm.textSearchInput = {
-                    value: '',
-                    previousLength: 0
-                };
+                vm.suggestedKeywords = [];
+                vm.textSearchInput = {value: '', previousLength: 0 };
                 vm.focus = false;
 
                 vm.doSearch = doSearch;
                 vm.removeKeyWord = removeKeyWord;
                 vm.addSuggestedKeywordToSearchInput = addSuggestedKeywordToSearchInput;
                 vm.showtoolbarSearchInfo = showtoolbarSearchInfo;
+                vm.onKeyPress = onKeyPress;
+                vm.reset = reset;
 
-                scope.$watch(function(){
+                listenSuggestWords();
+
+                vm.$watch(function(){
                     return vm.filter.text;
                 }, function(newValue, oldValue){
                     vm.filterArray = keyWordStringToArray(newValue);
@@ -52,14 +54,14 @@
                 /**
                  *
                  */
-                vm.onKeyPress = function($event) {
+                function onKeyPress($event) {
                     // only fire the search if Enter-key (13) is pressed
                     if (getKeyboardCodeFromEvent($event) === 13) {
                         vm.doSearch();
                     }else if (getKeyboardCodeFromEvent($event) === 8) {
                         removeKeyWordFromDeleteKey();
                     }
-                };
+                }
 
                 /**
                  *
@@ -74,27 +76,22 @@
                     HeatMapSourceGenerator.search(vm.filter.text);
                 }
 
-                vm.reset = function() {
+                function reset() {
                     searchFilter.resetFilter();
                     HeatMapSourceGenerator.search();
                     // Reset the map
                     MapService.resetMap();
-                };
+                }
 
                 function showtoolbarSearchInfo() {
                     InfoService.showInfoPopup('textsearch');
                 }
 
                 function keyWordStringToArray(keyWordString) {
-                    var keyWordList = [];
-                    if (keyWordString) {
-                        keyWordString.split('"').forEach(function(val){
-                            if(val !== '' && val !== ' '){
-                                keyWordList.push(val);
-                            }
-                        });
-                    }
-                    return keyWordList;
+                    keyWordString = keyWordString || '';
+                    return keyWordString.split('"').filter(function(val){
+                        return val !== '' && val !== ' ';
+                    });
                 }
 
                 function removeKeyWord(keyword) {
@@ -119,6 +116,14 @@
                 function addSuggestedKeywordToSearchInput(keyword) {
                     vm.textSearchInput.value = keyword;
                     doSearch();
+                }
+
+                function listenSuggestWords() {
+                    vm.$on('setSuggestWords', function(event, dataRawKeywords) {
+                        vm.suggestedKeywords = dataRawKeywords.filter(function(obj) {
+                            return obj.value.length >= 3;
+                        });
+                    });
                 }
             }
         }]);
