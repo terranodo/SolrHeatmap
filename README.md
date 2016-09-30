@@ -1,4 +1,4 @@
-angular search [![Build Status](https://travis-ci.org/terranodo/angular-search.svg?branch=master)](https://travis-ci.org/terranodo/angular-search)
+angular search [![Build Status](https://travis-ci.org/terranodo/angular-search.svg?branch=master)](https://travis-ci.org/terranodo/angular-search) [![Test Coverage](https://codeclimate.com/github/terranodo/angular-search/badges/coverage.svg)](https://codeclimate.com/github/terranodo/angular-search/coverage)
 ====
 
 [AngularJS](https://angularjs.org/) + [OpenLayers 3](http://openlayers.org/) interface to query a [Apache Solr](http://lucene.apache.org/solr/) instance based on this [API](http://54.158.101.33:8080/bopws/swagger/#/default).
