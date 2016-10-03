@@ -98,7 +98,7 @@
                     var fiterText = '';
                     vm.filterArray.forEach(function(value) {
                         if (value !== keyword) {
-                            fiterText = fiterText + ' "' + value + '"';
+                            fiterText = fiterText === '' ? '"' + value + '"' : fiterText + ' "' + value + '"';
                             return;
                         }
                     });
