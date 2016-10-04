@@ -16,7 +16,9 @@
                 link: toolbarSearchLink,
                 restrict: 'EA',
                 templateUrl: 'components/toolbarSearch/toolbarSearchField.tpl.html',
-                scope: {}
+                scope: {
+                    numberKeywords: '='
+                }
             };
 
             function toolbarSearchLink(scope) {
@@ -131,7 +133,8 @@
                 }
 
                 function toggleSuggestKeywords() {
-                    vm.filter.textLimit = vm.tagSwitch.value ? 5 : null;
+                    var numberKeywords = vm.numberKeywords || 5;
+                    vm.filter.textLimit = vm.tagSwitch.value ? numberKeywords : null;
                     vm.tagSwitch.disable = true;
                     HeatMapSourceGenerator.search();
                 }

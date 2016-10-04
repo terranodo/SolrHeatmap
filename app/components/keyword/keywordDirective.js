@@ -6,7 +6,7 @@
             scope: {
                 tag: '@',
                 remove: '=',
-                removefn: '='
+                removefn: '&'
             },
             link: keywordLink,
             templateUrl: 'components/keyword/keyword.tpl.html'
