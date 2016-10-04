@@ -28,6 +28,7 @@
                 vm.suggestedKeywords = [];
                 vm.textSearchInput = {value: '', previousLength: 0 };
                 vm.focus = false;
+                vm.tagSwitch = {value: false, disable: false};
 
                 vm.doSearch = doSearch;
                 vm.removeKeyWord = removeKeyWord;
@@ -35,6 +36,8 @@
                 vm.showtoolbarSearchInfo = showtoolbarSearchInfo;
                 vm.onKeyPress = onKeyPress;
                 vm.reset = reset;
+
+                vm.toggleSuggestKeywords = toggleSuggestKeywords;
 
                 listenSuggestWords();
 
@@ -120,10 +123,17 @@
 
                 function listenSuggestWords() {
                     vm.$on('setSuggestWords', function(event, dataRawKeywords) {
+                        vm.tagSwitch.disable = false;
                         vm.suggestedKeywords = dataRawKeywords.filter(function(obj) {
                             return obj.value.length >= 3;
                         });
                     });
+                }
+
+                function toggleSuggestKeywords() {
+                    vm.filter.textLimit = vm.tagSwitch.value ? 5 : null;
+                    vm.tagSwitch.disable = true;
+                    HeatMapSourceGenerator.search();
                 }
             }
         }]);
