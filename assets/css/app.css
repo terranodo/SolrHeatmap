@@ -10,7 +10,7 @@ html, body {
 }
 
 .map {
-  max-height: 600px;
+  max-height: 380px;
   margin: 4px;
   border: solid 1px #b3b3b3;
   border-radius: 4px;
