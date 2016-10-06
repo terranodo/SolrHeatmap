@@ -29,9 +29,9 @@
                 params = {
                     'q.text': reqParamsUi.text,
                     'q.user': reqParamsUi.user,
-                    'q.time': timeTextFormat(reqParamsUi.time, reqParamsUi.minDate, reqParamsUi.maxDate),
+                    'q.time': '[1900-01-01 TO 2016-12-31T00:00:00]', //timeTextFormat(reqParamsUi.time, reqParamsUi.minDate, reqParamsUi.maxDate),
                     'q.geo': reqParamsUi.geo,
-                    'a.hm.filter': reqParamsUi.hm,
+                    'a.hm.filter': '[-1,1 TO 2,4]', //reqParamsUi.hm,
                     'a.time.limit': '1',
                     'a.time.gap': 'PT1H',
                     'd.docs.limit': '10',
@@ -44,7 +44,6 @@
                     geo: params['q.geo']
                 }, {notify: false, location: "replace"}
                 );
-
                 return params;
             }
             var createParamsForGeospatialSearch = function() {
@@ -63,10 +62,10 @@
                 var config,
                     params = createParamsForGeospatialSearch();
                 if (params) {
-                    params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
+                    // params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
 
                     config = {
-                        url: solrHeatmapApp.appConfig.tweetsSearchBaseUrl,
+                        url: solrHeatmapApp.appConfig.hypermap,
                         method: 'GET',
                         params: params
                     };
@@ -75,18 +74,23 @@
                     .then(function successCallback(response) {
                         // check if we have a heatmap facet and update the map with it
                         var data = response.data;
-                        if (data && data['a.hm']) {
-                            MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                        if (data) {
                             // get the count of matches
                             $rootScope.$broadcast('setCounter', data['a.matchDocs']);
 
-                            $rootScope.$broadcast('setHistogram', data['a.time']);
-
-                            $rootScope.$broadcast('setTweetList', data['d.docs']);
-
-                            $rootScope.$broadcast('setSuggestWords', data['a.text']);
-
-                            searchFilter.histogramCount = data['a.time'].counts;
+                            if (data['a.hm']) {
+                                MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                            }
+                            if (data['a.time']) {
+                                $rootScope.$broadcast('setHistogram', data['a.time']);
+                                searchFilter.histogramCount = data['a.time'].counts;
+                            }
+                            if (data['d.docs']) {
+                                $rootScope.$broadcast('setTweetList', data['d.docs']);
+                            }
+                            if (data['a.text']) {
+                                $rootScope.$broadcast('setSuggestWords', data['a.text']);
+                            }
                         }
                     }, function errorCallback(response) {
                         $window.alert('An error occured while reading heatmap data');

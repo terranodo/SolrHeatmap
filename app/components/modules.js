@@ -8,6 +8,7 @@
         'search_geospatialFilter_component',
         'search_exportButton_component',
         'search_heatmap_component',
-        'search_keyword_component'
+        'search_keyword_component',
+        'search_layerList_component'
     ]);
 })();

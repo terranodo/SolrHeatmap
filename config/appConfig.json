@@ -2,6 +2,9 @@
     "appConfig": {
         "tweetsSearchBaseUrl": "http://54.158.101.33:8080/bopws/tweets/search?",
         "tweetsExportBaseUrl": "http://54.158.101.33:8080/bopws/tweets/export?",
+        "catalogs": "/registry/api/catalogs/",
+        "hypermap": "http://registry.terranodo.io/registry/hypermap/api/?",
+        "hypermapLocal": "http://localhost/registry/hypermap/api/?",
         "ratioInnerBbox": 0.9
     },
     "bopwsConfig": {

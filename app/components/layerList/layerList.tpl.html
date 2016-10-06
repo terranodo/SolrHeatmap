@@ -1,0 +1,15 @@
+<div class="result-table">
+  <div class="clearfix search-results panel add-layer">
+    <table class="table table-hover list-results panel-body">
+      <tr>
+        <th>Title</th>
+        <th>Domain</th>
+      </tr>
+      <tr class="result" ng-mouseover="previewLayer(layer);" ng-mouseleave="cleanMapPreview();" ng-click="selectRow(layer)"
+      ng-class="{'preview-hover': isInCart(layer)}" ng-repeat="layer in layerList">
+        <td class="ellipsis">{{ layer.title }}</td>
+        <td>{{ layer.domain_name}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
