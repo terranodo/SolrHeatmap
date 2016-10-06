@@ -5,7 +5,7 @@
         return {
             scope: {
                 tag: '@',
-                remove: '=',
+                remove: '@',
                 removefn: '&'
             },
             link: keywordLink,

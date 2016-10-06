@@ -23,7 +23,7 @@
 
             function toolbarSearchLink(scope) {
                 var vm = scope;
-
+                var numberKeywords = vm.numberKeywords || 5;
 
                 vm.filter = searchFilter;
                 vm.filterArray = [];
@@ -133,7 +133,6 @@
                 }
 
                 function toggleSuggestKeywords() {
-                    var numberKeywords = vm.numberKeywords || 5;
                     vm.filter.textLimit = vm.tagSwitch.value ? numberKeywords : null;
                     vm.tagSwitch.disable = true;
                     HeatMapSourceGenerator.search();
