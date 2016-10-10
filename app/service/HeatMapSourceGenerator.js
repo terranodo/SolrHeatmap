@@ -31,11 +31,11 @@
                     'q.user': reqParamsUi.user,
                     'q.time': '[1900-01-01 TO 2016-12-31T00:00:00]', //timeTextFormat(reqParamsUi.time, reqParamsUi.minDate, reqParamsUi.maxDate),
                     'q.geo': reqParamsUi.geo,
-                    'a.hm.filter': '[-1,1 TO 2,4]', //reqParamsUi.hm,
+                    'a.hm.filter': reqParamsUi.hm,
                     'a.time.limit': '1',
                     'a.time.gap': 'PT1H',
-                    'd.docs.limit': '10',
-                    'a.text.limit': '5'
+                    'd.docs.limit': '10'
+                    // 'a.text.limit': '5'
                 };
                 $state.go('search', {
                     text: params['q.text'],
@@ -62,10 +62,10 @@
                 var config,
                     params = createParamsForGeospatialSearch();
                 if (params) {
-                    // params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
-
+                    params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
+                    console.log(params);
                     config = {
-                        url: solrHeatmapApp.appConfig.hypermap,
+                        url: solrHeatmapApp.appConfig.hypermapLocal,
                         method: 'GET',
                         params: params
                     };
@@ -75,6 +75,7 @@
                         // check if we have a heatmap facet and update the map with it
                         var data = response.data;
                         if (data) {
+                            console.log(data);
                             // get the count of matches
                             $rootScope.$broadcast('setCounter', data['a.matchDocs']);
 
