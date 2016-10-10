@@ -96,6 +96,7 @@ code {
 
 .row-box {
     max-width: 400px;
+    min-width: 390px;
     background-color: #fff;
     border-radius: 2px;
     padding: 15px 10px;
@@ -111,6 +112,38 @@ code {
 .results-display .control-label {
   margin-top: 8px;
   font-weight: 400;
+}
+
+@base: 100%/12;
+
+.generate-columns(@n, @class, @i: 1) when (@i =< @n) {
+  .@{class}@{i} {
+    float: left;
+    width: @base*@i;
+  }
+  .generate-columns(@n, @class, (@i + 1));
+}
+
+.visible-xlg {
+    display: none;
+}
+@media (min-width: 1500px) {
+    .generate-columns(12, col-xlg-);
+    .visible-xlg {
+        display: block;
+    }
+    .hidden-xlg {
+        display: none;
+    }
+}
+@media (min-width: 2300px) {
+    .generate-columns(12, col-xxlg-);
+    .visible-xlg {
+        display: block;
+    }
+    .hidden-xlg {
+        display: none;
+    }
 }
 
 /*
