@@ -18,6 +18,7 @@
                 vm.tweetList.exist = false;
 
                 vm.addCircle = addCircle;
+                vm.removeAllfeatures = MapService.removeAllfeatures;
 
 
                 vm.$on('setTweetList', setTweetList);
@@ -39,6 +40,7 @@
                         MapService.addCircle([coordArray[1], coordArray[0]]);
                     }
                 }
+
             }
         }]);
 

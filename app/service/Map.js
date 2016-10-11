@@ -519,7 +519,7 @@
                             fill: new ol.style.Fill({
                                 color: 'rgba(0,0,255,0.2)'
                             }),
-                            stroke: new ol.style.Stroke({color: 'rgba(0,0,255,0.5)', width: 1})
+                            stroke: new ol.style.Stroke({color: 'rgba(0,0,255,0.5)', width: 1.5})
                         })
                     })
                 };
@@ -527,10 +527,9 @@
             }
 
             service.removeAllfeatures = function() {
-                console.log(map.getLayers().getArray());
                 if (angular.isObject(map)) {
                     var layerLength = map.getLayers().getLength();
-                    for (var i = 2; i < layerLength; i++) {
+                    for (var i = 3; i < layerLength; i++) {
                         map.removeLayer(map.getLayers().getArray()[i]);
                     }
                 }
@@ -602,8 +601,6 @@
                     vw.set('extent', viewConfig.extent);
                     generateMaskAndAssociatedInteraction(viewConfig.extent, viewConfig.projection);
                 }
-
-                console.log(map.getLayers().getArray());
             };
             return service;
         }]
