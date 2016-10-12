@@ -20,7 +20,6 @@
                 vm.addCircle = addCircle;
                 vm.removeAllfeatures = MapService.removeAllfeatures;
 
-
                 vm.$on('setTweetList', setTweetList);
 
                 var stylePoint = new ol.style.Style({
@@ -31,13 +30,10 @@
                     })
                 });
 
-
                 function setTweetList(event, tweetList) {
                     vm.tweetList = tweetList;
                     vm.tweetList.exist = true;
                 }
-
-
 
                 function addCircle(coordinates) {
                     var coordArray;
