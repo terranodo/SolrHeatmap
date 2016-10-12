@@ -23,21 +23,32 @@
 
                 vm.$on('setTweetList', setTweetList);
 
+                var stylePoint = new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 7,
+                        fill: new ol.style.Fill({color: 'rgba(0,0,255,0.2)'}),
+                        stroke: new ol.style.Stroke({color: 'rgba(0,0,255,0.5)', width: 2})
+                    })
+                });
+
+
                 function setTweetList(event, tweetList) {
                     vm.tweetList = tweetList;
                     vm.tweetList.exist = true;
                 }
 
+
+
                 function addCircle(coordinates) {
                     var coordArray;
-                    if (typeof coordinates !== 'string') {
+                    if (!angular.isString(coordinates)) {
                         return;
                     }
                     if (coordinates.includes(',')) {
                         coordArray = coordinates.split(',').map(function(val) {
                             return Number(val);
                         });
-                        MapService.addCircle([coordArray[1], coordArray[0]]);
+                        MapService.addCircle([coordArray[1], coordArray[0]], stylePoint);
                     }
                 }
 

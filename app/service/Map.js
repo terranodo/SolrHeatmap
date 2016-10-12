@@ -511,21 +511,6 @@
                 return currentExtent;
             };
 
-            function getStyles(styleKey) {
-                var styles = {
-                    'Point': new ol.style.Style({
-                        image: new ol.style.Circle({
-                            radius: 5,
-                            fill: new ol.style.Fill({
-                                color: 'rgba(0,0,255,0.2)'
-                            }),
-                            stroke: new ol.style.Stroke({color: 'rgba(0,0,255,0.5)', width: 1.5})
-                        })
-                    })
-                };
-                return styleKey ? styles[styleKey] : styles;
-            }
-
             service.removeAllfeatures = function() {
                 if (angular.isObject(map)) {
                     var layerLength = map.getLayers().getLength();
@@ -535,12 +520,12 @@
                 }
             };
 
-            service.addCircle = function(point) {
+            service.addCircle = function(point, style) {
                 service.removeAllfeatures();
 
                 var geojsonObject = {
-                     "type": "Feature",
-                     "geometry": {"type": "Point", "coordinates": ol.proj.fromLonLat(point)}
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": ol.proj.fromLonLat(point)}
                 };
 
                 if (angular.isObject(map) && Object.keys(map).length !== 0) {
@@ -549,7 +534,7 @@
                             features: (new ol.format.GeoJSON).readFeatures(geojsonObject)
                         })
                     });
-                    vectorLayer.setStyle(getStyles('Point'));
+                    vectorLayer.setStyle(style);
                     map.addLayer(vectorLayer);
                 }
             };
