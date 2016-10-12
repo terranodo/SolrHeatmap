@@ -1,4 +1,4 @@
-<div class="col-xs-12 padding-search">
+<div class="col-xs-9 padding-search">
     <div class="row toolbarsearch" ng-class="{'searchtext-focus': focus}">
         <keyword removefn="removeKeyWord(keyword)" ng-repeat="keywordFilter in filterArray track by $index" remove="true" tag="{{keywordFilter}}"></keyword>
         <span class="input-group searchinputfield" id="searchinput">
@@ -12,15 +12,15 @@
      </div>
 </div>
 <div class="col-xs-3 padding-search">
-    <!-- <span class="searchbtn">
+    <span class="searchbtn">
         <button class="btn btn-primary btn-sm" type="button" ng-click="reset()">Reset</button>
-    </span> -->
+    </span>
 
-    <!-- <span class="searchbtn">
+    <span class="searchbtn">
         <a href="" class="infobtn" ng-click="showtoolbarSearchInfo()">
              <span class="glyphicon glyphicon-info-sign"></span>
         </a>
-    </span> -->
+    </span>
 </div>
 <div class="col-xs-12 padding-search" style="padding-top: 8px;">
     <div class="btn-group pull-left">
