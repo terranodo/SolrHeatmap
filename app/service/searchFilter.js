@@ -13,7 +13,8 @@
             user: null,
             geo: '[-90,-180 TO 90,180]',
             hm: '[-1,1 TO 2,4]',
-            histogramCount: []
+            histogramCount: [],
+            docs: heightModule().numberofItems()
         };
 
         var emptyStringForNull = function(value) {
@@ -40,6 +41,37 @@
             service.user = null;
             service.geo = '[-90,-180 TO 90,180]';
         };
+
+        service.heightModule = heightModule;
+
+        function heightModule(itemHeight, otherHeights) {
+
+            itemHeight = itemHeight || 90;
+            otherHeights = otherHeights || 360;  //time search field, padding, table header, pagination
+
+            function documentHeight() {
+                var D = document;
+                return Math.max(D.body.scrollHeight, D.documentElement.scrollHeight,
+                    D.body.offsetHeight, D.documentElement.offsetHeight,
+                    D.body.clientHeight, D.documentElement.clientHeight);
+            }
+
+            function availableHeight() {
+                return documentHeight() - otherHeights;
+            }
+
+            function calculateNumberofItems() {
+                return Math.round(availableHeight() / itemHeight);
+            }
+
+            return {
+                documentHeight: documentHeight,
+                availableHeight: availableHeight,
+                numberofItems: calculateNumberofItems
+            }
+
+        }
+
         return service;
     }]);
 })();

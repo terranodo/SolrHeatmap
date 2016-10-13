@@ -34,7 +34,7 @@
                     'a.hm.filter': reqParamsUi.hm,
                     'a.time.limit': '1',
                     'a.time.gap': 'PT1H',
-                    'd.docs.limit': '10',
+                    'd.docs.limit': reqParamsUi.docs,
                     'a.text.limit': '5'
                 };
                 $state.go('search', {
