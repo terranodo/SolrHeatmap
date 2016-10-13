@@ -6,14 +6,15 @@
     .factory('searchFilter', ['Map', function(Map){
         var MapService = Map;
         var service = {
-            minDate: new Date('2013-03-10'),
-            maxDate: new Date('2013-03-21'),
+            minDate: new Date('2016-10-10'),
+            maxDate: new Date('2016-10-21'),
             time: null,
             text: null,
             user: null,
             geo: '[-90,-180 TO 90,180]',
             hm: '[-1,1 TO 2,4]',
             histogramCount: [],
+            textLimit: null,
             docs: heightModule().numberofItems()
         };
 
@@ -40,6 +41,7 @@
             service.text = null;
             service.user = null;
             service.geo = '[-90,-180 TO 90,180]';
+            service.textLimit = null;
         };
 
         service.heightModule = heightModule;
@@ -47,7 +49,8 @@
         function heightModule(itemHeight, otherHeights) {
 
             itemHeight = itemHeight || 90;
-            otherHeights = otherHeights || 360;  //time search field, padding, table header, pagination
+            //time search field, padding, table header, pagination
+            otherHeights = otherHeights || 360;
 
             function documentHeight() {
                 var D = document;
@@ -68,8 +71,7 @@
                 documentHeight: documentHeight,
                 availableHeight: availableHeight,
                 numberofItems: calculateNumberofItems
-            }
-
+            };
         }
 
         return service;

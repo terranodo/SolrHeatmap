@@ -26,6 +26,7 @@
                 /*
                 // calculate reduced bounding box
                 */
+
                 params = {
                     'q.text': reqParamsUi.text,
                     'q.user': reqParamsUi.user,
@@ -35,7 +36,7 @@
                     'a.time.limit': '1',
                     'a.time.gap': 'PT1H',
                     'd.docs.limit': reqParamsUi.docs,
-                    'a.text.limit': '5'
+                    'a.text.limit': reqParamsUi.textLimit
                 };
                 $state.go('search', {
                     text: params['q.text'],
@@ -75,6 +76,9 @@
                     .then(function successCallback(response) {
                         // check if we have a heatmap facet and update the map with it
                         var data = response.data;
+
+                        data['a.text'] = data['a.text'] || [];
+
                         if (data && data['a.hm']) {
                             MapService.createOrUpdateHeatMapLayer(data['a.hm']);
                             // get the count of matches

@@ -5,8 +5,8 @@
         return {
             scope: {
                 tag: '@',
-                remove: '=',
-                removefn: '='
+                remove: '@',
+                removefn: '&'
             },
             link: keywordLink,
             templateUrl: 'components/keyword/keyword.tpl.html'
@@ -14,6 +14,7 @@
 
         function keywordLink(scope) {
             var vm = scope;
+            vm.removeTag = vm.remove === 'true' ? true : false;
         }
     });
 })();
