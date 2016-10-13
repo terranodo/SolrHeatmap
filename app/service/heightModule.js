@@ -25,7 +25,11 @@
         }
 
         function calculateNumberofItems() {
-            return Math.round(availableHeight() / service.itemHeight);
+            var height = availableHeight();
+            if (height > 0) {
+                return Math.round(height / service.itemHeight);
+            }
+            return 10;
         }
 
         return service;
