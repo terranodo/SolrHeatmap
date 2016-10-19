@@ -17,7 +17,7 @@
                     view: {
                         center: [0 ,0],
                         projection: 'EPSG:3857',
-                        zoom: 2
+                        zoom: 4
                     }
                 },
                 rs = $rootScope;
@@ -334,8 +334,8 @@
                 vector.getSource().addFeature(polygon);
 
                 var transformInteraction = new ol.interaction.Transform({
-                    translate: true,
-                    scale: true,
+                    translate: false,
+                    scale: false,
                     translateFeature: false,
                     rotate: false,
                     stretch: false
@@ -381,16 +381,16 @@
                     mapExtent = service.getMapView().calculateExtent(service.getMapSize()),
                     vectorSrc = transformInteractionLayer.getSource(),
                     currentBbox = vectorSrc.getFeatures()[0],
-                    needsUpdate = false,
+                    needsUpdate = true,
                     ordArray = currentBbox.getGeometry().getCoordinates()[0];
 
                 // check if current bbox is greater than map extent
-                for (var i = 0; i<ordArray.length; i++) {
-                    if (! new ol.geom.Point(ordArray[i]).intersectsExtent(mapExtent)){
-                        needsUpdate = true;
-                        break;
-                    }
-                }
+                // for (var i = 0; i<ordArray.length; i++) {
+                //     if (! new ol.geom.Point(ordArray[i]).intersectsExtent(mapExtent)){
+                //         needsUpdate = true;
+                //         break;
+                //     }
+                // }
 
                 if (needsUpdate === true) {
                     // calculate reduced bounding box
