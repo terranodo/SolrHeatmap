@@ -17,7 +17,7 @@
                     view: {
                         center: [0 ,0],
                         projection: 'EPSG:3857',
-                        zoom: 4
+                        zoom: 2
                     }
                 },
                 rs = $rootScope;
