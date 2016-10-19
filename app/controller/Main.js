@@ -33,10 +33,10 @@
                       }
                   });
                 MapService.getMap().on('moveend', function(evt){
-                    // check box of transform interaction
-                    MapService.checkBoxOfTransformInteraction();
                     searchFilter.setFilter({geo: MapService.getCurrentExtentQuery() });
                     HeatMapSourceGeneratorService.search();
+                    // check box of transform interaction
+                    MapService.checkBoxOfTransformInteraction();
                 });
 
                 MapService.getInteractionsByClass(ol.interaction.Transform)[0].on(

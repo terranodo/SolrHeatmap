@@ -6,7 +6,7 @@ describe( 'HeatMapSourceGenerator', function() {
     beforeEach( inject( function( _Map_, _Normalize_) {
         subject = _Map_;
         NormalizeService = _Normalize_;
-        mapViewSpy = jasmine.createSpyObj('view', ['set']);
+        mapViewSpy = jasmine.createSpyObj('view', ['set', 'fit']);
         mapSpy = jasmine.createSpyObj('map', ['getView', 'addLayer', 'addInteraction']);
         mapSpy.getView.and.returnValue(mapViewSpy);
         olSpy = spyOn(ol, 'Map').and.returnValue(mapSpy);
@@ -73,10 +73,13 @@ describe( 'HeatMapSourceGenerator', function() {
             spyOn(subject, 'getLayersBy').and.returnValue([layer]);
             spyOn(subject, 'getMap').and.returnValue(mapSpy);
             spyOn(subject, 'getMapProjection').and.returnValue('EPSG:4326');
+            spyOn(subject, 'getMapSize').and.returnValue([100,50]);
+
             defaultConfig = { mapConfig: { view: { extent: [0,0]}}};
             subject.init(defaultConfig);
             expect(mapSpy.getView).toHaveBeenCalled();
             expect(mapViewSpy.set).toHaveBeenCalled();
+            expect(mapViewSpy.fit).toHaveBeenCalled();
         });
         describe('broken config', function() {
             it('sets renderer to undefined', function() {

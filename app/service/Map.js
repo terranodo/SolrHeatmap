@@ -563,6 +563,7 @@
                     var vw = map.getView();
                     vw.set('extent', viewConfig.extent);
                     generateMaskAndAssociatedInteraction(viewConfig.extent, viewConfig.projection);
+                    vw.fit(viewConfig.extent, service.getMapSize());
                 }
             };
             return service;
