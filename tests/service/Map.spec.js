@@ -294,19 +294,20 @@ describe( 'HeatMapSourceGenerator', function() {
         });
     });
     describe('#resetMap', function() {
-        var getViewSpy, setGeometrySpy;
+        var getView, setGeometrySpy;
         beforeEach(function() {
-            var feature = {getGeometry: function() { return { getCoordinates: function() { return [0,0]; }}; }, setGeometry: function() {}};
+            var feature = { getGeometry: function() {return {getCoordinates: function() { return [0,0]; }};}, setGeometry: function() {}};
             layer = { getSource: function() { return { getFeatures: function() { return [feature];}}; }};
+            getView = { calculateExtent: function (extent) {return [-20037508.34,-20037508.34,20037508.34,20037508.34];}};
             setGeometrySpy = spyOn(feature, 'setGeometry');
             spyOn(subject, 'getLayersBy').and.returnValue([layer]);
-            getViewSpy = jasmine.createSpyObj('map', ['calculateExtent']);
-            spyOn(subject, 'getMapView').and.returnValue(getViewSpy);
+            spyOn(subject, 'getMapView').and.returnValue(getView);
             spyOn(subject, 'getMapSize').and.returnValue([10,10]);
+            spyOn(subject, 'getInteractions').and.returnValue([]);
         });
-        it('does not call the spy', function() {
+        it('does call the spy', function() {
             subject.checkBoxOfTransformInteraction();
-            expect(setGeometrySpy).not.toHaveBeenCalled();
+            expect(setGeometrySpy).toHaveBeenCalled();
         });
     });
     describe('#calculateReducedBoundingBox', function() {
