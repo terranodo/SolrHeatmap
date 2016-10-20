@@ -69,9 +69,10 @@
 
 <body ng-controller="MainController">
 	<ui-view></ui-view>
+    <heatmap></heatmap>
     <div class="container-fluid">
-        <div class="row center-block width-block">
-            <div class="container col-400-12 col-800-6 col-1200-4">
+        <div class="row">
+            <div class="container col-400-12 col-800-6 col-1200-4" style="z-index:100">
                 <div class="row component-padding">
                     <div class="col-xs-12 row-box">
                         <toolbar-search number-keywords="10"></toolbar-search>
@@ -101,7 +102,7 @@
                 </div>
             </div>
 
-            <div class="container col-400-12 col-800-6 col-1200-8">
+            <div class="container col-400-12 col-800-6 col-1200-8" style="z-index:100">
                 <div class="row">
                     <div class="container col-400-12 col-1200-4">
                         <div class="row component-padding">
@@ -118,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="container col-400-12 col-1200-8 col-1600-9 col-2000-9 col-2800">
                         <div class="row component-padding">
                             <div class="row-box heatmap">
@@ -126,8 +127,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
+
         </div>
     </div>
 

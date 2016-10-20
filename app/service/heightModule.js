@@ -7,7 +7,7 @@
 
         var service = {
             itemHeight: 90,
-            otherHeights: 410,
+            otherHeights: 440,
             documentHeight: documentHeight,
             availableHeight: availableHeight,
             getNumberofItems: calculateNumberofItems

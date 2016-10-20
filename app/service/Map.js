@@ -7,8 +7,9 @@
 (function() {
     angular.module('SolrHeatmapApp')
     .factory('Map',
-             ['$rootScope', '$filter', '$document', 'Normalize', '$controller', 'queryService',
-        function($rootScope, $filter, $document, Normalize, $controller, queryService) {
+             ['$rootScope', '$filter', '$document', 'Normalize', '$controller',
+             'queryService', 'HeightModule',
+        function($rootScope, $filter, $document, Normalize, $controller, queryService, HeightModule) {
             var NormalizeService = Normalize;
             var service = {};
             var map = {},
@@ -370,6 +371,21 @@
                 });
             }
 
+            service.calculateReducedBoundingBoxFromPixelToPercent = function(extent) {
+                var sideBarPercent = 1 - (400/window.innerWidth);
+                var topPercent = 1 - (200/HeightModule.documentHeight());
+                if(solrHeatmapApp.appConfig) {
+                    var dx = extent.maxX - extent.minX,
+                        dy = extent.maxY - extent.minY,
+                        minX = extent.minX + (1 - sideBarPercent) * dx,
+                        maxX = extent.minX + (solrHeatmapApp.appConfig.ratioInnerBbox) * dx,
+                        minY = extent.minY + (1 - solrHeatmapApp.appConfig.ratioInnerBbox) * dy,
+                        maxY = extent.minY + (topPercent) * dy;
+                    return {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
+                }
+                return extent;
+            };
+
             service.calculateReducedBoundingBox = function(extent) {
                 if(solrHeatmapApp.appConfig) {
                     var dx = extent.maxX - extent.minX,
@@ -378,6 +394,7 @@
                         maxX = extent.minX + (solrHeatmapApp.appConfig.ratioInnerBbox) * dx,
                         minY = extent.minY + (1 - solrHeatmapApp.appConfig.ratioInnerBbox) * dy,
                         maxY = extent.minY + (solrHeatmapApp.appConfig.ratioInnerBbox) * dy;
+                    console.log({minX: minX, minY: minY, maxX: maxX, maxY: maxY});
                     return {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
                 }
                 return extent;
@@ -392,7 +409,7 @@
                 var mapExtent = service.getMapView().calculateExtent(service.getMapSize());
 
                 // calculate reduced bounding box
-                var reducedBoundingBox = service.calculateReducedBoundingBox({
+                var reducedBoundingBox = service.calculateReducedBoundingBoxFromPixelToPercent({
                     minX: mapExtent[0], minY: mapExtent[1],
                     maxX: mapExtent[2], maxY: mapExtent[3]
                 });
@@ -420,7 +437,7 @@
             service.getReducedQueryFromExtent = function(extentQuery) {
                 var extent = queryService.getExtentFromQuery(extentQuery);
                 return queryService.
-                    createQueryFromExtent(service.calculateReducedBoundingBox(extent));
+                    createQueryFromExtent(service.calculateReducedBoundingBoxFromPixelToPercent(extent));
             };
 
             service.getCurrentExtentQuery = function(){
@@ -558,12 +575,16 @@
                                 viewConfig.zoomFactor : undefined
                     })
                 });
-
+                console.log('viewConfig', viewConfig);
+                console.log('solrHeatmapApp', solrHeatmapApp);
                 if (angular.isArray(viewConfig.extent)) {
                     var vw = map.getView();
                     vw.set('extent', viewConfig.extent);
                     generateMaskAndAssociatedInteraction(viewConfig.extent, viewConfig.projection);
-                    vw.fit(viewConfig.extent, service.getMapSize());
+
+                    if (viewConfig.initExtent) {
+                        vw.fit(viewConfig.extent, service.getMapSize());
+                    }
                 }
             };
             return service;
