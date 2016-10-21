@@ -24,13 +24,6 @@
 
                 vm.$on('setTweetList', setTweetList);
 
-                scope.$on('setCounter', function(e, data){
-                    if (data < 1 || !data) {
-                        data = 'No results found';
-                    }
-                    scope.counter = data;
-                });
-
                 var stylePoint = new ol.style.Style({
                     image: new ol.style.Circle({
                         radius: 10,
