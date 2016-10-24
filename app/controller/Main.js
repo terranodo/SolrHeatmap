@@ -31,11 +31,18 @@
                           hmLayer.setRadius(radius);
                           hmLayer.setBlur(radius*2);
                       }
+                      // =========================================
+                      MapService.checkBoxOfTransformInteraction();
                   });
                 MapService.getMap().on('moveend', function(evt){
-                    searchFilter.setFilter({geo: MapService.getCurrentExtentQuery() });
+                    console.log('entro en moveend');
+                    var text = 'main.js --> onMoveend --> geo:MapService.getCurrentExtentQuery()';
+                    searchFilter.setFilter({geo: MapService.getCurrentExtentQuery() }, text);
+
                     HeatMapSourceGeneratorService.search();
                     // check box of transform interaction
+
+                    // =========================================
                     MapService.checkBoxOfTransformInteraction();
                 });
 
@@ -68,6 +75,7 @@
                     solrHeatmapApp.instructions = instructions;
 
                     // fire event mapReady
+                    console.log('mapReady');
                     $rootScope.$broadcast('mapReady', MapService.getMap());
 
                     solrHeatmapApp.setupEvents();

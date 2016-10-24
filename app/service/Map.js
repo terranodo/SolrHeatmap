@@ -336,8 +336,8 @@
                 vector.getSource().addFeature(polygon);
 
                 var transformInteraction = new ol.interaction.Transform({
-                    translate: false,
-                    scale: false,
+                    translate: true,
+                    scale: true,
                     translateFeature: false,
                     rotate: false,
                     stretch: false
@@ -447,6 +447,9 @@
                     currentBbox,
                     currentBboxExtentWgs84,
                     currentExtent = {};
+                console.log('');
+
+
 
                 if (!transformInteractionLayer) {
                     return null;
@@ -469,10 +472,10 @@
                         minY = normalizedExtentMap[0],
                         maxY = normalizedExtentMap[2];
 
-                    minX = normalizedExtentBox[1];
-                    maxX = normalizedExtentBox[3];
-                    minY = normalizedExtentBox[0];
-                    maxY = normalizedExtentBox[2];
+                    // minX = normalizedExtentBox[1];
+                    // maxX = normalizedExtentBox[3];
+                    // minY = normalizedExtentBox[0];
+                    // maxY = normalizedExtentBox[2];
 
                     currentExtent = {
                         minX: minX,
@@ -480,7 +483,7 @@
                         minY: minY,
                         maxY: maxY
                     };
-
+                    console.log('getCurrentExtent: currentExtent', currentExtent);
                     var roundToFixed = function(value){
                         return parseFloat(Math.round(value* 100) / 100).toFixed(2);
                     };
@@ -491,7 +494,7 @@
                                             roundToFixed(maxX) + ',' +
                                             roundToFixed(maxY) + ']');
                 }
-
+                console.log('.');
                 return currentExtent;
             };
 
