@@ -37,12 +37,11 @@
                     'd.docs.limit': reqParamsUi.getNumOfDocs(),
                     'a.text.limit': reqParamsUi.textLimit
                 };
-                console.log(params);
                 $state.go('search', {
                     text: params['q.text'],
                     user: params['q.user'],
                     time: params['q.time'],
-                    geo: params['a.hm.filter']
+                    geo: params['q.geo']
                 }, {notify: false, location: "replace"}
                 );
 

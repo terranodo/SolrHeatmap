@@ -6,8 +6,8 @@
     .factory('searchFilter', ['Map', 'HeightModule', function(Map, HeightModule){
         var MapService = Map;
         var service = {
-            geo: '[-90,-180 TO 90,180]',
-            hm: '[-1,1 TO 2,4]',
+            geo: '[-1,1 TO 2,4]',
+            hm: '[-90,-180 TO 90,180]',
             time: null,
             text: null,
             user: null,
@@ -21,7 +21,7 @@
         var emptyStringForNull = function(value) {
             return value === null ? '' : value;
         };
-        service.setFilter = function(filter, text) {
+        service.setFilter = function(filter) {
             if(filter.time) {
                 service.time = filter.time;
             }
@@ -32,17 +32,18 @@
                 service.text = filter.text;
             }
             if(filter.geo) {
-                service.geo = MapService.getReducedQueryFromExtent(filter.geo);
-                service.hm = filter.geo;
+                service.geo = filter.geo;
             }
-            console.log(text, service);
+            if (filter.hm) {
+                service.hm = filter.hm;
+            }
         };
 
         service.resetFilter = function() {
             service.time = null;
             service.text = null;
             service.user = null;
-            service.geo = '[-90,-180 TO 90,180]';
+            service.geo = MapService.getCurrentExtentQuery().geo;
             service.textLimit = null;
         };
 

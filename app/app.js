@@ -22,8 +22,7 @@
             component: 'search',
             resolve: {
                 search: function($stateParams,HeatMapSourceGenerator,searchFilter) {
-                    var text = 'app.js --> config--> $stateParams --> setFilter --> service: ';
-                    searchFilter.setFilter($stateParams, text);
+                    searchFilter.setFilter($stateParams);
                 }
             }
         });

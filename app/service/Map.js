@@ -417,8 +417,7 @@
                     var vw = service.getMapView();
                     vw.setCenter(intitalCenter);
                     vw.setZoom(intitalZoom);
-
-                    setTransactionBBox(solrHeatmapApp.initMapConf.view.extent);
+                    service.checkBoxOfTransformInteraction();
                 }
             };
 
@@ -430,7 +429,11 @@
             };
 
             service.getCurrentExtentQuery = function(){
-                return queryService.createQueryFromExtent(service.getCurrentExtent());
+                var currentExtent = service.getCurrentExtent();
+                return {
+                    geo: queryService.createQueryFromExtent(currentExtent.geo),
+                    hm: queryService.createQueryFromExtent(currentExtent.hm)
+                };
             };
 
             /**
@@ -446,10 +449,8 @@
                                     getLayersBy('name', 'TransformInteractionLayer')[0],
                     currentBbox,
                     currentBboxExtentWgs84,
-                    currentExtent = {};
-                console.log('');
-
-
+                    currentExtent = {},
+                    currentExtentBox = {};
 
                 if (!transformInteractionLayer) {
                     return null;
@@ -464,38 +465,35 @@
                 }
 
                 if (extent && extentWgs84){
-                    var normalizedExtentMap = NormalizeService.normalizeExtent(extentWgs84),
-                        normalizedExtentBox =
-                            NormalizeService.normalizeExtent(currentBboxExtentWgs84),
-                        minX = normalizedExtentMap[1],
-                        maxX = normalizedExtentMap[3],
-                        minY = normalizedExtentMap[0],
-                        maxY = normalizedExtentMap[2];
-
-                    // minX = normalizedExtentBox[1];
-                    // maxX = normalizedExtentBox[3];
-                    // minY = normalizedExtentBox[0];
-                    // maxY = normalizedExtentBox[2];
+                    var normalizedExtentMap = NormalizeService.normalizeExtent(extentWgs84);
+                    var normalizedExtentBox = NormalizeService
+                            .normalizeExtent(currentBboxExtentWgs84);
 
                     currentExtent = {
-                        minX: minX,
-                        maxX: maxX,
-                        minY: minY,
-                        maxY: maxY
+                        minX: normalizedExtentMap[1],
+                        maxX: normalizedExtentMap[3],
+                        minY: normalizedExtentMap[0],
+                        maxY: normalizedExtentMap[2]
                     };
-                    console.log('getCurrentExtent: currentExtent', currentExtent);
+
+                    currentExtentBox = {
+                        minX: normalizedExtentBox[1],
+                        maxX: normalizedExtentBox[3],
+                        minY: normalizedExtentBox[0],
+                        maxY: normalizedExtentBox[2]
+                    };
+
                     var roundToFixed = function(value){
                         return parseFloat(Math.round(value* 100) / 100).toFixed(2);
                     };
                     // Reset the date fields
                     $rootScope.$broadcast('geoFilterUpdated', '[' +
-                                            roundToFixed(minX) + ',' +
-                                            roundToFixed(minY) + ' TO ' +
-                                            roundToFixed(maxX) + ',' +
-                                            roundToFixed(maxY) + ']');
+                                            roundToFixed(currentExtentBox.minX) + ',' +
+                                            roundToFixed(currentExtentBox.minY) + ' TO ' +
+                                            roundToFixed(currentExtentBox.maxX) + ',' +
+                                            roundToFixed(currentExtentBox.maxY) + ']');
                 }
-                console.log('.');
-                return currentExtent;
+                return {hm: currentExtent, geo: currentExtentBox};
             };
 
             service.removeAllfeatures = function() {
