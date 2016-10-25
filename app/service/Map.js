@@ -336,8 +336,8 @@
                 vector.getSource().addFeature(polygon);
 
                 var transformInteraction = new ol.interaction.Transform({
-                    translate: true,
-                    scale: true,
+                    translate: false,
+                    scale: false,
                     translateFeature: false,
                     rotate: false,
                     stretch: false
