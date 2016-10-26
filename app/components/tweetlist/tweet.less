@@ -51,22 +51,28 @@ li .tweet {
 
 .list-item-text p{
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 200;
     letter-spacing: .01em;
     margin: 0;
     line-height: 1.6em;
-    color: #2e6da4;
+    color: #337ab7;
 }
 
 .no-info {
-    font-size: 200%;
+    font-size: 150%;
     text-align: center;
-    color: #888;
+    color: #87898c;
+}
+.tweet-component .no-info {
+    padding-top: 10px;
 }
 
 .count-padding {
-    padding: 10px;
+    padding: 10px 20px;
     margin-bottom: -10px;
+    text-align: right;
+    font-weight: 200;
+    color: #337ab7;
 }
 
 .dl-horizontal dt {
@@ -79,8 +85,16 @@ li .tweet {
    font-weight: 500;
 }
 .list-group {
-   margin-bottom: 0px;
+   margin: -10px;
+   border-color: #eee;
 }
 .list-group-item {
-    padding: 9px 15px;
+    padding: 10px 15px;
+    border: 1px solid #eee;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 0px;
+}
+.list-group-item:first-child {
+    border-top: 0px;
 }
