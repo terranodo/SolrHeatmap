@@ -41,12 +41,12 @@
                     HeatMapSourceGeneratorService.search();
                 });
 
-                MapService.getInteractionsByClass(ol.interaction.Transform)[0].on(
-                    ['translateend', 'scaleend'], function (e) {
-                        var currentExtent = MapService.getCurrentExtentQuery();
-                        searchFilter.setFilter({geo: currentExtent.geo, hm: currentExtent.hm });
-                        HeatMapSourceGeneratorService.search();
-                    });
+                // MapService.getInteractionsByClass(ol.interaction.Transform)[0].on(
+                //     ['translateend', 'scaleend'], function (e) {
+                //         var currentExtent = MapService.getCurrentExtentQuery();
+                //         searchFilter.setFilter({geo: currentExtent.geo, hm: currentExtent.hm });
+                //         HeatMapSourceGeneratorService.search();
+                //     });
             };
 
             vm.response = function(data, status, headers, config) {

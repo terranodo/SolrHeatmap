@@ -6,7 +6,7 @@
     .factory('searchFilter', ['Map', 'HeightModule', function(Map, HeightModule){
         var MapService = Map;
         var service = {
-            geo: '[-1,1 TO 2,4]',
+            geo: '[-90,-180 TO 90,180]',
             hm: '[-90,-180 TO 90,180]',
             time: null,
             text: null,
@@ -14,8 +14,8 @@
             histogramCount: [],
             textLimit: null,
             getNumOfDocs: HeightModule.getNumberofItems,
-            minDate: new Date('2013-03-10'),
-            maxDate: new Date('2013-03-21')
+            minDate: new Date('2016-10-10'),
+            maxDate: new Date('2016-10-21')
         };
 
         var emptyStringForNull = function(value) {
