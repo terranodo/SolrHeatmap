@@ -7,7 +7,7 @@
 
         var service = {
             itemHeight: 90,
-            otherHeights: 410,
+            otherHeights: 280,
             documentHeight: documentHeight,
             availableHeight: availableHeight,
             getNumberofItems: calculateNumberofItems,
@@ -22,9 +22,9 @@
 
         function topPanelHeight() {
             if ($window.innerWidth < 1200) {
-                return 370;
+                return 400;
             }
-            return 200;
+            return 210;
         }
 
         function availableHeight() {
