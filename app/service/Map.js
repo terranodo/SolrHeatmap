@@ -357,7 +357,7 @@
             }
 
             service.calculateReducedBoundingBoxFromInFullScreen = function(extent) {
-                var sideBarPercent = 1 - (405/$window.innerWidth);
+                var sideBarPercent = 1 - (HeightModule.sideBarWidth/$window.innerWidth);
                 var topBarPercent = 1 -
                     (HeightModule.topPanelHeight()/HeightModule.documentHeight());
                 if(solrHeatmapApp.appConfig) {

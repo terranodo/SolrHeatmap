@@ -2,7 +2,7 @@ describe( 'ExportDirective', function() {
     var $scope, scope, element, rootScope, HeatMapSourceGeneratorService, compiledElement, MapService, searchFilter;
 
     beforeEach(module('SolrHeatmapApp'));
-    beforeEach(module('search_exportButton_component'));
+    beforeEach(module('search_resetButton_component'));
 
     beforeEach(inject( function($compile, $rootScope, _HeatMapSourceGenerator_, _Map_, _searchFilter_) {
         rootScope = $rootScope;
@@ -18,9 +18,6 @@ describe( 'ExportDirective', function() {
         searchFilter = _searchFilter_;
     }));
 
-    it( 'export has defaults', function() {
-        expect(scope.export.numDocuments).toEqual(1);
-    });
     describe('#reset', function() {
         var searchSpy, mapSpy, filterSpy;
         beforeEach(function() {

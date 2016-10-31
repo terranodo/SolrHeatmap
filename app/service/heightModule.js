@@ -8,6 +8,7 @@
         var service = {
             itemHeight: 90,
             otherHeights: 280,
+            sideBarWidth: 405,
             documentHeight: documentHeight,
             availableHeight: availableHeight,
             getNumberofItems: calculateNumberofItems,
