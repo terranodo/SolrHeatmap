@@ -30,10 +30,16 @@
 
                 vm.dateOptions = searchFilter;
                 vm.dateOptions.startingDate = 1;
-                vm.dateOptions.showWeeks= false;
+                vm.dateOptions.showWeeks = false;
 
-                vm.dateString = DateTimeService.formatDatesToString(vm.dateOptions.minDate,
-                                                        vm.dateOptions.maxDate);
+                vm.$watch(function(){
+                    return vm.dateOptions.time;
+                }, function(newValue, oldValue){
+                    if (angular.isString(newValue)) {
+                        vm.dateString = newValue;
+                        changeDatepicker();
+                    }
+                });
 
                 vm.startDate = {
                     opened: false
@@ -94,6 +100,9 @@
                 }
 
                 function stringToStartEndDateArray(dateString) {
+                    if (!angular.isString(dateString)) {
+                        return null;
+                    }
                     var dateArray = dateString.split(' TO ');
                     if (angular.isString(dateString) && dateArray.length === 2) {
                         dateArray[0] = new Date(dateArray[0].slice(1,11));
@@ -106,15 +115,23 @@
                     return null;
                 }
 
-                function onSubmitDateText() {
+                function changeDatepicker(){
                     var dateArray = stringToStartEndDateArray(vm.dateString);
                     if (dateArray !== null) {
                         vm.datepickerStartDate = dateArray[0];
                         vm.datepickerEndDate = dateArray[1];
-                        performDateSearch();
+                        return true;
                     } else{
                         vm.dateString = DateTimeService.formatDatesToString(vm.datepickerStartDate,
                                                                 vm.datepickerEndDate);
+                        return false;
+                    }
+                }
+
+                function onSubmitDateText() {
+                    var hasDatepickerChanged = changeDatepicker();
+                    if (hasDatepickerChanged) {
+                        performDateSearch();
                     }
                 }
 
