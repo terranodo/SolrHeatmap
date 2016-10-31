@@ -7,8 +7,9 @@
 
     angular
     .module('search_datepicker_component', [])
-    .directive('datePicker', ['HeatMapSourceGenerator', 'InfoService', 'searchFilter',
-        function(HeatMapSourceGenerator, InfoService, searchFilter) {
+    .directive('datePicker', ['HeatMapSourceGenerator', 'InfoService',
+        'searchFilter', 'DateTimeService',
+        function(HeatMapSourceGenerator, InfoService, searchFilter, DateTimeService) {
             return {
                 link: datePickerFilterLink,
                 templateUrl: 'components/datepicker/datepicker.tpl.html',
@@ -31,7 +32,7 @@
                 vm.dateOptions.startingDate = 1;
                 vm.dateOptions.showWeeks= false;
 
-                vm.dateString = getFormattedDateString(vm.dateOptions.minDate,
+                vm.dateString = DateTimeService.formatDatesToString(vm.dateOptions.minDate,
                                                         vm.dateOptions.maxDate);
 
                 vm.startDate = {
@@ -87,14 +88,9 @@
                  * Will be fired after the start and the end date was chosen.
                  */
                 function onChangeDatepicker(){
-                    vm.dateString = getFormattedDateString(vm.datepickerStartDate,
+                    vm.dateString = DateTimeService.formatDatesToString(vm.datepickerStartDate,
                                                             vm.datepickerEndDate);
                     performDateSearch();
-                }
-
-                function getFormattedDateString(minDate, maxDate) {
-                    return '[' + minDate.toISOString().replace('.000Z','') + ' TO ' +
-                      maxDate.toISOString().replace('.000Z','') + ']';
                 }
 
                 function stringToStartEndDateArray(dateString) {
@@ -117,7 +113,7 @@
                         vm.datepickerEndDate = dateArray[1];
                         performDateSearch();
                     } else{
-                        vm.dateString = getFormattedDateString(vm.datepickerStartDate,
+                        vm.dateString = DateTimeService.formatDatesToString(vm.datepickerStartDate,
                                                                 vm.datepickerEndDate);
                     }
                 }

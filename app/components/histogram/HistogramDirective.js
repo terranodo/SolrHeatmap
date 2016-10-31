@@ -4,8 +4,8 @@
 
     angular
     .module('search_timehistogram_component', [])
-    .directive('timeHistogram', ['$rootScope', 'HeatMapSourceGenerator', 'searchFilter',
-        function timeHistogram($rootScope, HeatMapSourceGenerator, searchFilter) {
+    .directive('timeHistogram', ['$rootScope', 'HeatMapSourceGenerator', 'searchFilter', 'DateTimeService',
+        function timeHistogram($rootScope, HeatMapSourceGenerator, searchFilter, DateTimeService) {
             var directive = {
                 templateUrl: 'components/histogram/histogram.tpl.html',
                 restrict: 'EA',
@@ -100,16 +100,11 @@
                     var maxKey = vm.slider.maxValue;
                     vm.datepickerStartDate = new Date(vm.slider.counts[minKey].value);
                     vm.datepickerEndDate = new Date(vm.slider.counts[maxKey].value);
-                    vm.dateString = getFormattedDateString(vm.datepickerStartDate,
+                    vm.dateString = DateTimeService.formatDatesToString(vm.datepickerStartDate,
                                                             vm.datepickerEndDate);
                     performDateSearch();
                 }
 
-                function getFormattedDateString(minDate, maxDate) {
-                    return '[' + minDate.toISOString().replace('.000Z','') + ' TO ' +
-                      maxDate.toISOString().replace('.000Z','') + ']';
-                }
-                //
                 function performDateSearch() {
                     vm.slider.changeTime = true;
                     searchFilter.time = vm.dateString;

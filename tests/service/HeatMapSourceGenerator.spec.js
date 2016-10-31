@@ -10,13 +10,6 @@ describe( 'HeatMapSourceGenerator', function() {
         geospatialFilter = { minX: 1, maxX: 1, minY: 1, maxY: 1};
         spatialSpy = spyOn(MapService, 'getCurrentExtent').and.returnValue(geospatialFilter);
     }));
-
-    describe('#getFormattedDateString', function() {
-        it('Returns the formatted date object that can be parsed by API.', function() {
-            var startDate = new Date('2016-09-08');
-            expect(subject.getFormattedDateString(startDate, startDate)).toEqual('[2016-09-08T00:00:00 TO 2016-09-08T00:00:00]');
-        });
-    });
     describe('#startCsvExport', function() {
         var exportRequest;
         beforeEach(function() {
