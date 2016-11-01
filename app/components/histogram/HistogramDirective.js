@@ -88,10 +88,14 @@
                         return;
                     }
                     disableSlider(false);
-                    if (vm.slider.options.ceil === 1 || vm.slider.changeTime === false) {
+
+                    if (vm.slider.options.ceil === 1 || isTheInitialDate() ||
+                        dataHistogram.counts.length - 1 > vm.slider.options.ceil) {
+
                         vm.slider.counts = dataHistogram.counts;
                         vm.slider.options.ceil = dataHistogram.counts.length - 1;
                         vm.slider.maxValue = vm.slider.options.ceil;
+                        vm.slider.minValue = 0;
                         dataHistogram.slider = vm.slider;
                         $rootScope.$broadcast('setHistogramRangeSlider', dataHistogram);
                     }else{
@@ -100,9 +104,15 @@
                     }
                 }
 
+                function isTheInitialDate() {
+                    var initialDate = DateTimeService.formatDatesToString(searchFilter.minDate, searchFilter.maxDate);
+                    return initialDate === searchFilter.time;
+                }
+
                 function slideEnded() {
                     var minKey = vm.slider.minValue;
                     var maxKey = vm.slider.maxValue;
+
                     vm.datepickerStartDate = new Date(vm.slider.counts[minKey].value);
                     vm.datepickerEndDate = new Date(vm.slider.counts[maxKey].value);
                     vm.dateString = DateTimeService.formatDatesToString(vm.datepickerStartDate,
@@ -139,6 +149,7 @@
                             floor: 0,
                             ceil: 1,
                             step: 1,
+                            minRange: 1,
                             noSwitching: true, hideLimitLabels: true,
                             getSelectionBarColor: function() {
                                 return '#609dd2';
