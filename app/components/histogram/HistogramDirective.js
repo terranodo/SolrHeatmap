@@ -83,6 +83,11 @@
                 }
 
                 function setHistogram(event, dataHistogram) {
+                    if (!dataHistogram.counts.length) {
+                        disableSlider(true);
+                        return;
+                    }
+                    disableSlider(false);
                     if (vm.slider.options.ceil === 1 || vm.slider.changeTime === false) {
                         vm.slider.counts = dataHistogram.counts;
                         vm.slider.options.ceil = dataHistogram.counts.length - 1;
@@ -109,6 +114,20 @@
                     vm.slider.changeTime = true;
                     searchFilter.time = vm.dateString;
                     HeatMapSourceGenerator.search();
+                }
+
+                function disableSlider(option) {
+                    if (option) {
+                        vm.slider.options.disabled = true;
+                        vm.slider.options.getSelectionBarColor = function() {
+                            return '#d8e0f3';
+                        };
+                    }else {
+                        vm.slider.options.disabled = false;
+                        vm.slider.options.getSelectionBarColor =
+                            defaultSliderValue().options.getSelectionBarColor;
+                    }
+
                 }
 
                 function defaultSliderValue() {
