@@ -1,8 +1,9 @@
+/*eslint angular/di: [2,"array"]*/
 (function() {
     angular
     .module('search_keywordinput_component', [])
     .directive('keywordInput', ['HeatMapSourceGenerator', 'searchFilter', '$window',
-        function keywordInput(HeatMapSourceGenerator, searchFilter,  $window) {
+        function keywordInput(HeatMapSourceGenerator, searchFilter, $window) {
 
             return {
                 link: keywordInputLink,
@@ -14,7 +15,7 @@
                     limit: '@',
                     text: '@'
                 }
-            }
+            };
 
             function keywordInputLink(scope) {
                 var vm = scope;
@@ -73,7 +74,6 @@
                     if (searchInput && searchInput !== '') {
                         var keywordslength = searchInput.split('"="').length;
                         if (keywordslength === 1) {
-                            console.log('"' + searchInput + '" "' + newValue + '"');
                             return '"' + searchInput + '" "' + newValue + '"';
                         }else if(keywordslength > 1){
                             return searchInput + ' "' + newValue + '"';
@@ -135,5 +135,5 @@
                     }
                 }
             }
-    }]);
+        }]);
 })();

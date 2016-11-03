@@ -33,7 +33,7 @@
     "test:unit": "./node_modules/karma/bin/karma start --browsers PhantomJS --auto-watch",
     "lintest": "npm run js-lint && npm run test",
     "serve": "http-server -p 3001",
-    "server": "npm run serve && grunt dev-watch",
+    "server": "parallelshell 'npm run serve -s' 'grunt dev-watch -s'",
     "deploy": "grunt deploy",
     "publish": "grunt publish"
   },
@@ -63,6 +63,7 @@
     "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-spec-reporter": "0.0.26",
-    "less-plugin-clean-css": "^1.5.1"
+    "less-plugin-clean-css": "^1.5.1",
+    "parallelshell": "^2.0.0"
   }
 }

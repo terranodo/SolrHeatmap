@@ -7,10 +7,8 @@
 (function() {
     angular
     .module('search_toolbarsearch_component', [])
-    .directive('toolbarSearch', ['$rootScope', 'HeatMapSourceGenerator',
-        '$window', 'InfoService', 'searchFilter',
-        function toolbarSearch($rootScope, HeatMapSourceGenerator, $window, InfoService, searchFilter) {
-
+    .directive('toolbarSearch', [
+        function toolbarSearch() {
             return {
                 restrict: 'EA',
                 template: '<keyword-input number-keywords="5" text="text" limit="textLimit"' +
@@ -18,6 +16,5 @@
                         '</keyword-input>',
                 scope: {}
             };
-
         }]);
 })();
