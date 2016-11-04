@@ -12,12 +12,7 @@
         }
 
         function iskeywordInTheBlacklist(comparedWord) {
-            var blacklist = ["i", "to", "the", "a", "you", "my", "t.co", "http",
-                // "me", "and", "i'm", "is", "in", "it", "that", "of", "for", "at",
-                // "on", "just", "this", "so", "be", "lol", "like", "with", "have",
-                // "up", "but", "not", "get", "don't", "your", "all", "no", "was",
-                // "love", "do", "what", "are", "if", "when", "out", "go", "amp",
-                "now", "know", "good", "we", "it's"];
+            var blacklist = ["i", "to", "the", "a", "you", "my", "t.co", "http"];
             var comparedList = blacklist.filter(function(blackWord) {
                 return blackWord === comparedWord;
             });
