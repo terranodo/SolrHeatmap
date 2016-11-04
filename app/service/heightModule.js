@@ -24,24 +24,24 @@
         }
 
         function topPanelHeight() {
-        if ($window.innerWidth < 1200) {
-                  return 4;
-             }
-             return 102;
+            if ($window.innerWidth < 1200) {
+                return 4;
+            }
+            return 102;
         }
 
         function otherHeights() {
-        if ($window.innerWidth < 1200) {
-                  return 560;
-             }
-             return 350;
+            if ($window.innerWidth < 1200) {
+                return 560;
+            }
+            return 350;
         }
 
         function sideBarWidth() {
-        if ($window.innerWidth < 800) {
-                  return 4;
-             }
-             return 400;
+            if ($window.innerWidth < 800) {
+                return 4;
+            }
+            return 400;
         }
 
         function availableHeight() {

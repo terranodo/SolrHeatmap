@@ -321,7 +321,7 @@ describe( 'HeatMapSourceGenerator', function() {
             solrHeatmapApp.appConfig.ratioInnerBbox = 2;
             spyOn(HeightModule, 'documentHeight').and.returnValue(400);
             spyOn(HeightModule, 'topPanelHeight').and.returnValue(200);
-            HeightModule.sideBarWidth = 400;
+            spyOn(HeightModule, 'sideBarWidth').and.returnValue(400);
             HeightModule.rightSideBarWidth = 200;
             HeightModule.bottomHeight = 200;
             $window.innerWidth = 800;

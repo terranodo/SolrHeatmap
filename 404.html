@@ -63,6 +63,7 @@
     <script src="./app/components/keyword/keywordDirective.js"></script>
     <script src="./app/components/cardwrapper/cardwrapperDirective.js"></script>
     <script src="./app/components/keywordInput/keywordInputDirective.js"></script>
+    <script src="./app/components/responsiveView/responsiveViewDirective.js"></script>
 
     <script src="./tmp/templates.js"></script>
 
@@ -72,72 +73,7 @@
 	<ui-view></ui-view>
     <heatmap></heatmap>
 
-<!-- min: 1200 -->
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="container col-400-12 col-800-6 col-1200-4">
-                <card-wrapper>
-                    <toolbar-search number-keywords="10"></toolbar-search>
-                </card-wrapper>
-
-                <card-wrapper>
-                    <user-filter></user-filter>
-                </card-wrapper>
-
-                <card-wrapper class="tweetlist-lg">
-                    <tweetlist></tweetlist>
-                </card-wrapper>
-
-                <reset-button></reset-button>
-            </div>
-
-            <div class="container col-400-12 col-800-12 col-1200-8 col-1600-9">
-                <div class="row">
-                    <div class="container col-400-12 col-1200-8 col-1600-6 time-components-lg">
-                        <div class="row">
-                            <div class="container col-400-12 col-1600-3">
-                                <card-wrapper>
-                                    <date-picker></date-picker>
-                                </card-wrapper>
-                            </div>
-                            <div class="container col-400-12 col-1600-3">
-                                <card-wrapper>
-                                    <time-histogram barId="inbar"></time-histogram>
-                                </card-wrapper>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container col-400-12 col-1600-3">
-                            <tweet-panel></tweet-panel>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-<!-- min: 800px and max:1200 -->
-
-                      <!-- <div class="container-fluid">
-                          <div class="row">
-                             <div class="container col-400-12 col-800-6 col-1200-4 sidebar-tools-md">
-                                  <card-wrapper>
-                                      <date-picker></date-picker>
-                                  </card-wrapper>
-
-                                  <card-wrapper>
-                                      <time-histogram barId="inbar"></time-histogram>
-                                  </card-wrapper>
-
-                                  <card-wrapper>
-                                      <tweetlist></tweetlist>
-                                  </card-wrapper>
-
-                                  <reset-button></reset-button>
-                             </div>
-                          </div>
-                      </div> -->
+    <responsive-layout></responsive-layout>
 
     <!-- map popup -->
     <ng-include src="'./app/view/mapPopup.html'"></ng-include>
