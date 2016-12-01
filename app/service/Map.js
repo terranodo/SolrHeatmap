@@ -31,6 +31,7 @@
                 var layer,
                     layers = [];
 
+
                 if (angular.isArray(layerConfig)) {
                     angular.forEach(layerConfig, function(conf) {
                         if (conf.type === 'TileWMS') {
@@ -38,6 +39,7 @@
                                 name: conf.name,
                                 backgroundLayer: conf.backgroundLayer,
                                 displayInLayerPanel: conf.displayInLayerPanel,
+                                // source: new ol.source.OSM(),
                                 source: new ol.source.TileWMS({
                                     attributions: [new ol.Attribution({
                                         html: conf.attribution
@@ -73,6 +75,7 @@
                             });
                         }
                         layers.push(layer);
+                        // layers.push(googleLayer);
                     });
                 }
                 return layers;
@@ -111,7 +114,7 @@
 
             service.getLayersBy = function(key, value) {
                 var layers = service.getLayers();
-                return $filter('filter')(layers, function(layer) {
+                return layers.filter(function (layer) {
                     return layer.get(key) === value;
                 });
             };
@@ -147,9 +150,11 @@
             * heatmap layer
             */
             var _switchMasks = function(hmAvailable) {
-                var heatMapLayer = service.getLayersBy('name', 'HeatMapLayer')[0],
-                    heatMapMask = heatMapLayer.getFilters()[0],
-                    backgroundLayer = service.getLayersBy('backgroundLayer', true)[0],
+                var heatMapLayer = service.getLayersBy('name', 'HeatMapLayer')[0];
+                console.log('heatMapLayer', heatMapLayer);
+                var heatMapMask = heatMapLayer.getFilters()[0];
+                console.log('heatMapMask', heatMapMask);
+                var backgroundLayer = service.getLayersBy('backgroundLayer', true)[0],
                     backgroundLayerMask = backgroundLayer.getFilters()[0];
 
                 // disable mask of backgroundLayer if heatmap is available and vice versa
@@ -288,22 +293,23 @@
                         source: olVecSrc,
                         radius: 10
                     });
-
+                    console.log('service.getMap()', service.getMap());
+                    console.log('newHeatMapLayer', newHeatMapLayer);
                     service.getMap().addLayer(newHeatMapLayer);
 
-                    // Add Mask to HeatMapLayer
-                    var currentBBox = transformInteractionLayer.getSource().getFeatures()[0];
-
-                    var mask = new ol.filter.Mask({
-                        feature: currentBBox,
-                        inner: false,
-                        fill: new ol.style.Fill({
-                            color: [255,255,255,0.5]
-                        })
-                    });
-                    newHeatMapLayer.addFilter(mask);
+                    // // Add Mask to HeatMapLayer
+                    // var currentBBox = transformInteractionLayer.getSource().getFeatures()[0];
+                    //
+                    // var mask = new ol.filter.Mask({
+                    //     feature: currentBBox,
+                    //     inner: false,
+                    //     fill: new ol.style.Fill({
+                    //         color: [255,255,255,0.5]
+                    //     })
+                    // });
+                    // newHeatMapLayer.addFilter(mask);
                 }
-                _switchMasks(olVecSrc !== null);
+                // _switchMasks(olVecSrc !== null);
             };
 
             /**
@@ -520,15 +526,30 @@
                         config.mapConfig.renderer : defaults.renderer,
                     layerConfig = config.mapConfig.layers;
 
+                // var layers = buildMapLayers(layerConfig);
+
+                var googleLayer = new olgm.layer.Google({
+                    backgroundLayer: layerConfig[0].backgroundLayer
+                });
+
+                var osmLayer = new ol.layer.Tile({
+                    source: new ol.source.OSM(),
+                    backgroundLayer: layerConfig[0].backgroundLayer,
+                    // visible: false
+                });
+
                 map = new ol.Map({
+                    // use OL3-Google-Maps recommended default interactions
+                    interactions: olgm.interaction.defaults(),
                     controls: ol.control.defaults().extend([
                         new ol.control.ScaleLine(),
                         new ol.control.ZoomSlider()
                     ]),
-                    layers: buildMapLayers(layerConfig),
+                    layers: [googleLayer],
                     renderer: angular.isString(rendererConfig) ?
                                             rendererConfig : undefined,
                     target: 'map',
+
                     view: new ol.View({
                         center: angular.isArray(viewConfig.center) ?
                                 viewConfig.center : undefined,
@@ -550,6 +571,10 @@
                                 viewConfig.zoomFactor : undefined
                     })
                 });
+
+                var olGM = new olgm.OLGoogleMaps({map: map}); // map is the ol.Map instance
+                olGM.activate();
+
                 if (angular.isArray(viewConfig.extent)) {
                     var vw = map.getView();
                     vw.set('extent', viewConfig.extent);
