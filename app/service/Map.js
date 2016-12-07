@@ -75,7 +75,6 @@
                             });
                         }
                         layers.push(layer);
-                        // layers.push(googleLayer);
                     });
                 }
                 return layers;
@@ -151,9 +150,7 @@
             */
             var _switchMasks = function(hmAvailable) {
                 var heatMapLayer = service.getLayersBy('name', 'HeatMapLayer')[0];
-                console.log('heatMapLayer', heatMapLayer);
                 var heatMapMask = heatMapLayer.getFilters()[0];
-                console.log('heatMapMask', heatMapMask);
                 var backgroundLayer = service.getLayersBy('backgroundLayer', true)[0],
                     backgroundLayerMask = backgroundLayer.getFilters()[0];
 
@@ -287,29 +284,20 @@
                         layerSrc.clear();
                     }
                     currHeatmapLayer.setSource(olVecSrc);
-                } else {
+                }
+                else {
                     newHeatMapLayer = new ol.layer.Heatmap({
                         name: 'HeatMapLayer',
                         source: olVecSrc,
                         radius: 10
                     });
-                    console.log('service.getMap()', service.getMap());
-                    console.log('newHeatMapLayer', newHeatMapLayer);
-                    service.getMap().addLayer(newHeatMapLayer);
+                    try {
+                        service.getMap().addLayer(newHeatMapLayer);
+                    }
+                    catch(err) {
+                    }
 
-                    // // Add Mask to HeatMapLayer
-                    // var currentBBox = transformInteractionLayer.getSource().getFeatures()[0];
-                    //
-                    // var mask = new ol.filter.Mask({
-                    //     feature: currentBBox,
-                    //     inner: false,
-                    //     fill: new ol.style.Fill({
-                    //         color: [255,255,255,0.5]
-                    //     })
-                    // });
-                    // newHeatMapLayer.addFilter(mask);
                 }
-                // _switchMasks(olVecSrc !== null);
             };
 
             /**
@@ -335,20 +323,15 @@
                     style: new ol.style.Style({
                         fill: new ol.style.Fill({
                             color: [255,255,255,0.01]
+                        }),
+                        stroke: new ol.style.Stroke({
+                            color: [80,80,200,0.6],
+                            width: 5
                         })
                     })
                 });
                 service.getMap().addLayer(vector);
                 vector.getSource().addFeature(polygon);
-
-                var mask = new ol.filter.Mask({
-                    feature: polygon,
-                    inner: false,
-                    fill: new ol.style.Fill({
-                        color:[255,255,255,0.5]
-                    })
-                });
-                backGroundLayer.addFilter(mask);
             }
 
             function setTransactionBBox(extent) {
@@ -490,15 +473,12 @@
 
             service.removeAllfeatures = function() {
                 if (angular.isObject(map)) {
-                    var layerLength = map.getLayers().getLength();
-                    for (var i = 3; i < layerLength; i++) {
-                        map.removeLayer(map.getLayers().getArray()[i]);
-                    }
+                    layersWithBbox = service.getLayersBy('isbbox', true);
+                    layersWithBbox[0].getSource().clear();
                 }
             };
 
             service.addCircle = function(point, style) {
-                service.removeAllfeatures();
 
                 var geojsonObject = {
                     "type": "Feature",
@@ -506,13 +486,22 @@
                 };
 
                 if (angular.isObject(map) && Object.keys(map).length !== 0) {
-                    var vectorLayer = new ol.layer.Vector({
-                        source: new ol.source.Vector({
-                            features: (new ol.format.GeoJSON).readFeatures(geojsonObject)
-                        })
-                    });
-                    vectorLayer.setStyle(style);
-                    map.addLayer(vectorLayer);
+                    var layersWithBbox = service.getLayersBy('isbbox', true);
+                    var features = (new ol.format.GeoJSON).readFeatures(geojsonObject);
+
+                    if (layersWithBbox.length) {
+                        layersWithBbox[0].getSource().addFeatures(features);
+                    }else{
+                        var vectorLayer = new ol.layer.Vector({
+                            isbbox: true,
+                            source: new ol.source.Vector({
+                                features: features
+                            })
+                        });
+                        vectorLayer.setStyle(style);
+                        map.addLayer(vectorLayer);
+                    }
+
                 }
             };
 

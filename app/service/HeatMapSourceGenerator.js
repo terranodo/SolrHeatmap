@@ -80,7 +80,7 @@
                         data['a.text'] = data['a.text'] || [];
 
                         if (data && data['a.hm']) {
-                            // MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                            MapService.createOrUpdateHeatMapLayer(data['a.hm']);
                             // get the count of matches
                             $rootScope.$broadcast('setCounter', data['a.matchDocs']);
 
