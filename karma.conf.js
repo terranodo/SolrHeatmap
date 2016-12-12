@@ -16,6 +16,7 @@ module.exports = function ( config ) {
       "assets/lib/ol3-ext/interaction/transforminteraction.js",
       'node_modules/angularjs-slider/dist/rzslider.js',
       'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/ol3-google-maps/dist/ol3gm.js',
       'app/**/*.js',
       'tests/**/*.spec.js',
       'app/**/*.tpl.html'

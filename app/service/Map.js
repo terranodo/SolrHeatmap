@@ -31,15 +31,29 @@
                 var layer,
                     layers = [];
 
-
                 if (angular.isArray(layerConfig)) {
+
                     angular.forEach(layerConfig, function(conf) {
+                        if (conf.type === 'googleLayer') {
+                            service.googleLayer = new olgm.layer.Google({
+                                backgroundLayer: conf.visible,
+                                mapTypeId: google.maps.MapTypeId.TERRAIN
+                            });
+                            layer = service.googleLayer;
+                        }
+                        if (conf.type === 'OSM') {
+                            service.osmLayer = new ol.layer.Tile({
+                                source: new ol.source.OSM(),
+                                backgroundLayer: conf.backgroundLayer,
+                                visible: conf.visible
+                            });
+                            layer = service.osmLayer;
+                        }
                         if (conf.type === 'TileWMS') {
                             layer = new ol.layer.Tile({
                                 name: conf.name,
                                 backgroundLayer: conf.backgroundLayer,
                                 displayInLayerPanel: conf.displayInLayerPanel,
-                                // source: new ol.source.OSM(),
                                 source: new ol.source.TileWMS({
                                     attributions: [new ol.Attribution({
                                         html: conf.attribution
@@ -284,8 +298,7 @@
                         layerSrc.clear();
                     }
                     currHeatmapLayer.setSource(olVecSrc);
-                }
-                else {
+                } else {
                     newHeatMapLayer = new ol.layer.Heatmap({
                         name: 'HeatMapLayer',
                         source: olVecSrc,
@@ -293,8 +306,8 @@
                     });
                     try {
                         service.getMap().addLayer(newHeatMapLayer);
-                    }
-                    catch(err) {
+                    } catch(err) {
+                        void 0;
                     }
 
                 }
@@ -322,11 +335,11 @@
                     source: new ol.source.Vector(),
                     style: new ol.style.Style({
                         fill: new ol.style.Fill({
-                            color: [255,255,255,0.01]
+                            color: [255,255,255,0]
                         }),
                         stroke: new ol.style.Stroke({
-                            color: [80,80,200,0.6],
-                            width: 5
+                            color: [0,0,0,0],
+                            width: 0
                         })
                     })
                 });
@@ -473,7 +486,7 @@
 
             service.removeAllfeatures = function() {
                 if (angular.isObject(map)) {
-                    layersWithBbox = service.getLayersBy('isbbox', true);
+                    var layersWithBbox = service.getLayersBy('isbbox', true);
                     layersWithBbox[0].getSource().clear();
                 }
             };
@@ -505,6 +518,11 @@
                 }
             };
 
+            service.toggleBaseMaps = function() {
+                service.googleLayer.setVisible(!service.googleLayer.getVisible());
+                service.osmLayer.setVisible(!service.osmLayer.getVisible());
+            };
+
             /**
              *
              */
@@ -515,18 +533,6 @@
                         config.mapConfig.renderer : defaults.renderer,
                     layerConfig = config.mapConfig.layers;
 
-                // var layers = buildMapLayers(layerConfig);
-
-                var googleLayer = new olgm.layer.Google({
-                    backgroundLayer: layerConfig[0].backgroundLayer
-                });
-
-                var osmLayer = new ol.layer.Tile({
-                    source: new ol.source.OSM(),
-                    backgroundLayer: layerConfig[0].backgroundLayer,
-                    // visible: false
-                });
-
                 map = new ol.Map({
                     // use OL3-Google-Maps recommended default interactions
                     interactions: olgm.interaction.defaults(),
@@ -534,7 +540,7 @@
                         new ol.control.ScaleLine(),
                         new ol.control.ZoomSlider()
                     ]),
-                    layers: [googleLayer],
+                    layers: buildMapLayers(layerConfig),
                     renderer: angular.isString(rendererConfig) ?
                                             rendererConfig : undefined,
                     target: 'map',
