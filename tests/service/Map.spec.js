@@ -1,5 +1,5 @@
 describe( 'HeatMapSourceGenerator', function() {
-    var subject, NormalizeService, olSpy, mapSpy, viewSpy, mapViewSpy, olGMSpy,
+    var subject, NormalizeService, olSpy, mapSpy, viewSpy, mapViewSpy, olgmSpy,
         olgmObjSpy, defaultConfig, defaultViewConfig, layer, HeightModule, $window;
 
     beforeEach( module( 'SolrHeatmapApp' ) );
