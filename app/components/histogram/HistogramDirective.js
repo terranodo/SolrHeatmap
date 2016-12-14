@@ -15,24 +15,27 @@
             return directive;
 
             function link(scope, element, attr) {
-                var renderSvgBars;
+                var HistogramBars;
                 var vm = scope;
-                scope.barId = attr.barid;
 
-                scope.slider = defaultSliderValue();
+                vm.barId = attr.barid;
+                vm.histogramBarsDimensions = {};
 
-                scope.$on('setHistogramRangeSlider', function(even, histogram) {
-                    renderSvgBars = makeHistogram(histogram);
-                    renderSvgBars();
+                vm.slider = defaultSliderValue();
+
+                vm.$on('setHistogramRangeSlider', function(even, histogram) {
+                    HistogramBars = makeHistogram(histogram);
+                    HistogramBars.renderingSvgBars();
+                    vm.histogramBarsDimensions = HistogramBars.dimensions;
                 });
 
-                scope.$on('changeSlider', function(event, slider) {
-                    renderSvgBars(slider.minValue, slider.maxValue);
+                vm.$on('changeSlider', function(event, slider) {
+                    HistogramBars.renderingSvgBars(slider.minValue, slider.maxValue);
                 });
 
-                scope.$on('setHistogram', setHistogram);
+                vm.$on('setHistogram', setHistogram);
 
-                scope.$on('slideEnded', slideEnded);
+                vm.$on('slideEnded', slideEnded);
 
                 /**
                  * Create histogram
@@ -43,7 +46,11 @@
                     var histogrambarsWidth = 364;
 
                     findHistogramMaxValue();
-                    return renderingSvgBars;
+
+                    return {
+                        renderingSvgBars: renderingSvgBars,
+                        dimensions: getDimensions()
+                    };
 
                     function findHistogramMaxValue() {
                         histogram.maxValue = Math.max.apply(null,
@@ -51,6 +58,17 @@
                                 return obj.count;
                             })
                         );
+                    }
+
+                    function getDimensions() {
+                        return {
+                            barsheight: barsheight,
+                            histogrambarsWidth: histogrambarsWidth,
+                            counts: histogram.counts,
+                            start: histogram.start,
+                            end: histogram.end,
+                            gap: histogram.gap
+                        }
                     }
 
                     function renderingSvgBars(minValue, maxValue) {
@@ -160,6 +178,7 @@
                         }
                     };
                 }
+
             }
         }]);
 
