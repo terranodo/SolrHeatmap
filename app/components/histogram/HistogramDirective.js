@@ -44,6 +44,7 @@
 
                     var barsheight = 40;
                     var histogrambarsWidth = 364;
+                    var paddingBar = 8;
 
                     findHistogramMaxValue();
 
@@ -64,9 +65,8 @@
                         return {
                             barsheight: barsheight,
                             histogrambarsWidth: histogrambarsWidth,
+                            paddingBar: paddingBar,
                             counts: histogram.counts,
-                            start: histogram.start,
-                            end: histogram.end,
                             gap: histogram.gap
                         }
                     }
@@ -76,9 +76,9 @@
                             minValue = minValue || 0;
                             maxValue = maxValue || histogram.counts.length - 1;
                             histogram.bars = document.getElementById(scope.barId);
-                            var rectWidth = (histogrambarsWidth / histogram.counts.length);
+                            var rectWidth = (histogrambarsWidth - 2*paddingBar) / histogram.counts.length;
                             var svgRect = histogram.counts.map(renderSvgBar);
-                            histogram.bars.innerHTML = '<svg width="100%" height="' +
+                            histogram.bars.innerHTML = '<svg style="padding-left:' + paddingBar + 'px" width="100%" height="' +
                                 barsheight + '">' + svgRect.join('') + '</svg>';
                         }
 
@@ -168,7 +168,8 @@
                             ceil: 1,
                             step: 1,
                             minRange: 1,
-                            noSwitching: true, hideLimitLabels: true,
+                            noSwitching: true,
+                            hideLimitLabels: true,
                             getSelectionBarColor: function() {
                                 return '#609dd2';
                             },

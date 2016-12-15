@@ -38,6 +38,7 @@
     "publish": "grunt publish"
   },
   "dependencies": {
+    "moment": "^2.17.1",
     "ol3-google-maps": "^0.12.3"
   },
   "devDependencies": {

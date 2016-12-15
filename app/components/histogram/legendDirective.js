@@ -25,15 +25,20 @@
 
             function timeBar(dimensions) {
                 vm.legendList = [];
-                var partition = 10;
+                var partition = 5;
                 var delta = dimensions.counts.length/partition;
-
                 for (var i = 0; i < partition; i++) {
                     var index = Math.round(i*delta);
-                    var hour = new Date(dimensions.counts[index].value).getUTCHours();
-                    vm.legendList.push(hour);
+                    var date = moment(dimensions.counts[index].value).utc();
+                    if (dimensions.gap.slice(-1) === 'H') {
+                        var day = date.format("MMM-DD H") + 'h';
+                    }else {
+                        var day = date.utc().format("MMM-DD");
+                    }
+                    vm.legendList.push(day);
                 }
-                vm.legendWidth = dimensions.histogrambarsWidth/vm.legendList.length;
+                vm.legendWidth = (dimensions.histogrambarsWidth - dimensions.paddingBar*2)/vm.legendList.length;
+                vm.paddingBar = dimensions.paddingBar;
             }
         }
     }]);
