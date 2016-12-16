@@ -1,3 +1,4 @@
+/*eslint angular/di: [2,"array"]*/
 (function() {
     angular
     .module('search_legendhistogram_component', [])
@@ -31,15 +32,14 @@
                     var index = Math.round(i*delta);
                     var date = moment(dimensions.counts[index].value).utc();
                     if (dimensions.gap.slice(-1) === 'H') {
-                        var day = date.format("MMM-DD H") + 'h';
+                        vm.legendList.push(date.format('MMM-DD H') + 'h');
                     }else {
-                        var day = date.utc().format("MMM-DD");
+                        vm.legendList.push(date.format('MMM-DD'));
                     }
-                    vm.legendList.push(day);
                 }
                 vm.legendWidth = (dimensions.histogrambarsWidth - dimensions.paddingBar*2)/vm.legendList.length;
                 vm.paddingBar = dimensions.paddingBar;
             }
         }
     }]);
-})()
+})();

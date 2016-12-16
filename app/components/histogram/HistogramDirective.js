@@ -68,7 +68,7 @@
                             paddingBar: paddingBar,
                             counts: histogram.counts,
                             gap: histogram.gap
-                        }
+                        };
                     }
 
                     function renderingSvgBars(minValue, maxValue) {
