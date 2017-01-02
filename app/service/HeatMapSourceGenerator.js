@@ -44,8 +44,7 @@
                     user: params['q.user'],
                     time: params['q.time'],
                     geo: params['q.geo']
-                }, {notify: false, location: "replace"}
-                );
+                }, {});
 
                 return params;
             }
