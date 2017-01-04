@@ -39,6 +39,7 @@
                     'a.user.limit': reqParamsUi.userLimit,
                     'd.docs.sort': 'distance'
                 };
+
                 $state.go('search', {
                     text: params['q.text'],
                     user: params['q.user'],
@@ -80,7 +81,7 @@
                         data['a.text'] = data['a.text'] || [];
 
                         if (data && data['a.hm']) {
-                            MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                            // MapService.createOrUpdateHeatMapLayer(data['a.hm']);
                             // get the count of matches
                             $rootScope.$broadcast('setCounter', data['a.matchDocs']);
 

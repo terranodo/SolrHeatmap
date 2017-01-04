@@ -8,16 +8,30 @@
     angular
     .module('SolrHeatmapApp')
     .controller('MainController',
-                ['Map', 'HeatMapSourceGenerator', '$http', '$scope',
+                ['Map', 'HeatMapSourceGenerator', '$http', '$scope', '$location',
                     '$rootScope', '$stateParams', 'searchFilter', 'queryService',
-        function(Map, HeatMapSourceGenerator, $http, $scope,
+        function(Map, HeatMapSourceGenerator, $http, $scope, $location,
                  $rootScope, $stateParams, searchFilter, queryService) {
             var MapService = Map;
             var HeatMapSourceGeneratorService = HeatMapSourceGenerator;
             var mapIsMoved = false;
+            var isBackbuttonPressed = false;
 
             var vm = this;
             vm.$state = $stateParams;
+
+            $rootScope.$on('$locationChangeSuccess', function() {
+                if($rootScope.previousLocation === $location.url()) {
+                    isBackbuttonPressed = true;
+                    var extent = queryService.
+                      getExtentForProjectionFromQuery($location.search().geo,
+                                                      solrHeatmapApp.initMapConf.view.projection);
+                    MapService.getMap().getView().fit(extent, MapService.getMapSize())
+                }
+                $rootScope.previousLocation = $rootScope.actualLocation;
+                $rootScope.actualLocation = $location.url();
+            });
+
             vm.setupEvents = function() {
                 MapService.getMap().getView().on('change:center', function(evt){
                     mapIsMoved = !mapIsMoved ? true : false;
@@ -37,10 +51,11 @@
                         changeGeoSearch();
                   });
                 MapService.getMap().on('moveend', function(evt){
-                    if (mapIsMoved || searchFilter.geo === '[-90,-180 TO 90,180]') {
+                    if ((mapIsMoved || searchFilter.geo === '[-90,-180 TO 90,180]') && !isBackbuttonPressed) {
                         changeGeoSearch();
                         mapIsMoved = false;
-                    }else{
+                    }else {
+                        isBackbuttonPressed = false;
                         HeatMapSourceGeneratorService.search();
                     }
                 });
