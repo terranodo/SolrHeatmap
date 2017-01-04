@@ -20,24 +20,25 @@
             var vm = this;
             vm.$state = $stateParams;
 
-            $rootScope.$on('$locationChangeSuccess', function() {
+            var locationChangeEventBroadcast = $rootScope.$on('$locationChangeSuccess', function() {
                 if($rootScope.previousLocation === $location.url()) {
                     isBackbuttonPressed = true;
                     var extent = queryService.
                       getExtentForProjectionFromQuery($location.search().geo,
                                                       solrHeatmapApp.initMapConf.view.projection);
-                    MapService.getMap().getView().fit(extent, MapService.getMapSize())
+                    MapService.getMap().getView().fit(extent, MapService.getMapSize());
                 }
                 $rootScope.previousLocation = $rootScope.actualLocation;
                 $rootScope.actualLocation = $location.url();
             });
+            $rootScope.$on('$destroy', locationChangeEventBroadcast);
 
             vm.setupEvents = function() {
                 MapService.getMap().getView().on('change:center', function(evt){
                     mapIsMoved = !mapIsMoved ? true : false;
                 });
                 MapService.getMap().getView()
-                  .on('change:resolution', function(evt){
+                    .on('change:resolution', function(evt){
                         var existingHeatMapLayers = MapService.getLayersBy('name', 'HeatMapLayer');
                         if (existingHeatMapLayers && existingHeatMapLayers.length > 0){
                             var radius = 500 * evt.target.getResolution();
@@ -49,7 +50,7 @@
                             hmLayer.setBlur(radius*2);
                         }
                         changeGeoSearch();
-                  });
+                    });
                 MapService.getMap().on('moveend', function(evt){
                     if ((mapIsMoved || searchFilter.geo === '[-90,-180 TO 90,180]') && !isBackbuttonPressed) {
                         changeGeoSearch();
