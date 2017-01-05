@@ -26,6 +26,7 @@
                 /*
                 // calculate reduced bounding box
                 */
+                console.log('reqParamsUi.hm', reqParamsUi.hm);
                 params = {
                     'q.text': reqParamsUi.text,
                     'q.user': reqParamsUi.user,
@@ -33,7 +34,7 @@
                     'q.geo': reqParamsUi.geo,
                     'a.hm.filter': reqParamsUi.hm,
                     'a.time.limit': '1',
-                    'a.time.gap': 'PT1H',
+                    // 'a.time.gap': 'PT1H',
                     'd.docs.limit': reqParamsUi.numOfDocs,
                     'a.text.limit': reqParamsUi.textLimit,
                     'a.user.limit': reqParamsUi.userLimit,
@@ -65,7 +66,7 @@
                 var config,
                     params = createParamsForGeospatialSearch();
                 if (params) {
-                    params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
+                    // params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
 
                     config = {
                         url: solrHeatmapApp.appConfig.tweetsSearchBaseUrl,
@@ -80,8 +81,11 @@
 
                         data['a.text'] = data['a.text'] || [];
 
-                        if (data && data['a.hm']) {
-                            MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                        if (data) {
+                            if (data['a.hm']) {
+                                MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                            }
+
                             // get the count of matches
                             $rootScope.$broadcast('setCounter', data['a.matchDocs']);
 
