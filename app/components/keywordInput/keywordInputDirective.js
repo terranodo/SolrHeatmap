@@ -68,7 +68,7 @@
                         vm.filter[vm.text] = concatSearchInput(vm.filter[vm.text], vm.textSearchInput.value);
                         vm.textSearchInput = {value: '', previousLength: 0};
                     }
-                    HeatMapSourceGenerator.search();
+                    search();
                 }
 
                 function concatSearchInput(searchInput, newValue) {
@@ -99,7 +99,7 @@
                         }
                     });
                     vm.filter[vm.text] = fiterText;
-                    HeatMapSourceGenerator.search();
+                    search();
                 }
 
                 function removeKeyWordFromDeleteKey() {
@@ -132,8 +132,13 @@
                     if (vm.limit) {
                         vm.filter[vm.limit] = vm.tagSwitch.value ? numberKeywords : null;
                         vm.tagSwitch.disable = true;
-                        HeatMapSourceGenerator.search();
+                        search();
                     }
+                }
+
+                function search() {
+                    solrHeatmapApp.isThereInteraction = true;
+                    HeatMapSourceGenerator.search();
                 }
             }
         }]);

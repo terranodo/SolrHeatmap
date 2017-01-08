@@ -106,20 +106,47 @@
                         return;
                     }
                     disableSlider(false);
+                    // console.log('vm.slider.changeTime', vm.slider.changeTime);
+                    // console.log('dataHistogram.counts.length', dataHistogram.counts.length);
+                    // console.log('vm.slider', vm.slider);
 
                     if (vm.slider.options.ceil === 1 || isTheInitialDate() ||
                         dataHistogram.counts.length - 1 > vm.slider.options.ceil) {
-
+                        console.log('primer');
                         vm.slider.counts = dataHistogram.counts;
                         vm.slider.options.ceil = dataHistogram.counts.length - 1;
                         vm.slider.maxValue = vm.slider.options.ceil;
                         vm.slider.minValue = 0;
                         dataHistogram.slider = vm.slider;
                         $rootScope.$broadcast('setHistogramRangeSlider', dataHistogram);
+                    }else if ( (dataHistogram.counts.length < vm.slider.options.ceil && !vm.slider.changeTime) ||
+                        (vm.slider.previusCount < dataHistogram.counts.length) ) {
+                        console.log('second' );
+                        vm.slider.previusCount = dataHistogram.counts.length;
+                        dataHistogram.counts = getSubDataHistogram(dataHistogram, vm.slider.counts);
+                        $rootScope.$broadcast('setHistogramRangeSlider', dataHistogram);
+
                     }else{
+                        console.log('third');
                         vm.slider.changeTime = false;
                         $rootScope.$broadcast('changeSlider', vm.slider);
                     }
+                    // console.log('');
+                }
+
+                function getSubDataHistogram(dataHistogram, dataSlider) {
+                    var index = 0;
+                    var firstDate = dataHistogram.counts[index].value;
+                    var newData = dataSlider.map(function (bar) {
+                        if(new Date(firstDate) > new Date(bar.value) || index === dataHistogram.counts.length){
+                            bar.count = 0;
+                        }else if(dataHistogram.counts[index]) {
+                            bar.count = dataHistogram.counts[index].count;
+                            index++;
+                        }
+                        return bar;
+                    });
+                    return newData;
                 }
 
                 function isTheInitialDate() {
@@ -128,6 +155,7 @@
                 }
 
                 function slideEnded() {
+                    solrHeatmapApp.isThereInteraction = true;
                     var minKey = vm.slider.minValue;
                     var maxKey = vm.slider.maxValue;
 
