@@ -137,8 +137,13 @@
                 }
 
                 function search() {
-                    solrHeatmapApp.isThereInteraction = true;
-                    HeatMapSourceGenerator.search();
+                    try {
+                        solrHeatmapApp.isThereInteraction = true;
+                    } catch (e) {
+                        void 0;
+                    } finally {
+                        HeatMapSourceGenerator.search();
+                    }
                 }
             }
         }]);

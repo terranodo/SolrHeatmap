@@ -91,8 +91,6 @@
                             $rootScope.$broadcast('setSuggestWords', data['a.text']);
 
                             $rootScope.$broadcast('setUserSuggestWords', data['a.user']);
-
-                            // searchFilter.histogramCount = data['a.time'].counts;
                         }
                     }, function errorCallback(response) {
                         $window.alert('An error occured while reading heatmap data');
