@@ -8,9 +8,9 @@
     angular
     .module('SolrHeatmapApp')
     .factory('HeatMapSourceGenerator', ['Map', '$rootScope', '$controller', '$filter', '$window',
-        '$document', '$http', '$state', 'searchFilter', 'DateTimeService',
+        '$document', '$http', '$state', 'searchFilter', 'DateTimeService', 'DataCacheService',
         function(Map, $rootScope, $controller, $filter, $window, $document,
-            $http, $state, searchFilter, DateTimeService) {
+            $http, $state, searchFilter, DateTimeService, DataCacheService) {
             var MapService= Map;
 
             var methods = {
@@ -72,32 +72,22 @@
                         method: 'GET',
                         params: params
                     };
+
+                    var responseCache = DataCacheService.getObjData(config.params);
+                    if (angular.isObject(responseCache)) {
+                        broadcastData(responseCache);
+                        return;
+                    }
+
                     //load the data
+
                     $http(config)
                     .then(function successCallback(response) {
                         // check if we have a heatmap facet and update the map with it
                         var data = response.data;
+                        DataCacheService.insertData(config.params, data);
+                        broadcastData(data);
 
-                        data['a.text'] = data['a.text'] || [];
-
-                        if (data) {
-                            if (data['a.hm']) {
-                                MapService.createOrUpdateHeatMapLayer(data['a.hm']);
-                            }
-
-                            // get the count of matches
-                            $rootScope.$broadcast('setCounter', data['a.matchDocs']);
-
-                            $rootScope.$broadcast('setHistogram', data['a.time']);
-
-                            $rootScope.$broadcast('setTweetList', data['d.docs']);
-
-                            $rootScope.$broadcast('setSuggestWords', data['a.text']);
-
-                            $rootScope.$broadcast('setUserSuggestWords', data['a.user']);
-
-                            searchFilter.histogramCount = data['a.time'].counts;
-                        }
                     }, function errorCallback(response) {
                         $window.alert('An error occured while reading heatmap data');
                     })
@@ -106,6 +96,24 @@
                     });
                 } else {
                     $window.alert('Spatial filter could not be computed.');
+                }
+            }
+
+            function broadcastData(data) {
+                data['a.text'] = data['a.text'] || [];
+
+                if (data && data['a.hm']) {
+                    MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                    // get the count of matches
+                    $rootScope.$broadcast('setCounter', data['a.matchDocs']);
+
+                    $rootScope.$broadcast('setHistogram', data['a.time']);
+
+                    $rootScope.$broadcast('setTweetList', data['d.docs']);
+
+                    $rootScope.$broadcast('setSuggestWords', data['a.text']);
+
+                    $rootScope.$broadcast('setUserSuggestWords', data['a.user']);
                 }
             }
 
