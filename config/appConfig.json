@@ -4,7 +4,7 @@
         "ratioInnerBbox": 0.98
     },
     "bopwsConfig": {
-        "heatmapFacetLimit": 1000,
+        "heatmapFacetLimit": 10000,
         "csvDocsLimit": 1
     },
     "mapConfig": {

@@ -26,7 +26,6 @@
                 /*
                 // calculate reduced bounding box
                 */
-                console.log('reqParamsUi.hm', reqParamsUi.hm);
                 params = {
                     'q.text': reqParamsUi.text,
                     'q.user': reqParamsUi.user,
@@ -34,13 +33,13 @@
                     'q.geo': reqParamsUi.geo,
                     'a.hm.filter': reqParamsUi.hm,
                     'a.time.limit': '1',
-                    // 'a.time.gap': 'PT1H',
+                    'a.time.gap': 'PT1H',
                     'd.docs.limit': reqParamsUi.numOfDocs,
                     'a.text.limit': reqParamsUi.textLimit,
                     'a.user.limit': reqParamsUi.userLimit,
                     'd.docs.sort': 'distance'
                 };
-                // console.log("params['q.geo']", params['q.geo']);
+
                 $state.go('search', {
                     text: params['q.text'],
                     user: params['q.user'],
@@ -66,7 +65,7 @@
                 var config,
                     params = createParamsForGeospatialSearch();
                 if (params) {
-                    // params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
+                    params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
 
                     config = {
                         url: solrHeatmapApp.appConfig.tweetsSearchBaseUrl,
