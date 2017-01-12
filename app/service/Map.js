@@ -285,7 +285,7 @@
 
             service.createOrUpdateHeatMapLayer = function(data) {
                 var existingHeatMapLayers, transformInteractionLayer, olVecSrc, newHeatMapLayer;
-                var heatmapRadius = 25;
+                var heatmapRadius = 30;
                 existingHeatMapLayers = service.getLayersBy('name', 'HeatMapLayer');
                 transformInteractionLayer = service.getLayersBy('name',
                                                                 "TransformInteractionLayer")[0];
@@ -306,7 +306,7 @@
                         source: olVecSrc,
                         radius: heatmapRadius,
                         blur: 30,
-                        gradient: ['#ff00ff', '#8000ff', '#00f', '#0ff', '#0f0',
+                        gradient: ['#40f', '#00f', '#00aaff', '#0ff', '#0f0',
                             '#ff0', '#f80', '#ff4000', '#f00', '#b60000']
                     });
                     try {
