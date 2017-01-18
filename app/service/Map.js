@@ -222,6 +222,17 @@
                 return scaledValue;
             }
 
+            function getClassifications(hmParams) {
+                var flattenCount = [];
+                hmParams.counts_ints2D.forEach(function(row) {
+                    flattenCount.push.apply(flattenCount, row);
+                });
+                var series = new geostats(flattenCount);
+                numberOfClassifications = hmParams.gradientArray.length;
+                classifications = series.getClassJenks(numberOfClassifications);
+                return classifications;
+            }
+
             /*
              *
              */
@@ -248,6 +259,8 @@
                     return null;
                 }
                 minMaxValue = heatmapMinMax(counts_ints2D, gridRows, gridColumns);
+                var classifications = getClassifications(hmParams);
+                console.log('classifications', classifications);
 
                 for (var i = 0 ; i < gridRows ; i++){
                     for (var j = 0 ; j < gridColumns ; j++){
@@ -273,6 +286,7 @@
                             });
 
                             var scaledValue = rescaleHeatmapValue(hmVal,minMaxValue);
+                            // var clasifyValue = getClassificationsValues()
 
                             feat.set('weight', scaledValue);
                             feat.set('origVal', hmVal);
@@ -305,13 +319,19 @@
                   return context.canvas.toDataURL();
             }
 
-            service.createOrUpdateHeatMapLayer = function(data) {
+            service.createOrUpdateHeatMapLayer = function(hmData) {
                 var existingHeatMapLayers, transformInteractionLayer, olVecSrc, newHeatMapLayer;
-                var heatmapRadius = 20;
+
+                hmData.heatmapRadius = 20;
+                hmData.blur = 20;
+                hmData.gradientArray = ['#000000', '#0000df', '#00effe', '#00ff42',
+                '#feec30', '#ff5f00', '#ff0000'];
+                console.log('hmData', hmData);
+
                 existingHeatMapLayers = service.getLayersBy('name', 'HeatMapLayer');
                 transformInteractionLayer = service.getLayersBy('name',
                                                                 "TransformInteractionLayer")[0];
-                olVecSrc = createHeatMapSource(data);
+                olVecSrc = createHeatMapSource(hmData);
 
                 if (existingHeatMapLayers && existingHeatMapLayers.length > 0){
                     var currHeatmapLayer = existingHeatMapLayers[0];
@@ -321,15 +341,14 @@
                         layerSrc.clear();
                     }
                     currHeatmapLayer.setSource(olVecSrc);
-                    currHeatmapLayer.setRadius(heatmapRadius);
+                    currHeatmapLayer.setRadius(hmData.heatmapRadius);
                 } else {
                     newHeatMapLayer = new ol.layer.Heatmap({
                         name: 'HeatMapLayer',
                         source: olVecSrc,
-                        radius: heatmapRadius,
-                        blur: 20,
-                        gradient: ['#40f', '#00f', '#00aaff', '#0ff',
-                            '#ff0', '#f80', '#ff4000', '#f00']
+                        radius: hmData.heatmapRadius,
+                        blur: hmData.blur,
+                        gradient: hmData.gradientArray
                     });
 
                     console.log('newHeatMapLayer', newHeatMapLayer);
