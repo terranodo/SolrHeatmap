@@ -216,7 +216,10 @@
                     return 0;
                 }
 
-                return (value - minMaxValue[0]) / (minMaxValue[1] - minMaxValue[0]);
+                var scaledValue = (value - minMaxValue[0]) / (minMaxValue[1] - minMaxValue[0]);
+
+                // return scaledValue < 0.0001 ? 0 : (5 * scaledValue + 1)/6;
+                return scaledValue;
             }
 
             /*
@@ -245,6 +248,7 @@
                     return null;
                 }
                 minMaxValue = heatmapMinMax(counts_ints2D, gridRows, gridColumns);
+
                 for (var i = 0 ; i < gridRows ; i++){
                     for (var j = 0 ; j < gridColumns ; j++){
                         var hmVal = counts_ints2D[counts_ints2D.length-i-1][j],
@@ -263,11 +267,13 @@
                             );
 
                             feat = new ol.Feature({
-                                geometry: new ol.geom.Point(coords)
+                                geometry: new ol.geom.Point(coords),
+                                opacity: 1,
+                                weight: 1
                             });
 
-                            // needs to be rescaled.
                             var scaledValue = rescaleHeatmapValue(hmVal,minMaxValue);
+
                             feat.set('weight', scaledValue);
                             feat.set('origVal', hmVal);
 
@@ -283,9 +289,25 @@
                 return olVecSrc;
             }
 
+            function createCircle_() {
+                  var radius = this.getRadius();
+                  var blur = this.getBlur();
+                  var halfSize = radius + blur + 1;
+                  var size = 2 * halfSize;
+                  var context = ol.dom.createCanvasContext2D(size, size);
+                  context.shadowOffsetX = context.shadowOffsetY = this.shadow_;
+                  context.shadowBlur = blur;
+                  context.shadowColor = '#000';
+                  context.beginPath();
+                  var center = halfSize - this.shadow_;
+                  context.arc(center, center, radius, 0, Math.PI * 2, true);
+                  context.fill();
+                  return context.canvas.toDataURL();
+            }
+
             service.createOrUpdateHeatMapLayer = function(data) {
                 var existingHeatMapLayers, transformInteractionLayer, olVecSrc, newHeatMapLayer;
-                var heatmapRadius = 30;
+                var heatmapRadius = 20;
                 existingHeatMapLayers = service.getLayersBy('name', 'HeatMapLayer');
                 transformInteractionLayer = service.getLayersBy('name',
                                                                 "TransformInteractionLayer")[0];
@@ -305,10 +327,26 @@
                         name: 'HeatMapLayer',
                         source: olVecSrc,
                         radius: heatmapRadius,
-                        blur: 30,
-                        gradient: ['#40f', '#00f', '#00aaff', '#0ff', '#0f0',
-                            '#ff0', '#f80', '#ff4000', '#f00', '#b60000']
+                        blur: 20,
+                        gradient: ['#40f', '#00f', '#00aaff', '#0ff',
+                            '#ff0', '#f80', '#ff4000', '#f00']
                     });
+
+                    console.log('newHeatMapLayer', newHeatMapLayer);
+
+                    // newHeatMapLayer.setStyle(function(feature, resolution) {
+                    //     var weight = feature.get('weight');
+                    //     style = [
+                    //         new ol.style.Style({
+                    //           image: new ol.style.Icon({
+                    //             opacity: 1,
+                    //                 src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAA+CAYAAABzwahEAAAE20lEQVRoQ+2aiY6jMBBEs/f5/1+6962SeKtSbbcxJBllw4xk2TBA/Lq628bmyemgf08Oyn16BD+a8o+KP4Dis0b+/QB9uVqMz0LOMl7cGJfsYPesvb9RwV7MAHs7hVLV/Xlu5poZyJlrZj3oLFcfAfI/v6Zrq7MOVbW7/+e9VwcfASW0H695mACBrOo1A10VvIJOOB1T1Jk87joIuEP7uc4om5VfUyA7mNAjYId9ujwojeEdTsC1Y+4dhUHrAVvA16AFBxjtrGfBfy0u39UZEpvhZ8E79+5gdT6LnsH1uH8qLlCH5dhr9wSuzeesxvpW8HRtVxTQZwbtbTdE/q5gKsify3nqNADgo9gvjTADXrm4q+fAAq2KrnEjjMAdVm2VH2YANwIGy6S4muy2gHuyAtyBBPZ8AfSadqrvSriSDitgwGlXXjDK/LsUr8Zk3BsQFBYg5YW1/bzDV+AOKVDKd2tXBkjleXY7xV1TvBquPFZROYFfnk4nwVMS3rM7aiW0YCnflrYbAwN0iW/o7lvB16ABVk0RvNrAozq/jVqAJ7CgKfzPDZCJr5r9/ePuM+A5ESGuURtVHfbVAkvN/4D3YQ1wYBz06wKtmrYbJt3es7wbYBN4NXR5BheEu7MgKa+j7errPp6jDuGqghAU4F8WWAF7W8cVfOXyrbuPFHfwTGge00AJWsBe3pgBUJ8s766OmwsadVV/XqAFTkH5jHuB4/ar7r4Gnm5OfLrarjLQbxcDCFxF52UgXQs483c6LMUTGvBPC7iO/RqP+Qq8dfdZ8ExqGdcAAypwCuAYSPdiQFxdSgkCKKkrSAFTdOwekAmP8X8qzjvwLr4ZswF3tQUoWNXvDBz1iXspn+DEN/EscIf+uBw7PEZCdQfvprJ/k9wWcJ+KMkQJQkCptMCBV+2qV+DqNPGN2sCqpo0xiHdX3ae2FwP3WRrxTcxK9VT6/QLuyhMOI8UBAvDDorRqh/dY9yRXuXuZ2WcUryYtUtyHL+IZUMBVZ6wznfXkhqtnbAOc4DJMJjkf030KexFwMnIOYRV4qs7QxiwuwXF1QUlRKVyB6zxJzoe2dPXqXX1TjLvihwX3aerdu7rywCGTG4sOhxzOcnnpbicwuQmwZcrKmJ7DGPP1m56yJri7u4wweknxFxNv59vZTb+kYIDDvZa68t0MLuOd93J/gfmvFiI6d7/7pSff5uk2EHJJeXaxUUOj//la+s0sNq5l+IT3dThfXiabC/qc5WUZhnl5t8KaW0qbFhtT8S7R3eWGQsJ3S83E/d1sITl45fK5h3atTUNyQLW8lGtsq9tHCVVuri0nqz20KuHlrmhuGfs9/ntr28S+gpp76KPvZlqmtZ0UbvTrqvX2zgi5J85EKH+Xzt/chwGdy+cEhxzgHwy4UTyb+4YCy0NuAF8+yk9CHuxTkE75XIb25JeJsAoXXw9b+9in2wPf/P3Llhj3WOncvprpVYYZ5ZL8sqEyRhprKpnlj87G+Oi+NESnrLt5Bz9KVLkdtEvpynVHSlT/S6ONPKHKEZnVK+WqGVh+5dB+9TAzTG2FHhluZJDuvqrzM4C7oPfGeGekLmz2htOMMfYKdtbXy9f0pHz2bmW3qrTbkoMbZ5W/OORMgroG8E0+c1aFm+z8OZ16BD/Hev/jvYdV/A8SDpNs6XcVeAAAAABJRU5ErkJggg=='
+                    // //             // src: ol.layer.Heatmap.createCircle_()
+                    //           })
+                    //         })
+                    //       ];
+                    //     return style;
+                    //   });
                     try {
                         service.getMap().addLayer(newHeatMapLayer);
                     } catch(err) {
