@@ -174,29 +174,14 @@
                 heatMapMask.setActive(hmAvailable);
             };
 
-            function heatmapMinMax(heatmap, stepsLatitude, stepsLongitude){
-                var max = -1;
-                var min = Number.MAX_VALUE;
-                for (var i = 0 ; i < stepsLatitude ; i++){
-                    var currentRow = heatmap[i];
-                    if (currentRow === null){
-                        heatmap[i] = currentRow = [];
+            function fillNullValueToEmptyArray(heatmap) {
+                return heatmap.map(function (row) {
+                    if (row === null) {
+                        return [];
+                    }else{
+                        return row;
                     }
-                    for (var j = 0 ; j < stepsLongitude ; j++){
-                        if (currentRow[j] === null){
-                            currentRow[j] = -1;
-                        }
-
-                        if (currentRow[j] > max){
-                            max = currentRow[j];
-                        }
-
-                        if (currentRow[j] < min && currentRow[j] > -1){
-                            min = currentRow[j];
-                        }
-                    }
-                }
-                return [min, max];
+                });
             }
 
             function rescaleHeatmapValue(value, minMaxValue){
@@ -215,10 +200,8 @@
                 if ((minMaxValue[1] - minMaxValue[0]) === 0){
                     return 0;
                 }
-
                 var scaledValue = (value - minMaxValue[0]) / (minMaxValue[1] - minMaxValue[0]);
 
-                // return scaledValue < 0.0001 ? 0 : (5 * scaledValue + 1)/6;
                 return scaledValue;
             }
 
@@ -228,9 +211,21 @@
                     flattenCount.push.apply(flattenCount, row);
                 });
                 var series = new geostats(flattenCount);
-                numberOfClassifications = hmParams.gradientArray.length;
+                numberOfClassifications = hmParams.gradientArray.length - 5;
                 classifications = series.getClassJenks(numberOfClassifications);
                 return classifications;
+            }
+
+            function closestValue(arrayOfValues, value) {
+                var currValue = arrayOfValues[0];
+                var currIndex = 0;
+                for (var i = 1; i < arrayOfValues.length; i++) {
+                    if (Math.abs(value - arrayOfValues[i]) < Math.abs(value - currValue)) {
+                        currValue = arrayOfValues[i];
+                        currIndex = i;
+                    }
+                }
+                return currIndex;
             }
 
             /*
@@ -253,14 +248,15 @@
                     olFeatures = [],
                     minMaxValue,
                     sumOfAllVals = 0,
+                    classifications,
                     olVecSrc;
 
                 if (!counts_ints2D) {
                     return null;
                 }
-                minMaxValue = heatmapMinMax(counts_ints2D, gridRows, gridColumns);
-                var classifications = getClassifications(hmParams);
-                console.log('classifications', classifications);
+                counts_ints2D = fillNullValueToEmptyArray(counts_ints2D);
+                classifications = getClassifications(hmParams);
+                minMaxValue = [0, classifications.length - 1];
 
                 for (var i = 0 ; i < gridRows ; i++){
                     for (var j = 0 ; j < gridColumns ; j++){
@@ -285,8 +281,8 @@
                                 weight: 1
                             });
 
-                            var scaledValue = rescaleHeatmapValue(hmVal,minMaxValue);
-                            // var clasifyValue = getClassificationsValues()
+                            var classifiedValue = closestValue(classifications, hmVal);
+                            var scaledValue = rescaleHeatmapValue(classifiedValue, minMaxValue);
 
                             feat.set('weight', scaledValue);
                             feat.set('origVal', hmVal);
@@ -324,9 +320,8 @@
 
                 hmData.heatmapRadius = 20;
                 hmData.blur = 20;
-                hmData.gradientArray = ['#000000', '#0000df', '#00effe', '#00ff42',
+                hmData.gradientArray = ['#000000', '#0000df', '#0000df', '#00effe', '#00effe', '#00ff42',' #00ff42', '#00ff42',
                 '#feec30', '#ff5f00', '#ff0000'];
-                console.log('hmData', hmData);
 
                 existingHeatMapLayers = service.getLayersBy('name', 'HeatMapLayer');
                 transformInteractionLayer = service.getLayersBy('name',
@@ -351,21 +346,6 @@
                         gradient: hmData.gradientArray
                     });
 
-                    console.log('newHeatMapLayer', newHeatMapLayer);
-
-                    // newHeatMapLayer.setStyle(function(feature, resolution) {
-                    //     var weight = feature.get('weight');
-                    //     style = [
-                    //         new ol.style.Style({
-                    //           image: new ol.style.Icon({
-                    //             opacity: 1,
-                    //                 src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAA+CAYAAABzwahEAAAE20lEQVRoQ+2aiY6jMBBEs/f5/1+6962SeKtSbbcxJBllw4xk2TBA/Lq628bmyemgf08Oyn16BD+a8o+KP4Dis0b+/QB9uVqMz0LOMl7cGJfsYPesvb9RwV7MAHs7hVLV/Xlu5poZyJlrZj3oLFcfAfI/v6Zrq7MOVbW7/+e9VwcfASW0H695mACBrOo1A10VvIJOOB1T1Jk87joIuEP7uc4om5VfUyA7mNAjYId9ujwojeEdTsC1Y+4dhUHrAVvA16AFBxjtrGfBfy0u39UZEpvhZ8E79+5gdT6LnsH1uH8qLlCH5dhr9wSuzeesxvpW8HRtVxTQZwbtbTdE/q5gKsify3nqNADgo9gvjTADXrm4q+fAAq2KrnEjjMAdVm2VH2YANwIGy6S4muy2gHuyAtyBBPZ8AfSadqrvSriSDitgwGlXXjDK/LsUr8Zk3BsQFBYg5YW1/bzDV+AOKVDKd2tXBkjleXY7xV1TvBquPFZROYFfnk4nwVMS3rM7aiW0YCnflrYbAwN0iW/o7lvB16ABVk0RvNrAozq/jVqAJ7CgKfzPDZCJr5r9/ePuM+A5ESGuURtVHfbVAkvN/4D3YQ1wYBz06wKtmrYbJt3es7wbYBN4NXR5BheEu7MgKa+j7errPp6jDuGqghAU4F8WWAF7W8cVfOXyrbuPFHfwTGge00AJWsBe3pgBUJ8s766OmwsadVV/XqAFTkH5jHuB4/ar7r4Gnm5OfLrarjLQbxcDCFxF52UgXQs483c6LMUTGvBPC7iO/RqP+Qq8dfdZ8ExqGdcAAypwCuAYSPdiQFxdSgkCKKkrSAFTdOwekAmP8X8qzjvwLr4ZswF3tQUoWNXvDBz1iXspn+DEN/EscIf+uBw7PEZCdQfvprJ/k9wWcJ+KMkQJQkCptMCBV+2qV+DqNPGN2sCqpo0xiHdX3ae2FwP3WRrxTcxK9VT6/QLuyhMOI8UBAvDDorRqh/dY9yRXuXuZ2WcUryYtUtyHL+IZUMBVZ6wznfXkhqtnbAOc4DJMJjkf030KexFwMnIOYRV4qs7QxiwuwXF1QUlRKVyB6zxJzoe2dPXqXX1TjLvihwX3aerdu7rywCGTG4sOhxzOcnnpbicwuQmwZcrKmJ7DGPP1m56yJri7u4wweknxFxNv59vZTb+kYIDDvZa68t0MLuOd93J/gfmvFiI6d7/7pSff5uk2EHJJeXaxUUOj//la+s0sNq5l+IT3dThfXiabC/qc5WUZhnl5t8KaW0qbFhtT8S7R3eWGQsJ3S83E/d1sITl45fK5h3atTUNyQLW8lGtsq9tHCVVuri0nqz20KuHlrmhuGfs9/ntr28S+gpp76KPvZlqmtZ0UbvTrqvX2zgi5J85EKH+Xzt/chwGdy+cEhxzgHwy4UTyb+4YCy0NuAF8+yk9CHuxTkE75XIb25JeJsAoXXw9b+9in2wPf/P3Llhj3WOncvprpVYYZ5ZL8sqEyRhprKpnlj87G+Oi+NESnrLt5Bz9KVLkdtEvpynVHSlT/S6ONPKHKEZnVK+WqGVh+5dB+9TAzTG2FHhluZJDuvqrzM4C7oPfGeGekLmz2htOMMfYKdtbXy9f0pHz2bmW3qrTbkoMbZ5W/OORMgroG8E0+c1aFm+z8OZ16BD/Hev/jvYdV/A8SDpNs6XcVeAAAAABJRU5ErkJggg=='
-                    // //             // src: ol.layer.Heatmap.createCircle_()
-                    //           })
-                    //         })
-                    //       ];
-                    //     return style;
-                    //   });
                     try {
                         service.getMap().addLayer(newHeatMapLayer);
                     } catch(err) {
