@@ -211,9 +211,8 @@
                     flattenCount.push.apply(flattenCount, row);
                 });
                 var series = new geostats(flattenCount);
-                numberOfClassifications = hmParams.gradientArray.length - 5;
-                classifications = series.getClassJenks(numberOfClassifications);
-                return classifications;
+                var numberOfClassifications = hmParams.gradientArray.length - 5;
+                return series.getClassJenks(numberOfClassifications);
             }
 
             function closestValue(arrayOfValues, value) {
@@ -257,7 +256,6 @@
                 counts_ints2D = fillNullValueToEmptyArray(counts_ints2D);
                 classifications = getClassifications(hmParams);
                 minMaxValue = [0, classifications.length - 1];
-
                 for (var i = 0 ; i < gridRows ; i++){
                     for (var j = 0 ; j < gridColumns ; j++){
                         var hmVal = counts_ints2D[counts_ints2D.length-i-1][j],
@@ -300,19 +298,19 @@
             }
 
             function createCircle_() {
-                  var radius = this.getRadius();
-                  var blur = this.getBlur();
-                  var halfSize = radius + blur + 1;
-                  var size = 2 * halfSize;
-                  var context = ol.dom.createCanvasContext2D(size, size);
-                  context.shadowOffsetX = context.shadowOffsetY = this.shadow_;
-                  context.shadowBlur = blur;
-                  context.shadowColor = '#000';
-                  context.beginPath();
-                  var center = halfSize - this.shadow_;
-                  context.arc(center, center, radius, 0, Math.PI * 2, true);
-                  context.fill();
-                  return context.canvas.toDataURL();
+                var radius = this.getRadius();
+                var blur = this.getBlur();
+                var halfSize = radius + blur + 1;
+                var size = 2 * halfSize;
+                var context = ol.dom.createCanvasContext2D(size, size);
+                context.shadowOffsetX = context.shadowOffsetY = this.shadow_;
+                context.shadowBlur = blur;
+                context.shadowColor = '#000';
+                context.beginPath();
+                var center = halfSize - this.shadow_;
+                context.arc(center, center, radius, 0, Math.PI * 2, true);
+                context.fill();
+                return context.canvas.toDataURL();
             }
 
             service.createOrUpdateHeatMapLayer = function(hmData) {
@@ -320,8 +318,9 @@
 
                 hmData.heatmapRadius = 20;
                 hmData.blur = 20;
-                hmData.gradientArray = ['#000000', '#0000df', '#0000df', '#00effe', '#00effe', '#00ff42',' #00ff42', '#00ff42',
-                '#feec30', '#ff5f00', '#ff0000'];
+                hmData.gradientArray = ['#000000', '#0000df', '#0000df', '#00effe',
+                    '#00effe', '#00ff42',' #00ff42', '#00ff42',
+                    '#feec30', '#ff5f00', '#ff0000'];
 
                 existingHeatMapLayers = service.getLayersBy('name', 'HeatMapLayer');
                 transformInteractionLayer = service.getLayersBy('name',
