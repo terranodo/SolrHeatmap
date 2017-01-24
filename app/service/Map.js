@@ -274,6 +274,7 @@
                             );
 
                             feat = new ol.Feature({
+                                name: 'Afghanistan',
                                 geometry: new ol.geom.Point(coords),
                                 opacity: 1,
                                 weight: 1
@@ -311,6 +312,32 @@
                 context.arc(center, center, radius, 0, Math.PI * 2, true);
                 context.fill();
                 return context.canvas.toDataURL();
+            }
+
+            function setTooltip() {
+                var tooltip = document.getElementById('tooltip');
+                var overlay = new ol.Overlay({
+                    element: tooltip,
+                    offset: [10, 0],
+                    positioning: 'bottom-left'
+                });
+                // map.addOverlay(overlay);
+
+                function displayTooltip(evt) {
+                    var pixel = evt.pixel;
+                    var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
+                        return feature;
+                    });
+                    tooltip.style.display = feature ? '' : 'none';
+                    if (feature) {
+                        console.log('evt.coordinate', evt.coordinate);
+                        overlay.setPosition(evt.coordinate);
+                        tooltip.innerHTML = feature.get('name');
+                        map.addOverlay(overlay);
+                        console.log('tooltip', tooltip);
+                    }
+                }
+                map.on('pointermove', displayTooltip);
             }
 
             service.createOrUpdateHeatMapLayer = function(hmData) {
@@ -620,6 +647,18 @@
                         vw.fit(viewConfig.extent, service.getMapSize());
                     }
                 }
+
+                var pos = ol.proj.fromLonLat([16.3725, 48.208889]);
+
+                // Vienna marker
+                var marker = new ol.Overlay({
+                  position: pos,
+                  positioning: 'center-center',
+                  element: document.getElementById('marker'),
+                  stopEvent: false
+                });
+                map.addOverlay(marker);
+                // setTooltip();
             };
             return service;
         }]
