@@ -317,8 +317,8 @@
 
             function displayTooltip(evt, overlay, tooltip) {
                 var pixel = evt.pixel;
-                var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
-                    return feature;
+                var feature = map.forEachFeatureAtPixel(pixel, function(feat) {
+                    return feat;
                 });
 
                 var name = feature ? feature.get('name') : undefined;
@@ -637,7 +637,7 @@
                     }
                 }
 
-                var tooltip = document.getElementById('tooltip');
+                var tooltip = $window.document.getElementById('tooltip');
                 var overlay = new ol.Overlay({
                     element: tooltip,
                     offset: [10, 0],

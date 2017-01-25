@@ -17,27 +17,4 @@
         };
     }
 
-    function setTooltip() {
-        var tooltip = document.getElementById('tooltip');
-        var overlay = new ol.Overlay({
-            element: tooltip,
-            offset: [10, 0],
-            positioning: 'bottom-left'
-        });
-        map.addOverlay(overlay);
-
-        function displayTooltip(evt) {
-            var pixel = evt.pixel;
-            var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
-                return feature;
-            });
-            tooltip.style.display = feature ? '' : 'none';
-            if (feature) {
-                overlay.setPosition(evt.coordinate);
-                tooltip.innerHTML = feature.get('name');
-            }
-        }
-        map.on('pointermove', displayTooltip);
-    }
-
 })();
