@@ -273,15 +273,16 @@
                               map.getView().getProjection().getCode()
                             );
 
+                            var classifiedValue = closestValue(classifications, hmVal);
+                            var scaledValue = rescaleHeatmapValue(classifiedValue, minMaxValue);
+
                             feat = new ol.Feature({
-                                name: 'Afghanistan',
+                                name: hmVal,
+                                scaledValue: scaledValue,
                                 geometry: new ol.geom.Point(coords),
                                 opacity: 1,
                                 weight: 1
                             });
-
-                            var classifiedValue = closestValue(classifications, hmVal);
-                            var scaledValue = rescaleHeatmapValue(classifiedValue, minMaxValue);
 
                             feat.set('weight', scaledValue);
                             feat.set('origVal', hmVal);
@@ -314,37 +315,25 @@
                 return context.canvas.toDataURL();
             }
 
-            function setTooltip() {
-                var tooltip = document.getElementById('tooltip');
-                var overlay = new ol.Overlay({
-                    element: tooltip,
-                    offset: [10, 0],
-                    positioning: 'bottom-left'
+            function displayTooltip(evt, overlay, tooltip) {
+                var pixel = evt.pixel;
+                var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
+                    return feature;
                 });
-                // map.addOverlay(overlay);
 
-                function displayTooltip(evt) {
-                    var pixel = evt.pixel;
-                    var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
-                        return feature;
-                    });
-                    tooltip.style.display = feature ? '' : 'none';
-                    if (feature) {
-                        console.log('evt.coordinate', evt.coordinate);
-                        overlay.setPosition(evt.coordinate);
-                        tooltip.innerHTML = feature.get('name');
-                        map.addOverlay(overlay);
-                        console.log('tooltip', tooltip);
-                    }
+                var name = feature ? feature.get('name') : undefined;
+                tooltip.style.display = name ? '' : 'none';
+                if (name) {
+                    overlay.setPosition(evt.coordinate);
+                    tooltip.innerHTML = name;
                 }
-                map.on('pointermove', displayTooltip);
             }
 
             service.createOrUpdateHeatMapLayer = function(hmData) {
                 var existingHeatMapLayers, transformInteractionLayer, olVecSrc, newHeatMapLayer;
 
                 hmData.heatmapRadius = 20;
-                hmData.blur = 20;
+                hmData.blur = 6;
                 hmData.gradientArray = ['#000000', '#0000df', '#0000df', '#00effe',
                     '#00effe', '#00ff42',' #00ff42', '#00ff42',
                     '#feec30', '#ff5f00', '#ff0000'];
@@ -648,17 +637,17 @@
                     }
                 }
 
-                var pos = ol.proj.fromLonLat([16.3725, 48.208889]);
-
-                // Vienna marker
-                var marker = new ol.Overlay({
-                  position: pos,
-                  positioning: 'center-center',
-                  element: document.getElementById('marker'),
-                  stopEvent: false
+                var tooltip = document.getElementById('tooltip');
+                var overlay = new ol.Overlay({
+                    element: tooltip,
+                    offset: [10, 0],
+                    positioning: 'bottom-left'
                 });
-                map.addOverlay(marker);
-                // setTooltip();
+                map.addOverlay(overlay);
+
+                map.on('pointermove', function (evt) {
+                    displayTooltip(evt, overlay, tooltip);
+                });
             };
             return service;
         }]
