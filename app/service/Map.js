@@ -154,9 +154,8 @@
             };
 
             service.updateTransformationLayerFromQueryForMap = function(query) {
-                var extent = queryService.
-                    getExtentForProjectionFromQuery(query,
-                                                    service.getMapProjection());
+                var extent = queryService
+                    .getExtentForProjectionFromQuery(query, service.getMapProjection());
                 setTransactionBBox(extent);
             };
 
@@ -435,6 +434,22 @@
                 return extent;
             };
 
+            service.calculateFullScreenExtentFromBoundingBox = function(extent) {
+                extent = {
+                    minX: extent[0], minY: extent[1],
+                    maxX: extent[2], maxY: extent[3]
+                };
+                var sideBarPercent = 1 - (HeightModule.sideBarWidth()/$window.innerWidth);
+                var topBarPercent = 1 -
+                    (HeightModule.topPanelHeight()/HeightModule.documentHeight());
+
+                var dx = extent.maxX - extent.minX,
+                    dy = extent.maxY - extent.minY,
+                    minX = extent.minX + dx - (dx/sideBarPercent),
+                    maxY = extent.minY + dy/topBarPercent;
+                return [minX, extent.minY, extent.maxX, maxY];
+            };
+
             /*
              * For change:resolution event (zoom in map):
              * If bounding of transform interaction is grater than the map extent
@@ -631,7 +646,6 @@
 
                 if (angular.isArray(viewConfig.extent)) {
                     var vw = map.getView();
-                    vw.set('extent', viewConfig.extent);
                     generateMaskAndAssociatedInteraction(viewConfig.extent, viewConfig.projection);
 
                     if (viewConfig.initExtent) {

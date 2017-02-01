@@ -82,6 +82,8 @@
                         mapConf.view.extent = queryService.
                           getExtentForProjectionFromQuery(solrHeatmapApp.$state.geo,
                                                           mapConf.view.projection);
+                        mapConf.view.extent = MapService
+                            .calculateFullScreenExtentFromBoundingBox(mapConf.view.extent);
                     }
                     MapService.init({
                         mapConfig: mapConf
