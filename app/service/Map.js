@@ -154,8 +154,9 @@
             };
 
             service.updateTransformationLayerFromQueryForMap = function(query) {
-                var extent = queryService
-                    .getExtentForProjectionFromQuery(query, service.getMapProjection());
+                var extent = queryService.
+                    getExtentForProjectionFromQuery(query,
+                                                    service.getMapProjection());
                 setTransactionBBox(extent);
             };
 
@@ -646,6 +647,7 @@
 
                 if (angular.isArray(viewConfig.extent)) {
                     var vw = map.getView();
+                    vw.set('extent', viewConfig.extent);
                     generateMaskAndAssociatedInteraction(viewConfig.extent, viewConfig.projection);
 
                     if (viewConfig.initExtent) {
