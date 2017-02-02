@@ -45,6 +45,8 @@
                         vm.isThereInteraction = true;
                         changeGeoSearch();
                         mapIsMoved = false;
+                    }else if(!isBackbuttonPressed){
+                        changeGeoSearch();
                     }else {
                         isBackbuttonPressed = false;
                         HeatMapSourceGeneratorService.search();
