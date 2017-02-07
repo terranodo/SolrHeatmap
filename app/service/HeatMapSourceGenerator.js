@@ -33,6 +33,7 @@
                     'q.geo': reqParamsUi.geo,
                     'a.hm.filter': reqParamsUi.hm,
                     'a.time.limit': '1',
+                    'a.hm.gridlevel': '4',
                     'a.time.gap': 'P1D',
                     'd.docs.limit': reqParamsUi.numOfDocs,
                     'a.text.limit': reqParamsUi.textLimit,
@@ -93,9 +94,10 @@
 
             function broadcastData(data) {
                 data['a.text'] = data['a.text'] || [];
-
-                if (data && data['a.hm']) {
-                    MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                if (data) {
+                    if (data['a.hm']) {
+                        MapService.createOrUpdateHeatMapLayer(data['a.hm']);
+                    }
                     // get the count of matches
                     $rootScope.$broadcast('setCounter', data['a.matchDocs']);
 

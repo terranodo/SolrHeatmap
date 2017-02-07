@@ -1,6 +1,7 @@
 {
     "appConfig": {
-        "tweetsSearchBaseUrl": "http://bop.worldmap.harvard.edu/bopws/tweets/search?",
+        "tweetsSearchBaseUrl2": "http://bop.worldmap.harvard.edu/bopws/tweets/search?",
+        "tweetsSearchBaseUrl": "http://localhost:8000/catalog/registry/api",
         "ratioInnerBbox": 0.98
     },
     "bopwsConfig": {

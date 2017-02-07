@@ -132,6 +132,9 @@
                 }
 
                 function generateAllDates(data, unitOfTime) {
+                    if (data.length === 1) {
+                        return data;
+                    }
                     var newData = [];
                     unitOfTime = unitOfTime || 'day';
                     data.forEach(function (datetime, index) {

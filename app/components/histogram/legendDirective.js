@@ -28,9 +28,13 @@
                 vm.legendList = [];
                 var partition = 5;
                 var delta = dimensions.counts.length/partition;
+                if (delta < 1) {
+                    partition = dimensions.counts.length;
+                    delta = 1;
+                }
                 for (var i = 0; i < partition; i++) {
                     var index = Math.round(i*delta);
-                    var date = moment(dimensions.counts[index].value).utc();
+                    var date = moment(new Date(dimensions.counts[index].value)).utc();
                     vm.legendList.push(date.format('MMM-DD'));
                 }
                 vm.legendWidth = (dimensions.histogrambarsWidth - dimensions.paddingBar*2)/vm.legendList.length;
