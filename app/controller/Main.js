@@ -16,7 +16,6 @@
             var HeatMapSourceGeneratorService = HeatMapSourceGenerator;
             var mapIsMoved = false;
             var isBackbuttonPressed = false;
-            // var isThereInteraction = false;
 
             var vm = this;
             vm.$state = $stateParams;

@@ -33,7 +33,7 @@
                     'q.geo': reqParamsUi.geo,
                     'a.hm.filter': reqParamsUi.hm,
                     'a.time.limit': '1',
-                    'a.hm.gridlevel': '4',
+                    'a.hm.gridlevel': '7',
                     'a.time.gap': 'P1D',
                     'd.docs.limit': reqParamsUi.numOfDocs,
                     'a.text.limit': reqParamsUi.textLimit,

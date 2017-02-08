@@ -209,15 +209,18 @@
 
             function getClassifications(hmParams) {
                 var flattenCount = [];
-
                 hmParams.counts_ints2D.forEach(function(row) {
                     flattenCount.push.apply(flattenCount, row);
                 });
-                console.log('flattenCount', flattenCount);
+
                 var series = new geostats(flattenCount);
+                var maxNumber = series.max();
                 var numberOfClassifications = hmParams.gradientArray.length - 5;
-                console.log(numberOfClassifications);
-                return series.getClassJenks(numberOfClassifications);
+
+                if (numberOfClassifications > maxNumber) {
+                    return Array.apply(null, {length: maxNumber}).map(Number.call, Number);
+                }
+                return series.getClassJenks(numberOfClassifications)
             }
 
             function closestValue(arrayOfValues, value) {
@@ -260,9 +263,8 @@
                 }
                 counts_ints2D = fillNullValueToEmptyArray(counts_ints2D);
                 classifications = getClassifications(hmParams);
-                console.log('classifications', classifications);
                 minMaxValue = [0, classifications.length - 1];
-                for (var i = 0 ; i < gridRows ; i++){
+                for (var i = 0; i < gridRows; i++){
                     for (var j = 0 ; j < gridColumns ; j++){
                         var hmVal = counts_ints2D[counts_ints2D.length-i-1][j],
                             lon,
@@ -281,7 +283,6 @@
 
                             var classifiedValue = closestValue(classifications, hmVal);
                             var scaledValue = rescaleHeatmapValue(classifiedValue, minMaxValue);
-
                             feat = new ol.Feature({
                                 name: hmVal,
                                 scaledValue: scaledValue,
@@ -349,30 +350,30 @@
                                                                 "TransformInteractionLayer")[0];
                 olVecSrc = createHeatMapSource(hmData);
 
-                // if (existingHeatMapLayers && existingHeatMapLayers.length > 0){
-                //     var currHeatmapLayer = existingHeatMapLayers[0];
-                //     // Update layer source
-                //     var layerSrc = currHeatmapLayer.getSource();
-                //     if (layerSrc){
-                //         layerSrc.clear();
-                //     }
-                //     currHeatmapLayer.setSource(olVecSrc);
-                // } else {
-                //     newHeatMapLayer = new ol.layer.Heatmap({
-                //         name: 'HeatMapLayer',
-                //         source: olVecSrc,
-                //         radius: hmData.heatmapRadius,
-                //         blur: hmData.blur,
-                //         gradient: hmData.gradientArray
-                //     });
-                //
-                //     try {
-                //         service.getMap().addLayer(newHeatMapLayer);
-                //     } catch(err) {
-                //         void 0;
-                //     }
-                //
-                // }
+                if (existingHeatMapLayers && existingHeatMapLayers.length > 0){
+                    var currHeatmapLayer = existingHeatMapLayers[0];
+                    // Update layer source
+                    var layerSrc = currHeatmapLayer.getSource();
+                    if (layerSrc){
+                        layerSrc.clear();
+                    }
+                    currHeatmapLayer.setSource(olVecSrc);
+                } else {
+                    newHeatMapLayer = new ol.layer.Heatmap({
+                        name: 'HeatMapLayer',
+                        source: olVecSrc,
+                        radius: hmData.heatmapRadius,
+                        blur: hmData.blur,
+                        gradient: hmData.gradientArray
+                    });
+
+                    try {
+                        service.getMap().addLayer(newHeatMapLayer);
+                    } catch(err) {
+                        void 0;
+                    }
+
+                }
             };
 
             /**
