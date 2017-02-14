@@ -12,7 +12,8 @@
             return {
                 link: ExportLink,
                 restrict: 'EA',
-                template: '<button class="btn btn-default" id="exportbtn" title="EXPORT" type="button" ng-click="startExport()">EXPORT</button>',
+                template: '<button class="btn btn-default" id="exportbtn" ' +
+                'title="EXPORT" type="button" ng-click="startExport()">EXPORT</button>',
                 scope: {}
             };
 
