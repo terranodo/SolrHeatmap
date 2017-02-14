@@ -8,32 +8,18 @@
     angular
     .module('search_exportButton_component', [])
     .directive('exportButton', ['HeatMapSourceGenerator',
-        'searchFilter', 'Map',
-        function(HeatMapSourceGenerator, InfoService, searchFilter, Map) {
+        function(HeatMapSourceGenerator) {
             return {
                 link: ExportLink,
                 restrict: 'EA',
-                templateUrl: 'components/exportButton/exportButton.tpl.html',
+                template: '<button class="btn btn-default" id="exportbtn" title="EXPORT" type="button" ng-click="startExport()">EXPORT</button>',
                 scope: {}
             };
 
             function ExportLink(scope) {
-                var vm = scope;
-                vm.export = {
-                    numDocuments: 1,
-                    options: {
-                        floor: 1,
-                        ceil: 10000,
-                        step: 1
-                    }
+                scope.startExport = function() {
+                    HeatMapSourceGenerator.startCsvExport(100);
                 };
-
-                vm.startExport = function() {
-                    var numDocs = vm.export.numDocuments;
-
-                    HeatMapSourceGenerator.startCsvExport(numDocs);
-                };
-
             }
         }]);
 })();

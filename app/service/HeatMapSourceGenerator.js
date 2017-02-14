@@ -14,6 +14,7 @@
             var MapService= Map;
 
             return {
+                startCsvExport: startCsvExport,
                 search: search
             };
 
