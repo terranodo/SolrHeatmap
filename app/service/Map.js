@@ -340,7 +340,7 @@
                 var existingHeatMapLayers, transformInteractionLayer, olVecSrc, newHeatMapLayer;
 
                 hmData.heatmapRadius = 20;
-                hmData.blur = 6;
+                hmData.blur = 55;
                 hmData.gradientArray = ['#000000', '#0000df', '#0000df', '#00effe',
                     '#00effe', '#00ff42',' #00ff42', '#00ff42',
                     '#feec30', '#ff5f00', '#ff0000'];
@@ -364,7 +364,8 @@
                         source: olVecSrc,
                         radius: hmData.heatmapRadius,
                         blur: hmData.blur,
-                        gradient: hmData.gradientArray
+                        gradient: hmData.gradientArray,
+                        opacity: '0.9'
                     });
 
                     try {
@@ -567,6 +568,31 @@
                 if (angular.isObject(map)) {
                     var layersWithBbox = service.getLayersBy('isbbox', true);
                     layersWithBbox[0].getSource().clear();
+                }
+            };
+            service.addBbox = function(point, style) {
+                var ring = [[point[0], point[1]],
+                            [point[2], point[1]],
+                            [point[2], point[3]],
+                            [point[0], point[3]],
+                            [point[0], point[1]]];
+                var polygon = new ol.geom.Polygon([ring]);
+                polygon.transform('EPSG:4326', 'EPSG:3857');
+                var feature = new ol.Feature(polygon);
+
+                var layersWithBbox = service.getLayersBy('isbbox', true);
+                if (layersWithBbox.length) {
+                    layersWithBbox[0].getSource().addFeature(feature);
+                }else{
+                    var vectorSource = new ol.source.Vector();
+                    vectorSource.addFeature(feature);
+
+                    var vectorLayer = new ol.layer.Vector({
+                      isbbox: true,
+                      source: vectorSource
+                    });
+                    vectorLayer.setStyle(style);
+                    map.addLayer(vectorLayer);
                 }
             };
 

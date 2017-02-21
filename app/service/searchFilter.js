@@ -14,7 +14,7 @@
             textLimit: null,
             userLimit: null,
             numOfDocs: 50,
-            minDate: new Date(moment().subtract(2, 'months').format('YYYY-MM-DD')),
+            minDate: new Date(moment().subtract(2000, 'years').format('YYYY-MM-DD')),
             maxDate: new Date(moment().format('YYYY-MM-DD'))
         };
 

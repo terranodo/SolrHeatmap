@@ -40,7 +40,7 @@
 
                 function selectTweet(tweet) {
                     PanelInformationService.selectedTweet = tweet;
-                    addCircle(tweet.coord);
+                    MapService.addBbox(tweet.bbox, stylePoint);
                 }
 
                 function removeAllfeatures() {
