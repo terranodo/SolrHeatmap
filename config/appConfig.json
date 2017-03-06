@@ -1,7 +1,7 @@
 {
     "appConfig": {
         "tweetsSearchBaseUrl2": "http://bop.worldmap.harvard.edu/bopws/tweets/search?",
-        "tweetsSearchBaseUrl": "http://localhost/catalog/registry/api",
+        "tweetsSearchBaseUrl": "http://jurgen.cientifi.co/registry/catalog/registry/api",
         "ratioInnerBbox": 0.98
     },
     "bopwsConfig": {
