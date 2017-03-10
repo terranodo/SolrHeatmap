@@ -8,6 +8,7 @@
         function(Map, queryService, HeatMapSourceGenerator) {
             return {
                 link: modalLink,
+                templateUrl: 'components/modalTweets/modalTweets.tpl.html',
                 restrict: 'EA',
                 scope: {}
             };
@@ -16,10 +17,12 @@
                 var vm = scope;
                 var MapService = Map;
                 vm.closestTweets = [];
+                vm.coordinate = [];
 
                 vm.$on('mapReady', function () {
                     MapService.getMap().on('click', function(evt){
-                        var extent = createBboxFromCoordinatePoint(evt.coordinate);
+                        vm.coordinate = ol.proj.toLonLat(evt.coordinate);
+                        var extent = createBboxFromCoordinatePoint(vm.coordinate);
                         var params = {
                             'q.geo': extent,
                             'd.docs.limit': 50,
@@ -28,13 +31,13 @@
                         HeatMapSourceGenerator.simpleSearch(params, function (res) {
                             if (res.data && angular.isArray(res.data['d.docs'])) {
                                 vm.closestTweets = res.data['d.docs'];
+                                $('#closesttweets').modal('show');
                             }
                         });
                     });
                 });
 
-                function createBboxFromCoordinatePoint(coordinate) {
-                    var centerPoint = ol.proj.toLonLat(coordinate);
+                function createBboxFromCoordinatePoint(centerPoint) {
                     var extentGeo = MapService.getCurrentExtent().geo;
                     var deltaX = Math.abs(extentGeo.maxX - extentGeo.minX);
                     var deltaY = Math.abs(extentGeo.maxY - extentGeo.minY);
