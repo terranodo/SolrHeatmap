@@ -4,8 +4,8 @@
 (function() {
     angular
     .module('search_modaltweets_component', [])
-    .directive('modalTweets', ['Map', 'queryService',
-        function(Map, queryService) {
+    .directive('modalTweets', ['Map', 'queryService', 'HeatMapSourceGenerator',
+        function(Map, queryService, HeatMapSourceGenerator) {
             return {
                 link: modalLink,
                 restrict: 'EA',
@@ -15,10 +15,21 @@
             function modalLink(scope) {
                 var vm = scope;
                 var MapService = Map;
+                vm.closestTweets = [];
 
                 vm.$on('mapReady', function () {
                     MapService.getMap().on('click', function(evt){
                         var extent = createBboxFromCoordinatePoint(evt.coordinate);
+                        var params = {
+                            'q.geo': extent,
+                            'd.docs.limit': 50,
+                            'd.docs.sort': 'distance'
+                        };
+                        HeatMapSourceGenerator.simpleSearch(params, function (res) {
+                            if (res.data && angular.isArray(res.data['d.docs'])) {
+                                vm.closestTweets = res.data['d.docs'];
+                            }
+                        });
                     });
                 });
 
