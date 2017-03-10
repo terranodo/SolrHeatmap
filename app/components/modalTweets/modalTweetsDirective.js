@@ -4,8 +4,8 @@
 (function() {
     angular
     .module('search_modaltweets_component', [])
-    .directive('modalTweets', ['Map',
-        function(Map) {
+    .directive('modalTweets', ['Map', 'queryService',
+        function(Map, queryService) {
             return {
                 link: modalLink,
                 restrict: 'EA',
@@ -18,11 +18,23 @@
 
                 vm.$on('mapReady', function () {
                     MapService.getMap().on('click', function(evt){
-                        console.log('evt', evt);
-                        var extentGeo = MapService.getCurrentExtentQuery().geo;
-                        console.log(extentGeo);
-                    })
+                        var extent = createBboxFromCoordinatePoint(evt.coordinate);
+                    });
                 });
+
+                function createBboxFromCoordinatePoint(coordinate) {
+                    var centerPoint = ol.proj.toLonLat(coordinate);
+                    var extentGeo = MapService.getCurrentExtent().geo;
+                    var deltaX = Math.abs(extentGeo.maxX - extentGeo.minX);
+                    var deltaY = Math.abs(extentGeo.maxY - extentGeo.minY);
+                    var newExtent = {
+                        maxX: centerPoint[1] + deltaX/2,
+                        minX: centerPoint[1] - deltaX/2,
+                        maxY: centerPoint[0] + deltaY/2,
+                        minY: centerPoint[0] - deltaY/2
+                    };
+                    return queryService.createQueryFromExtent(newExtent);
+                }
             }
         }]);
 })();
