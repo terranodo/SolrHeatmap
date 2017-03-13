@@ -4,8 +4,9 @@
 (function() {
     angular
     .module('search_modaltweets_component', [])
-    .directive('modalTweets', ['Map', 'queryService', 'HeatMapSourceGenerator',
-        function(Map, queryService, HeatMapSourceGenerator) {
+    .directive('modalTweets', ['Map', 'queryService',
+        'HeatMapSourceGenerator', 'Normalize',
+        function(Map, queryService, HeatMapSourceGenerator, Normalize) {
             return {
                 link: modalLink,
                 templateUrl: 'components/modalTweets/modalTweets.tpl.html',
@@ -31,7 +32,7 @@
                         HeatMapSourceGenerator.simpleSearch(params, function (res) {
                             if (res.data && angular.isArray(res.data['d.docs'])) {
                                 vm.closestTweets = res.data['d.docs'];
-                                $('#closesttweets').modal('show');
+                                angular.element('#closesttweets').modal('show');
                             }
                         });
                     });
@@ -41,13 +42,20 @@
                     var extentGeo = MapService.getCurrentExtent().geo;
                     var deltaX = Math.abs(extentGeo.maxX - extentGeo.minX);
                     var deltaY = Math.abs(extentGeo.maxY - extentGeo.minY);
+
                     var newExtent = {
-                        maxX: centerPoint[1] + deltaX/2,
                         minX: centerPoint[1] - deltaX/2,
-                        maxY: centerPoint[0] + deltaY/2,
-                        minY: centerPoint[0] - deltaY/2
+                        minY: centerPoint[0] - deltaY/2,
+                        maxX: centerPoint[1] + deltaX/2,
+                        maxY: centerPoint[0] + deltaY/2
                     };
-                    return queryService.createQueryFromExtent(newExtent);
+
+                    var normalizedExtent = Normalize.normalizeExtent([
+                        newExtent.minX, newExtent.minY, newExtent.maxX, newExtent.maxY
+                    ]);
+                    return queryService.createQueryFromExtent(
+                        MapService.createExtentFromNormalize(normalizedExtent)
+                    );
                 }
             }
         }]);
