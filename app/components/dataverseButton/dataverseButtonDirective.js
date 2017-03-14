@@ -25,7 +25,7 @@
                 function sendToDataverse() {
                     dataverseService.dataverseRequest(function (response) {
                         vm.response = response;
-                        if (response.status == 200) {
+                        if (response.status === 200) {
                             vm.callbackMessage = 'Dataverse success response';
                         } else {
                             vm.callbackMessage = 'Url error';

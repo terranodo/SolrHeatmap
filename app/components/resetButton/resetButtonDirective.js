@@ -12,8 +12,8 @@
             return {
                 link: ResetLink,
                 restrict: 'EA',
-                template: '<button class="btn btn-primary from-panel" id="resetbtn" title="RESET" ' +
-                    'type="button" ng-click="reset()">RESET</button>',
+                template: '<button class="btn btn-primary from-panel" id="resetbtn" ' +
+                    'title="RESET" type="button" ng-click="reset()">RESET</button>',
                 scope: {}
             };
 
