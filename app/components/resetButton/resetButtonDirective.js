@@ -12,7 +12,7 @@
             return {
                 link: ResetLink,
                 restrict: 'EA',
-                template: '<button class="btn btn-primary" id="resetbtn" title="RESET" ' +
+                template: '<button class="btn btn-primary from-panel" id="resetbtn" title="RESET" ' +
                     'type="button" ng-click="reset()">RESET</button>',
                 scope: {}
             };
@@ -29,7 +29,7 @@
     .directive('basemapButton', ['Map', function(Map) {
         return {
             link: link,
-            template: '<button class="btn btn-default" type="button" ' +
+            template: '<button class="btn btn-default from-panel" type="button" ' +
                 'ng-click="toggleBaseMaps()">BASEMAPS</button>',
             scope: {}
         };

@@ -3,7 +3,8 @@
 (function () {
     angular
     .module('SolrHeatmapApp')
-    .factory('dataverseService', ['$rootScope', function ($rootScope) {
+    .factory('dataverseService', ['$rootScope', '$http',
+        function ($rootScope, $http) {
 
         var dataverse = {
             AllowDataverseDeposit: false
@@ -25,15 +26,31 @@
         }
 
         function paramsToString(params) {
-            return 'time=' + params.time + '&keywords=' + params.keywords +
-            '&extent=' + params.extent;
+            var stringParams = [];
+            for (var key in params) {
+                stringParams.push(key + '=' + params[key]);
+            }
+            return stringParams.join('&');
+        }
+
+        function dataverseRequest(callback) {
+            var config = {
+                url: prepareDataverseUrl(),
+                method: 'GET',
+            };
+            $http(config).then(function(response) {
+                return callback(response);
+            }, function errorCallback(response) {
+                return callback(response);
+            });
         }
 
         return {
             getDataverse: function () {
                 return dataverse;
             },
-            prepareDataverseUrl: prepareDataverseUrl
+            prepareDataverseUrl: prepareDataverseUrl,
+            dataverseRequest: dataverseRequest
         };
 
 
