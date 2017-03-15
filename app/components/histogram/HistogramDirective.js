@@ -42,7 +42,7 @@
                  */
                 function makeHistogram(histogram) {
 
-                    var barsheight = 40;
+                    var barsheight = 100;
                     var histogrambarsWidth = 364;
                     var paddingBar = 8;
 
@@ -226,6 +226,16 @@
                         }
                     };
                 }
+
+                vm.Yaxis = {
+                    value: 5,
+                    options: {
+                        floor: 0,
+                        ceil: 10,
+                        vertical: true,
+                        showTicks: true
+                  }
+                };
 
             }
         }]);
