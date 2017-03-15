@@ -1,11 +1,6 @@
 <div class="col-md-12 component-padding">
-    <div style="height: 250px;">
-        <rzslider style="top: auto;
-        left: 0;
-        width: 32px;
-        height: 100%;
-        padding: 0 0 0 16px;
-        margin: 0 0 0 0px;" rz-slider-model="Yaxis.minValue" rz-slider-high="Yaxis.maxValue" rz-slider-options="Yaxis.options"></rzslider>
+    <div style="height: {{histogramBarsDimensions.barsheight}}px;" class="y-axis-wrap">
+        <rzslider class="y-axis" rz-slider-model="Yaxis.minValue" rz-slider-high="Yaxis.maxValue" rz-slider-options="Yaxis.options"></rzslider>
     </div>
 
     <div class="bar-graph" id="{{barId}}" ng-class="{disabled: slider.options.disabled}"></div>

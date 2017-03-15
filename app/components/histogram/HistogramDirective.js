@@ -42,7 +42,7 @@
                  */
                 function makeHistogram(histogram) {
 
-                    var barsheight = 100;
+                    var barsheight = 45;
                     var histogrambarsWidth = 364;
                     var paddingBar = 8;
 
@@ -228,13 +228,21 @@
                 }
 
                 vm.Yaxis = {
-                    value: 5,
+                    value: 0,
                     options: {
+                        step: 2,
                         floor: 0,
-                        ceil: 10,
+                        ceil: 8,
                         vertical: true,
-                        showTicks: true
-                  }
+                        minRange: 1,
+                        showTicks: true,
+                        translate: function() {
+                            return '';
+                        },
+                        getSelectionBarColor: function() {
+                            return '#609dd2';
+                        }
+                    }
                 };
 
             }
