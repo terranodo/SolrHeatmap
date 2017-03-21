@@ -39,7 +39,7 @@
              */
             function createParamsForGeospatialSearch () {
                 var sF = searchFilter;
-                return  {
+                return {
                     'q.text': sF.text,
                     'q.user': sF.user,
                     'q.time': timeTextFormat(sF.time, sF.minDate, sF.maxDate),
