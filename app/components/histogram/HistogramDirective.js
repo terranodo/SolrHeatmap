@@ -4,8 +4,10 @@
 
     angular
     .module('search_timehistogram_component', [])
-    .directive('timeHistogram', ['$rootScope', 'HeatMapSourceGenerator', 'searchFilter', 'DateTimeService',
-        function timeHistogram($rootScope, HeatMapSourceGenerator, searchFilter, DateTimeService) {
+    .directive('timeHistogram', ['$rootScope', 'HeatMapSourceGenerator',
+        'searchFilter', 'DateTimeService', 'NumberService',
+        function timeHistogram($rootScope, HeatMapSourceGenerator,
+            searchFilter, DateTimeService, NumberService) {
             var directive = {
                 templateUrl: 'components/histogram/histogram.tpl.html',
                 restrict: 'EA',
@@ -20,6 +22,7 @@
 
                 vm.barId = attr.barid;
                 vm.histogramBarsDimensions = {};
+                vm.yLegendRange = [];
 
                 vm.slider = defaultSliderValue();
 
@@ -27,6 +30,7 @@
                     HistogramBars = makeHistogram(histogram);
                     HistogramBars.renderingSvgBars();
                     vm.histogramBarsDimensions = HistogramBars.dimensions;
+                    vm.yLegendRange = createRange(vm.histogramBarsDimensions.maxValue, 2);
                 });
 
                 vm.$on('changeSlider', function(event, slider) {
@@ -42,8 +46,8 @@
                  */
                 function makeHistogram(histogram) {
 
-                    var barsheight = 45;
-                    var histogrambarsWidth = 364;
+                    var barsheight = 54;
+                    var histogrambarsWidth = 350;
                     var paddingBar = 8;
 
                     findHistogramMaxValue();
@@ -67,7 +71,8 @@
                             histogrambarsWidth: histogrambarsWidth,
                             paddingBar: paddingBar,
                             counts: histogram.counts,
-                            gap: histogram.gap
+                            gap: histogram.gap,
+                            maxValue: histogram.maxValue
                         };
                     }
 
@@ -227,12 +232,25 @@
                     };
                 }
 
+
+                function createRange(maxValue, partition) {
+                    var range =[];
+                    partition = partition || 1;
+                    maxValue = maxValue || 0;
+                    var step = Math.floor(maxValue/partition);
+
+                    for (var i = 0; i <= maxValue; i = i+step) {
+                        range.push(NumberService.compactInteger(i));
+                    }
+                    return range;
+                }
+
                 vm.Yaxis = {
                     value: 0,
                     options: {
-                        step: 2,
+                        step: 1,
                         floor: 0,
-                        ceil: 8,
+                        ceil: 2,
                         vertical: true,
                         minRange: 1,
                         showTicks: true,
