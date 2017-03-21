@@ -136,9 +136,9 @@
                     }
                 }
 
-                function generateAllDates(data, unitOfTime) {
+                function generateAllDates(data) {
                     var newData = [];
-                    unitOfTime = unitOfTime || 'day';
+                    var unitOfTime = getTimeFormat();
                     data.forEach(function (datetime, index) {
                         if (index < data.length - 1) {
                             var startDate = moment(datetime.value);
@@ -155,6 +155,17 @@
                         }
                     });
                     return newData;
+                }
+
+                function getTimeFormat() {
+                    var gap = searchFilter.gap;
+                    if (gap === 'P1D') {
+                        return 'days';
+                    } else if (gap === 'P1M') {
+                        return 'months';
+                    } else if (gap === 'P1Y') {
+                        return 'years';
+                    }
                 }
 
                 function getSubDataHistogram(dataHistogram, slider) {

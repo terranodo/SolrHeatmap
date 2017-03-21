@@ -46,7 +46,7 @@
                     'q.geo': sF.geo,
                     'a.hm.filter': sF.hm,
                     'a.time.limit': '1',
-                    'a.time.gap': 'P1D',
+                    'a.time.gap': sF.gap,
                     'd.docs.limit': sF.numOfDocs,
                     'a.text.limit': sF.textLimit,
                     'a.user.limit': sF.userLimit,
