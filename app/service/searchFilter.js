@@ -14,7 +14,7 @@
             textLimit: null,
             userLimit: null,
             numOfDocs: 50,
-            gap: 'P1W',
+            gap: 'P1M',
             minDate: new Date(moment('2014-08-25').format('YYYY-MM-DD')),
             maxDate: new Date(moment().format('YYYY-MM-DD'))
         };

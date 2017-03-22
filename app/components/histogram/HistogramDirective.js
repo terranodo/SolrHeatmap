@@ -138,7 +138,7 @@
 
                 function generateAllDates(data) {
                     var newData = [];
-                    var unitOfTime = getTimeFormat();
+                    var unitOfTime = DateTimeService.getTimeFormat();
                     if (!unitOfTime) {
                         return data;
                     }
@@ -158,19 +158,6 @@
                         }
                     });
                     return newData;
-                }
-
-                function getTimeFormat() {
-                    var gap = searchFilter.gap;
-                    if (gap === 'P1D') {
-                        return 'days';
-                    } else if(gap === 'P1W' || gap === 'P7D'){
-                        return 'weeks';
-                    } else if (gap === 'P1M') {
-                        return 'months';
-                    } else if (gap === 'P1Y') {
-                        return 'years';
-                    }
                 }
 
                 function getSubDataHistogram(dataHistogram, slider) {
