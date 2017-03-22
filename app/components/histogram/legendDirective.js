@@ -41,6 +41,8 @@
                 var gap = searchFilter.gap;
                 if (gap === 'P1D') {
                     return 'MMM-DD';
+                } else if(gap === 'P1W' || gap === 'P7D'){
+                    return 'YYYY-MMM';
                 } else if (gap === 'P1M') {
                     return 'YYYY-MMM';
                 } else if (gap === 'P1Y') {

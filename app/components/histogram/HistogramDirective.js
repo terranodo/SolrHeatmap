@@ -139,6 +139,9 @@
                 function generateAllDates(data) {
                     var newData = [];
                     var unitOfTime = getTimeFormat();
+                    if (!unitOfTime) {
+                        return data;
+                    }
                     data.forEach(function (datetime, index) {
                         if (index < data.length - 1) {
                             var startDate = moment(datetime.value);
@@ -161,6 +164,8 @@
                     var gap = searchFilter.gap;
                     if (gap === 'P1D') {
                         return 'days';
+                    } else if(gap === 'P1W' || gap === 'P7D'){
+                        return 'weeks';
                     } else if (gap === 'P1M') {
                         return 'months';
                     } else if (gap === 'P1Y') {

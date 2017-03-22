@@ -21,7 +21,9 @@
             url: '/search?time&geo&text&user',
             component: 'search',
             resolve: {
-                search: function($stateParams,HeatMapSourceGenerator,searchFilter) {
+                search: function($stateParams,HeatMapSourceGenerator,searchFilter,
+                    DateTimeService) {
+                    $stateParams.gap = DateTimeService.getGapFromTimeString($stateParams.time);
                     searchFilter.setFilter($stateParams);
                 }
             }
