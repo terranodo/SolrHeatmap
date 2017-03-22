@@ -69,6 +69,7 @@
             function search(changeUrl){
                 var config,
                     params = createParamsForGeospatialSearch();
+                changeUrl = angular.isUndefined(changeUrl) || changeUrl ? true : false;
 
                 if (params) {
                     params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
