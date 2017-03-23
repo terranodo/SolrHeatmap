@@ -28,7 +28,7 @@
 
                 vm.$on('setHistogramRangeSlider', function(even, histogram) {
                     HistogramBars = makeHistogram(histogram);
-                    HistogramBars.renderingSvgBars();
+                    HistogramBars.renderingSvgBars(histogram.slider.minValue, histogram.slider.maxValue);
                     vm.histogramBarsDimensions = HistogramBars.dimensions;
                     vm.yLegendRange = createRange(vm.histogramBarsDimensions.maxValue, 2);
                 });
@@ -115,30 +115,22 @@
                     var firstDate = new Date(dataHistogram.counts[0].value);
                     var lastDate = new Date(dataHistogram.counts[dataHistogram.counts.length - 1].value);
 
-                    if (vm.slider.options.ceil === 1 || isTheInitialDate() ||
-                        dataHistogram.counts.length - 1 > vm.slider.options.ceil) {
-                        vm.slider.counts = dataHistogram.counts;
-                        vm.slider.options.ceil = dataHistogram.counts.length - 1;
-                        vm.slider.maxValue = vm.slider.options.ceil;
-                        vm.slider.minValue = 0;
-                        dataHistogram.slider = vm.slider;
-                        $rootScope.$broadcast('setHistogramRangeSlider', dataHistogram);
+                    vm.slider.counts = dataHistogram.counts;
+                    vm.slider.options.ceil = dataHistogram.counts.length - 1;
+                    var sliderPadding = Math.ceil(vm.slider.options.ceil*0.2);
 
-                    }else if ( (dataHistogram.counts.length < vm.slider.options.ceil && !vm.slider.changeTime) ||
-                        vm.slider.oldFirstDate > firstDate || vm.slider.oldLastDate < lastDate) {
-                        vm.slider.oldFirstDate = firstDate;
-                        vm.slider.oldLastDate = lastDate;
-                        dataHistogram.counts = getSubDataHistogram(dataHistogram, vm.slider);
-                        $rootScope.$broadcast('setHistogramRangeSlider', dataHistogram);
-                    }else{
-                        vm.slider.changeTime = false;
-                        $rootScope.$broadcast('changeSlider', vm.slider);
-                    }
+                    vm.slider.maxValue = vm.slider.options.ceil - sliderPadding;
+                    vm.slider.minValue = sliderPadding;
+                    dataHistogram.slider = vm.slider;
+                    $rootScope.$broadcast('setHistogramRangeSlider', dataHistogram);
                 }
 
-                function generateAllDates(data, unitOfTime) {
+                function generateAllDates(data) {
                     var newData = [];
-                    unitOfTime = unitOfTime || 'day';
+                    var unitOfTime = DateTimeService.getTimeFormat(searchFilter.gap);
+                    if (!unitOfTime) {
+                        return data;
+                    }
                     data.forEach(function (datetime, index) {
                         if (index < data.length - 1) {
                             var startDate = moment(datetime.value);
@@ -187,12 +179,13 @@
                     vm.datepickerEndDate = new Date(vm.slider.counts[maxKey].value);
                     vm.dateString = DateTimeService.formatDatesToString(vm.datepickerStartDate,
                                                             vm.datepickerEndDate);
+                    console.log('vm.dateString', vm.dateString);
                     performDateSearch();
                 }
 
                 function performDateSearch() {
                     vm.slider.changeTime = true;
-                    searchFilter.time = vm.dateString;
+                    searchFilter.setFilter({time: vm.dateString});
                     HeatMapSourceGenerator.search();
                 }
 

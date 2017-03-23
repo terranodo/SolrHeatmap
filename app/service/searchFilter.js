@@ -3,18 +3,21 @@
 
 (function() {
     angular.module('SolrHeatmapApp')
-    .factory('searchFilter', ['Map', 'HeightModule', function(Map, HeightModule){
+    .factory('searchFilter', ['Map', 'HeightModule', 'DateTimeService',
+    function(Map, HeightModule, DateTimeService){
         var MapService = Map;
         var service = {
             geo: '[-90,-180 TO 90,180]',
             hm: '[-90,-180 TO 90,180]',
             time: null,
+            timeFilter: null,
             text: null,
             user: null,
             textLimit: null,
             userLimit: null,
             numOfDocs: 50,
-            minDate: new Date(moment().subtract(2, 'months').format('YYYY-MM-DD')),
+            gap: 'P1M',
+            minDate: new Date(moment('2014-08-25').format('YYYY-MM-DD')),
             maxDate: new Date(moment().format('YYYY-MM-DD'))
         };
 
@@ -24,6 +27,9 @@
         service.setFilter = function(filter) {
             if(filter.time) {
                 service.time = filter.time;
+                service.timeFilter = DateTimeService.getTimeLimit(filter.time);
+                service.gap = DateTimeService.getGapFromTimeString(service.timeFilter);
+
             }
             if(filter.user) {
                 service.user = filter.user;
@@ -41,6 +47,7 @@
 
         service.resetFilter = function() {
             service.time = null;
+            service.timeFilter = null;
             service.text = null;
             service.user = null;
             service.geo = MapService.getCurrentExtentQuery().geo;

@@ -21,7 +21,8 @@
             url: '/search?time&geo&text&user',
             component: 'search',
             resolve: {
-                search: function($stateParams,HeatMapSourceGenerator,searchFilter) {
+                search: function($stateParams,HeatMapSourceGenerator,searchFilter,
+                    DateTimeService) {
                     searchFilter.setFilter($stateParams);
                 }
             }

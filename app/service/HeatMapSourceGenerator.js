@@ -43,10 +43,11 @@
                     'q.text': sF.text,
                     'q.user': sF.user,
                     'q.time': timeTextFormat(sF.time, sF.minDate, sF.maxDate),
+                    'a.time.filter': sF.timeFilter,
                     'q.geo': sF.geo,
                     'a.hm.filter': sF.hm,
                     'a.time.limit': '1',
-                    'a.time.gap': 'P1D',
+                    'a.time.gap': sF.gap,
                     'd.docs.limit': sF.numOfDocs,
                     'a.text.limit': sF.textLimit,
                     'a.user.limit': sF.userLimit,
@@ -67,9 +68,11 @@
              * Performs search with the given full configuration / search object.
              */
             function search(changeUrl){
+
                 var config,
                     params = createParamsForGeospatialSearch();
-
+                changeUrl = angular.isUndefined(changeUrl) || changeUrl ? true : false;
+                console.log('params', params);
                 if (params) {
                     params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
 
@@ -104,14 +107,14 @@
 
             function broadcastData(data) {
                 data['a.text'] = data['a.text'] || [];
-
+                console.log('data', data);
                 if (data && data['a.hm']) {
                     MapService.createOrUpdateHeatMapLayer(data['a.hm']);
                     // get the count of matches
                     $rootScope.$broadcast('setCounter', data['a.matchDocs']);
-
+                    //
                     $rootScope.$broadcast('setHistogram', data['a.time']);
-
+                    //
                     $rootScope.$broadcast('setTweetList', data['d.docs']);
 
                     $rootScope.$broadcast('setSuggestWords', data['a.text']);
