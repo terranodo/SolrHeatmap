@@ -32,7 +32,9 @@
                     for (var i = 0; i < partition; i++) {
                         var index = Math.round(i*delta);
                         var date = moment(dimensions.counts[index].value).utc();
-                        vm.legendList.push(date.format(DateTimeService.durationFormat()));
+                        vm.legendList.push(date.format(
+                            DateTimeService.durationFormat(searchFilter.gap)
+                        ));
                     }
                     vm.legendWidth = (dimensions.histogrambarsWidth - dimensions.paddingBar*2)/vm.legendList.length;
                     vm.paddingBar = dimensions.paddingBar;

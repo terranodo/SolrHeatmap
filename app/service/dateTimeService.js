@@ -1,11 +1,13 @@
 /*eslint angular/di: [2,"array"]*/
 (function() {
     angular.module('SolrHeatmapApp')
-    .factory('DateTimeService', ['searchFilter', function(searchFilter){
+    .factory('DateTimeService', [function(){
         var service = {
             formatDatesToString: formatDatesToString,
             getTimeFormat: getTimeFormat,
-            durationFormat: durationFormat
+            durationFormat: durationFormat,
+            getGapFromTimeString: getGapFromTimeString,
+            getTimeLimit: getTimeLimit
         };
 
         /**
@@ -20,8 +22,7 @@
               maxDate.toISOString().replace('.000Z','') + ']';
         }
 
-        function durationFormat() {
-            var gap = searchFilter.gap;
+        function durationFormat(gap) {
             if (gap === 'PT1H') {
                 return 'MMM.D.H[h]';
             }else if(gap === 'P1D') {
@@ -35,8 +36,7 @@
             }
         }
 
-        function getTimeFormat() {
-            var gap = searchFilter.gap;
+        function getTimeFormat(gap) {
             if (gap === 'PT1H') {
                 return 'hours';
             } else if(gap === 'P1D') {
@@ -48,6 +48,51 @@
             } else if (gap === 'P1Y') {
                 return 'years';
             }
+        }
+
+        function getGapFromTimeString(timeString) {
+            if (!timeString) {
+                return;
+            }
+            var gap,
+                partition = 120,
+                dates = formatStringToDates(timeString),
+                diffms = moment(dates[1]).diff(dates[0]),
+                hours = diffms/(1000*3600),
+                days = hours/24,
+                years = days/365,
+                months = years * 12;
+
+            if (hours <= partition) {
+                gap = 'PT1H';
+            }else if (days <= partition) {
+                gap = 'P1D';
+            }else if (days/7 <= partition) {
+                gap = 'P1W';
+            }else if (months <= partition) {
+                gap = 'P1M';
+            }else {
+                gap = 'P1Y';
+            }
+            return gap;
+        }
+
+        function formatStringToDates(stringDates){
+            var dates = stringDates.split(' TO ');
+            dates[0] = dates[0].slice(1);
+            dates[1] = dates[1].slice(0, -1);
+            return dates;
+        }
+
+        function getTimeLimit(stringDates) {
+            var dates = formatStringToDates(stringDates);
+            var diffms = moment(dates[1]).diff(dates[0])
+            var timePadding = diffms * 0.2;
+            var newDate = [
+                moment(dates[0]).subtract(timePadding, 'ms').format('YYYY-MM-DD'),
+                moment(dates[1]).add(timePadding, 'ms').format('YYYY-MM-DD')
+            ];
+            return formatDatesToString(new Date(newDate[0]), new Date(newDate[1]));
         }
 
         return service;

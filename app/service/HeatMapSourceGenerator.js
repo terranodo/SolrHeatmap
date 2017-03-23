@@ -43,6 +43,7 @@
                     'q.text': sF.text,
                     'q.user': sF.user,
                     'q.time': timeTextFormat(sF.time, sF.minDate, sF.maxDate),
+                    'a.time.filter': sF.timeFilter,
                     'q.geo': sF.geo,
                     'a.hm.filter': sF.hm,
                     'a.time.limit': '1',
