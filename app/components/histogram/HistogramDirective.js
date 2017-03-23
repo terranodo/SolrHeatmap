@@ -115,8 +115,11 @@
                     var firstDate = new Date(dataHistogram.counts[0].value);
                     var lastDate = new Date(dataHistogram.counts[dataHistogram.counts.length - 1].value);
 
-                    if (vm.slider.options.ceil === 1 || isTheInitialDate() ||
-                        dataHistogram.counts.length - 1 > vm.slider.options.ceil) {
+                    if (vm.slider.options.ceil === 1 || isTheInitialDate() ) {//||
+                        // dataHistogram.counts.length - 1 > vm.slider.options.ceil) {
+                            console.log('vm.slider', JSON.stringify(vm.slider.options));
+                            console.log('dataHistogram', dataHistogram);
+
                         vm.slider.counts = dataHistogram.counts;
                         vm.slider.options.ceil = dataHistogram.counts.length - 1;
                         vm.slider.maxValue = vm.slider.options.ceil;
@@ -178,6 +181,7 @@
 
                 function isTheInitialDate() {
                     var initialDate = DateTimeService.formatDatesToString(searchFilter.minDate, searchFilter.maxDate);
+                    console.log('initialDate === searchFilter.time', initialDate === searchFilter.time);
                     return initialDate === searchFilter.time;
                 }
 
@@ -195,7 +199,7 @@
 
                 function performDateSearch() {
                     vm.slider.changeTime = true;
-                    searchFilter.time = vm.dateString;
+                    searchFilter.setFilter({time: vm.dateString});
                     HeatMapSourceGenerator.search();
                 }
 

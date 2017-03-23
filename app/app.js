@@ -23,7 +23,7 @@
             resolve: {
                 search: function($stateParams,HeatMapSourceGenerator,searchFilter,
                     DateTimeService) {
-                    $stateParams.gap = DateTimeService.getGapFromTimeString($stateParams.time);
+                    // console.log($stateParams);
                     searchFilter.setFilter($stateParams);
                 }
             }

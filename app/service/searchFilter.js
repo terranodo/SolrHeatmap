@@ -25,6 +25,7 @@
         service.setFilter = function(filter) {
             if(filter.time) {
                 service.time = filter.time;
+                service.gap = getGapFromTimeString(filter.time);
             }
             if(filter.user) {
                 service.user = filter.user;
@@ -38,9 +39,6 @@
             if (filter.hm) {
                 service.hm = filter.hm;
             }
-            if (filter.gap) {
-                service.gap = filter.gap;
-            }
         };
 
         service.resetFilter = function() {
@@ -50,6 +48,40 @@
             service.geo = MapService.getCurrentExtentQuery().geo;
             service.textLimit = null;
         };
+
+        function getGapFromTimeString(timeString) {
+            if (!timeString) {
+                return;
+            }
+            var gap,
+                partition = 120,
+                dates = formatStringToDates(timeString),
+                diffms = moment(dates[1]).diff(dates[0]),
+                hours = diffms/(1000*3600),
+                days = hours/24,
+                years = days/365,
+                months = years * 12;
+
+            if (hours <= partition) {
+                gap = 'PT1H';
+            }else if (days <= partition) {
+                gap = 'P1D';
+            }else if (days/7 <= partition) {
+                gap = 'P1W';
+            }else if (months <= partition) {
+                gap = 'P1M';
+            }else {
+                gap = 'P1Y';
+            }
+            return gap;
+        }
+
+        function formatStringToDates(stringDates){
+            var dates = stringDates.split(' TO ');
+            dates[0] = dates[0].slice(1);
+            dates[1] = dates[1].slice(0, -1);
+            return dates;
+        }
 
         return service;
     }]);

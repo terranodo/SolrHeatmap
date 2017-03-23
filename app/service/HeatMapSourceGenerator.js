@@ -67,10 +67,11 @@
              * Performs search with the given full configuration / search object.
              */
             function search(changeUrl){
+
                 var config,
                     params = createParamsForGeospatialSearch();
                 changeUrl = angular.isUndefined(changeUrl) || changeUrl ? true : false;
-
+                console.log('params', params);
                 if (params) {
                     params['a.hm.limit'] = solrHeatmapApp.bopwsConfig.heatmapFacetLimit;
 
@@ -105,6 +106,7 @@
 
             function broadcastData(data) {
                 data['a.text'] = data['a.text'] || [];
+                console.log('data', data);
                 if (data && data['a.hm']) {
                     MapService.createOrUpdateHeatMapLayer(data['a.hm']);
                     // get the count of matches
