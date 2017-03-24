@@ -22,16 +22,16 @@
               maxDate.toISOString().replace('.000Z','') + ']';
         }
 
-        function durationFormat(gap) {
-            if (gap === 'PT1H') {
+        function durationFormat(gapFormat) {
+            if (gapFormat === 'PT1H') {
                 return 'MMM.D.H[h]';
-            }else if(gap === 'P1D') {
+            }else if(gapFormat === 'P1D') {
                 return 'MMM-DD';
-            } else if(gap === 'P1W' || gap === 'P7D'){
+            } else if(gapFormat === 'P1W' || gap === 'P7D'){
                 return 'YYYY-MMM';
-            } else if (gap === 'P1M') {
+            } else if (gapFormat === 'P1M') {
                 return 'YYYY-MMM';
-            } else if (gap === 'P1Y') {
+            } else if (gapFormat === 'P1Y') {
                 return 'YYYY';
             }
         }
