@@ -138,7 +138,7 @@
 
                 function generateAllDates(data) {
                     var newData = [];
-                    var unitOfTime = DateTimeService.getTimeFormat();
+                    var unitOfTime = DateTimeService.getTimeFormat(searchFilter.gap);
                     if (!unitOfTime) {
                         return data;
                     }
