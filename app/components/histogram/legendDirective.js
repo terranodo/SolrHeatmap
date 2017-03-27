@@ -33,8 +33,8 @@
                         var index = Math.round(i*delta);
                         var date = moment(dimensions.counts[index].value).utc();
                         vm.legendList.push(date.format(
-                            DateTimeService.durationFormat(searchFilter.gap))
-                        );
+                            DateTimeService.getDurationFormatFromGap(searchFilter.gap).format
+                        ));
                     }
                     vm.legendWidth = (dimensions.histogrambarsWidth - dimensions.paddingBar*2)/vm.legendList.length;
                     vm.paddingBar = dimensions.paddingBar;

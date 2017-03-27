@@ -4,8 +4,7 @@
     .factory('DateTimeService', [function(){
         var service = {
             formatDatesToString: formatDatesToString,
-            getTimeFormat: getTimeFormat,
-            durationFormat: durationFormat,
+            getDurationFormatFromGap: getDurationFormatFromGap,
             getGapFromTimeString: getGapFromTimeString
 
         };
@@ -22,32 +21,23 @@
               maxDate.toISOString().replace('.000Z','') + ']';
         }
 
-        function durationFormat(gapFormat) {
-            if (gapFormat === 'PT1H') {
-                return 'MMM.D.H[h]';
-            }else if(gapFormat === 'P1D') {
-                return 'MMM-DD';
-            } else if(gapFormat === 'P1W' || gap === 'P7D'){
-                return 'YYYY-MMM';
-            } else if (gapFormat === 'P1M') {
-                return 'YYYY-MMM';
-            } else if (gapFormat === 'P1Y') {
-                return 'YYYY';
-            }
-        }
-
-        function getTimeFormat(gap) {
+        function getDurationFormatFromGap(gap) {
+            var obj = [];
             if (gap === 'PT1H') {
-                return 'hours';
-            } else if(gap === 'P1D') {
-                return 'days';
+                obj = ['MMM.D.H[h]', 'hours'];
+            }else if(gap === 'P1D') {
+                obj = ['MMM-DD', 'days'];
             } else if(gap === 'P1W' || gap === 'P7D'){
-                return 'weeks';
+                obj = ['YYYY-MMM', 'weeks'];
             } else if (gap === 'P1M') {
-                return 'months';
+                obj = ['YYYY-MMM', 'months'];
             } else if (gap === 'P1Y') {
-                return 'years';
+                obj = ['YYYY', 'years'];
             }
+            return {
+                format: obj[0],
+                duration: obj[1]
+            };
         }
 
         function getGapFromTimeString(timeString) {
