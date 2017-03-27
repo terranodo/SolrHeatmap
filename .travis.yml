@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '4.7.3'
+- '4'
 script:
 - npm run js-lint
 - npm run test
