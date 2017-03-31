@@ -1,3 +1,8 @@
+/* eslint-disable no-console */
+/*eslint angular/log: 0*/
+/*eslint angular/json-functions: 0*/
+
+
 const fs = require('fs');
 const BASE_URL = process.env['TWEETS_BASE_URL'];
 
@@ -43,18 +48,21 @@ const config = {
             'zoomFactor': null
         },
         'layers': [{
-                'type': 'googleLayer',
-                'backgroundLayer': true,
-                'visible': true
-            },{
-                'type': 'Toner',
-                'backgroundLayer': true,
-                'visible': false
-            },{
+            'type': 'googleLayer',
+            'backgroundLayer': true,
+            'visible': true
+        },{
+            'type': 'Toner',
+            'backgroundLayer': true,
+            'visible': false
+        },{
             'type': 'TileWMS',
             'backgroundLayer': true,
             'name': 'terrestris OSM WMS',
-            'attribution': 'Data © OpenStreetMap contributors <br>(<a href="http://www.openstreetmap.org/copyright">http://www.openstreetmap.org/copyright)</a>',
+            'attribution': `Data © OpenStreetMap contributors <br>(
+                <a href="http://www.openstreetmap.org/copyright">
+                    http://www.openstreetmap.org/copyright)
+                </a>`,
             'logo': {
                 'src': 'https://www.terrestris.de/wp-content/uploads/icon_terrestris_tiny.png',
                 'href': 'https://www.terrestris.de'
@@ -72,13 +80,13 @@ const config = {
             'visible': false
         }]
     }
-}
+};
 
 
 fs.writeFile('config/appConfig.json', JSON.stringify(config), (err) => {
     if (err) {
         console.error(err);
         return;
-    };
+    }
     console.log('File has been created');
 });
