@@ -14,10 +14,6 @@ WORKDIR /usr/src/app/
 # Copy source code into working directory.
 COPY . /usr/src/app/
 
-ENV TWEETS_BASE_URL=http://bop.worldmap.harvard.edu/bopws/tweets/
-ENV HEATMAP_FACET_LIMIT=10000
-ENV CSV_DOCS_LIMIT=10000
-
 # Install dependencies.
 RUN npm install
 RUN npm run deploy
