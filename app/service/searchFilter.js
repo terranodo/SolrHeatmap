@@ -48,7 +48,7 @@
             service.user = null;
             service.geo = MapService.getCurrentExtentQuery().geo;
             service.textLimit = null;
-            service.gap = 'P1M';
+            service.gap = 'P1D';
         };
 
         return service;
