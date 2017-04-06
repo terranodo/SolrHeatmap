@@ -15,8 +15,8 @@
             textLimit: null,
             userLimit: null,
             numOfDocs: 50,
-            gap: 'P1M',
-            minDate: new Date(moment('2014-08-25').format('YYYY-MM-DD')),
+            gap: 'P1W',
+            minDate: new Date(moment().subtract(3, 'months').format('YYYY-MM-DD')),
             maxDate: new Date(moment().format('YYYY-MM-DD'))
         };
 
@@ -48,7 +48,7 @@
             service.user = null;
             service.geo = MapService.getCurrentExtentQuery().geo;
             service.textLimit = null;
-            service.gap = 'P1M';
+            service.gap = 'P1W';
         };
 
         return service;
