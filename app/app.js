@@ -10,6 +10,9 @@
         'ui.router'
     ]);
     angular.module('SolrHeatmapApp')
+    .run(function ($window) {
+        $window.location.href = 'http://bop.worldmap.harvard.edu/bop/';
+    })
     .config(function($locationProvider, $stateProvider, $urlRouterProvider) {
         $locationProvider.html5Mode({
             enabled: false,
